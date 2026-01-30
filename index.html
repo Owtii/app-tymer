@@ -1,13 +1,91 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>punct</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Punct - Dynamic Home Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;700&display=swap"
+    rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#f0425f", // Updated warmer red
+            "primary-soft": "#FFE5E5",
+            "background-light": "#f8f6f6",
+            "background-dark": "#221013",
+            "surface-light": "#ffffff",
+            "surface-dark": "#2f1b1e",
+            "text-main": "#181112",
+            "text-muted": "#896168",
+            "gray-soft-light": "#F3F4F6",
+            "gray-soft-dark": "#27272A",
+          },
+          fontFamily: {
+            "display": ["Space Grotesk", "sans-serif"],
+            "body": ["Noto Sans", "sans-serif"],
+            "sans": ["Plus Jakarta Sans", "sans-serif"], // Keep old font as fallback or specific use
+          },
+          borderRadius: {
+            DEFAULT: "0.5rem",
+            'lg': "1rem",
+            'xl': "1.5rem",
+            '2xl': "2rem",
+            '3xl': "2.5rem",
+            'full': "9999px",
+          },
+          boxShadow: {
+            'soft': '0 10px 40px -10px rgba(0,0,0,0.05)',
+            'glow': '0 0 20px rgba(255, 77, 77, 0.3)',
+            'card': '0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02)',
+          }
+        },
+      },
+    };
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 1,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .logistics-gradient {
+      background: linear-gradient(90deg, #FF4D4D 0%, #FF8080 100%);
+    }
+
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+
+<body
+  class="bg-background-light dark:bg-background-dark font-display text-slate-800 dark:text-slate-100 antialiased min-h-screen flex justify-center selection:bg-primary selection:text-white">
+  <div id="root" class="w-full flex justify-center"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
 </html>

@@ -14,6 +14,7 @@ import CalendarView from './pages/CalendarView';
 import Profile from './pages/Profile';
 import Insights from './pages/Insights';
 import AppLayout from './components/AppLayout';
+import GroupDetails from './pages/GroupDetails';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           <Route path="/dashboard" element={<Navigate to="/app/home" replace />} />
           <Route path="/logistics" element={<Logistics />} />
           <Route path="/social" element={<Navigate to="/app/groups" replace />} />
+          <Route path="/group/:id" element={<GroupDetails />} />
         </Routes>
       </div>
     </Router>
