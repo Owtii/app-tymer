@@ -1,0 +1,330 @@
+.questionnaire-container {
+    height: 100vh;
+    /* Full viewport height */
+    display: flex;
+    flex-direction: column;
+    background-color: #F1F2F6;
+    /* Matches Progress Track Color */
+    position: relative;
+    overflow: hidden;
+    /* Lock scroll, inner content scrolls if needed */
+}
+
+.questionnaire-header {
+    padding: var(--spacing-lg);
+    padding-bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    flex-shrink: 0;
+    /* Keep header fixed size */
+}
+
+.progress-track {
+    flex: 1;
+    height: 6px;
+    background-color: #F1F2F6;
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--color-brand-primary);
+    transition: width 0.3s ease;
+}
+
+/* Main Content Area - Scrollable */
+.question-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 500px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.step-count {
+    font-size: 14px;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: var(--spacing-md);
+    margin-top: var(--spacing-md);
+}
+
+.question-text {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+    color: var(--color-text-primary);
+}
+
+.options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    /* Slightly tighter than before */
+    width: 100%;
+    padding-bottom: 20px;
+    /* Space for scrolling */
+}
+
+.option-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 24px !important;
+    /* Match Dashboard */
+    background-color: #FFFFFF;
+    /* Soft Border & Shadow match Dashboard */
+    /* Soft Border & Shadow match Dashboard */
+    /* Soft Border & Shadow match Dashboard */
+    border: 2px solid #F2F2F7;
+    /* iOS Style Shadow: Soft, diffused, larger blur radius */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+    min-height: 64px;
+    /* Reduced from 72px */
+    padding: 20px !important;
+    /* Reduced from 24px */
+}
+
+.option-card:hover {
+    border-color: #C7C7CC;
+    background-color: #F9F9F9;
+}
+
+.active-option {
+    /* Red Outline Active */
+    border-color: var(--color-brand-primary) !important;
+    border-width: 1px !important;
+    /* Thinner border when picked - requested */
+    background-color: #FFF5F5 !important;
+    /* Soft Red iOS Shadow */
+    box-shadow: 0 8px 24px rgba(255, 107, 129, 0.15) !important;
+}
+
+.option-text {
+    font-weight: 600;
+    font-size: 15px;
+    /* Reduced from 17px (-2px) */
+    /* Text remains BLACK */
+    color: var(--color-text-primary);
+}
+
+/* Ensure text stays black even when active */
+.active-option .option-text {
+    color: var(--color-text-primary);
+}
+
+/* Wrapper for Fixed Button Position */
+.questionnaire-footer-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    padding-bottom: 88px;
+    /* Aligned with Onboarding 'Next' (48px + 40px Skip Space) */
+    background: linear-gradient(to top, #F1F2F6 80%, rgba(241, 242, 246, 0));
+    /* Fade background matches page #F1F2F6 */
+    display: flex;
+    justify-content: center;
+    z-index: 100;
+}
+
+/* Loading Screen */
+.processing-screen {
+    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* Center Vertically */
+    padding: var(--spacing-xl);
+    background-color: #F1F2F6;
+    /* Match Page Background */
+}
+
+.loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 340px;
+    /* Center in available space */
+    margin-bottom: auto;
+    margin-top: auto;
+}
+
+.progress-ring-wrapper {
+    position: relative;
+    width: 200px;
+    /* Large Ring */
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-2xl);
+}
+
+.ring-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ring-percent {
+    font-size: 56px;
+    font-weight: 800;
+    color: var(--color-text-primary);
+}
+
+/* New Wrapper for Centered Block */
+.loading-text-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    /* Internal Left Align */
+    width: fit-content;
+    /* Shrink to content */
+    margin: 0 auto;
+    /* Center Horizontal */
+}
+
+.loading-title {
+    font-size: 26px;
+    font-weight: 900;
+    /* Extra Bold */
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-xl);
+    width: 100%;
+    text-align: left;
+    /* Align Left relative to block */
+    padding: 0;
+    /* Reset padding */
+}
+
+.steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    width: 100%;
+    padding: 0;
+    /* Reset padding */
+}
+
+.step-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+}
+
+.step-item.current {
+    opacity: 1;
+}
+
+.step-item.completed {
+    opacity: 1;
+}
+
+.step-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.step-spinner {
+    width: 20px;
+    height: 20px;
+    border: 4px solid rgba(255, 107, 129, 0.2);
+    /* 4px Thicker Stroke */
+    border-top-color: var(--color-brand-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.step-circle {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--color-border);
+    border-radius: 50%;
+}
+
+.step-check {
+    width: 22px;
+    height: 22px;
+    background-color: var(--color-brand-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+.step-label {
+    font-size: 16px;
+    font-weight: 900;
+    /* Extra Black/Bold */
+    color: var(--color-text-primary);
+}
+
+/* Button matches footer wrapper position */
+.finish-action-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    padding-bottom: 88px;
+    /* Match questionnaire footer alignment */
+    z-index: 100;
+}
+
+.finish-btn {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.5s ease;
+}
+
+.finish-btn.visible {
+    opacity: 1;
+    transform: translateY(0);
+}

@@ -1,0 +1,30 @@
+.splash-container {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-bg-app);
+    transition: opacity 0.5s ease;
+}
+
+.fade-out {
+    opacity: 0;
+}
+
+.logo-wrapper {
+    animation: scaleIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    color: var(--color-brand-primary);
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

@@ -1,0 +1,62 @@
+.card {
+    background-color: var(--color-bg-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.2s ease;
+    border: 1px solid var(--color-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+/* iOS-style stacking context fix for glassmorphism */
+.card {
+    position: relative;
+    z-index: 1;
+}
+
+[data-theme='dark'] .card {
+    background-color: rgba(28, 28, 30, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Variants */
+.card--glass {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: var(--shadow-md);
+}
+
+[data-theme='dark'] .card--glass {
+    background: rgba(30, 30, 30, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card--elevated {
+    box-shadow: var(--shadow-lg);
+    background-color: var(--color-bg-surface-elevated);
+}
+
+/* Padding */
+.card--padding-none {
+    padding: 0;
+}
+
+.card--padding-sm {
+    padding: var(--spacing-sm);
+}
+
+.card--padding-md {
+    padding: var(--spacing-md);
+}
+
+.card--padding-lg {
+    padding: var(--spacing-lg);
+}
+
+/* Hover effect */
+.card:active {
+    transform: scale(0.98);
+}

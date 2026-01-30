@@ -1,0 +1,27 @@
+/* Global Overrides for Safe Area */
+.app-container {
+    min-height: 100vh;
+    /* Add "border" (spacing) top and bottom for iOS feel */
+    padding-top: 48px;
+    /* Status bar space */
+    padding-bottom: 34px;
+    /* Home indicator space */
+    max-width: 480px;
+    /* Constrain width on desktop to look like mobile */
+    margin: 0 auto;
+    position: relative;
+    background-color: var(--color-bg-app);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.05);
+    /* Subtle shadow on desktop */
+}
+
+/* Ensure full height pages respect this */
+.welcome-container,
+.onboarding-container,
+.questionnaire-container,
+.auth-container,
+.dashboard-container {
+    height: 100%;
+    min-height: auto;
+    /* Let container handle min-height */
+}

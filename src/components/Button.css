@@ -1,0 +1,122 @@
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-family-body);
+    font-weight: 600;
+    border-radius: var(--radius-pill);
+    transition: all 0.2s ease;
+    text-decoration: none;
+    gap: var(--spacing-sm);
+    min-width: 200px;
+    /* Wider buttons as requested */
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    /* pointer-events: none; REMOVED to allow shake animation on click */
+}
+
+/* Primary: Soft Dark Black (Lightened ~2-3% from #1C1C1E) */
+.btn--primary,
+.btn--accent {
+    /* User asked for "more grey like 2%" */
+    background-color: #252528;
+    /* Lighter Charcoal */
+    color: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    /* Soft black shadow */
+}
+
+.btn--primary:hover,
+.btn--accent:hover {
+    background-color: #323235;
+    /* Even lighter on hover */
+    /* Slightly lighter on hover */
+    /* transform: translateY(-2px); REMOVED animation */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.btn--primary:active,
+.btn--accent:active {
+    /* transform: translateY(0); REMOVED animation */
+    background-color: #1A1A1D;
+    /* Darker on click */
+}
+
+/* Secondary: Grey */
+.btn--secondary {
+    background-color: #F1F2F6;
+    color: var(--color-text-primary);
+}
+
+.btn--secondary:hover {
+    background-color: #E1E2E6;
+}
+
+.btn--ghost {
+    background-color: transparent;
+    color: var(--color-text-primary);
+    min-width: auto;
+}
+
+.btn--ghost:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* Sizes */
+.btn--sm {
+    height: 36px;
+    padding: 0 20px;
+    font-size: 13px;
+}
+
+.btn--md {
+    height: 48px;
+    padding: 0 32px;
+    font-size: 16px;
+}
+
+.btn--lg {
+    height: 56px;
+    padding: 0 48px;
+    font-size: 18px;
+}
+
+.btn--full-width {
+    width: 100%;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20% {
+        transform: translateX(-6px);
+    }
+
+    40% {
+        transform: translateX(6px);
+    }
+
+    60% {
+        transform: translateX(-3px);
+    }
+
+    80% {
+        transform: translateX(3px);
+    }
+}
+
+.btn-shake {
+    animation: shake 0.25s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+    /* Faster & Smoother */
+    background-color: #323235 !important;
+    /* Match lighter grey */
+}

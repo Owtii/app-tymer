@@ -1,0 +1,77 @@
+:root {
+  /* Brand Colors - Pastel Red Accent */
+  --color-brand-primary: #FF6B81;
+  --color-brand-primary-hover: #FF4757;
+  --color-brand-secondary: #FFAB91;
+
+  /* Neutral Colors - Pure White */
+  --color-bg-app: #FFFFFF;
+  --color-bg-surface: #FFFFFF;
+  --color-bg-surface-elevated: #FFFFFF;
+
+  --color-text-primary: #1C1C1E;
+  /* Soft Black */
+  --color-text-secondary: #8E8E93;
+  --color-text-tertiary: #C7C7CC;
+  --color-border: #F2F2F7;
+
+  /* Status Colors */
+  --color-success: #34C759;
+  --color-warning: #FFCC00;
+  --color-danger: #FF3B30;
+
+  /* Typography */
+  --font-family-display: 'Montserrat', sans-serif;
+  --font-family-body: 'Inter', sans-serif;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  /* Reset spacing */
+  font-family: var(--font-family-body);
+  background-color: var(--color-bg-app);
+  color: var(--color-text-primary);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-family-display);
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+button {
+  font-family: var(--font-family-body);
+}
