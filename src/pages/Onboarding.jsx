@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Button from '../components/Button';
+import { ChevronLeft } from 'lucide-react';
 import './Onboarding.css';
 
 // Import assets
@@ -28,70 +28,60 @@ const Onboarding = () => {
         }
     };
 
-    const handleSkip = () => {
-        navigate('/questionnaire');
+    const handleBack = () => {
+        if (currentIndex > 0) {
+            setCurrentIndex(prev => prev - 1);
+        } else {
+            navigate('/welcome');
+        }
     };
 
-    const isLastSlide = currentIndex === slides.length - 1;
-
     return (
-        <div className="onboarding-container">
+        <div className="ob-container">
+            {/* Top bar: back arrow + pagination */}
+            <div className="ob-topbar">
+                <button className="ob-back-btn" onClick={handleBack}>
+                    <ChevronLeft size={26} strokeWidth={3} />
+                </button>
+
+                <div className="ob-pagination">
+                    {slides.map((_, index) => (
+                        <div
+                            key={index}
+                            className={`ob-dot ${index === currentIndex ? 'active' : ''}`}
+                        />
+                    ))}
+                </div>
+
+                <div style={{ width: 26 }} /> {/* Spacer */}
+            </div>
+
+            {/* Slide track */}
             <div
-                className="onboarding-track"
+                className="ob-track"
                 style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
                 {slides.map((slide) => (
-                    <div key={slide.id} className="onboarding-slide">
-                        <div className="slide-content">
-                            {/* Static 3D Asset Container (No animation) */}
-                            <div className="image-container-3d">
-                                <img src={slide.image} alt={slide.title} className="slide-3d-image" />
-                            </div>
+                    <div key={slide.id} className="ob-slide">
+                        {/* Image */}
+                        <div className="ob-image-wrapper">
+                            <img src={slide.image} alt={slide.title} className="ob-image" />
+                        </div>
 
-                            <div className="text-content">
-                                <h1 className="slide-title">{slide.title}</h1>
-                                <p className="slide-description">{slide.description}</p>
-                            </div>
+                        {/* Text */}
+                        <div className="ob-text">
+                            <h1 className="ob-title">{slide.title}</h1>
+                            <p className="ob-description">{slide.description}</p>
                         </div>
                     </div>
                 ))}
             </div>
 
-            <div className="onboarding-controls">
-                <div className="pagination">
-                    {slides.map((_, index) => (
-                        <div
-                            key={index}
-                            className={`dot ${index === currentIndex ? 'active' : ''}`}
-                        />
-                    ))}
-                </div>
-
-                {/* Buttons Stack */}
-                <div className="btn-stack">
-                    <Button
-                        variant="accent"
-                        size="lg"
-                        onClick={handleNext}
-                        className="fitted-btn"
-                    >
-                        {isLastSlide ? 'Get Started' : 'Next'}
-                    </Button>
-
-                    {/* Placeholder to keep layout stable when skip disappears */}
-                    <div className="skip-container">
-                        {!isLastSlide && (
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                className="skip-btn"
-                                onClick={handleSkip}
-                            >
-                                Skip
-                            </Button>
-                        )}
-                    </div>
-                </div>
+            {/* Bottom: Next button */}
+            <div className="ob-footer">
+                <button className="ob-next-btn" onClick={handleNext}>
+                    Next
+                </button>
             </div>
         </div>
     );

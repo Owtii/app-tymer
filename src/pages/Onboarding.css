@@ -1,155 +1,149 @@
-.onboarding-container {
+.ob-container {
     height: 100vh;
     width: 100%;
     overflow: hidden;
     position: relative;
     display: flex;
     flex-direction: column;
-    background-color: var(--color-bg-app);
+    background: #FFFFFF;
 }
 
-.onboarding-track {
+/* Top bar */
+.ob-topbar {
     display: flex;
-    height: 100%;
-    width: 100%;
-    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-    /* Smoother bezier */
+    align-items: center;
+    justify-content: space-between;
+    padding: 47px 38px 0;
+    flex-shrink: 0;
+    z-index: 10;
 }
 
-.onboarding-slide {
-    min-width: 100%;
-    height: 100%;
+.ob-back-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-xl);
-    padding-bottom: 220px;
+    color: #1C1C1C;
+    width: 26px;
+    height: 26px;
 }
 
-.slide-content {
-    text-align: center;
-    width: 100%;
-    max-width: 400px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--spacing-2xl);
-}
-
-.image-container-3d {
-    width: 300px;
-    height: 300px;
+/* Dot pagination */
+.ob-pagination {
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-    position: relative;
-    /* Dashboard Card Style */
-    background-color: #FFFFFF;
-    border-radius: 24px;
-    /* Soft Shadow & Border */
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-    border: 1px solid #F2F2F7;
-    margin-bottom: var(--spacing-xl);
-    /* Add space below card */
+    gap: 10px;
 }
 
-.slide-3d-image {
-    width: 90%;
-    /* Slight padding */
-    height: 90%;
-    object-fit: contain;
-    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.08));
-}
-
-.slide-title {
-    font-size: 28px;
-    /* Match Dashboard Greeting */
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    margin-bottom: var(--spacing-sm);
-    color: #1C1C1E;
-    /* Soft Black */
-}
-
-.slide-description {
-    font-size: 16px;
-    color: var(--color-text-secondary);
-    line-height: 1.5;
-    margin: 0;
-    max-width: 300px;
-    font-weight: 500;
-}
-
-.onboarding-controls {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: var(--spacing-lg);
-    padding-bottom: 48px;
-    /* Fixed space from bottom for consistency */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--spacing-lg);
-}
-
-/* Smooth Dots Animation */
-.pagination {
-    display: flex;
-    gap: 8px;
-    margin-bottom: var(--spacing-sm);
-}
-
-.dot {
-    width: 8px;
-    /* Start small */
-    height: 8px;
+.ob-dot {
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
-    background-color: #E5E5EA;
-    /* Light grey inactive */
+    background: #E2E2E2;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    /* Bouncy transition */
 }
 
-.dot.active {
-    width: 24px;
-    /* Expand width */
-    background-color: var(--color-brand-primary);
-    border-radius: 4px;
-    /* Pill shape */
+.ob-dot.active {
+    width: 34px;
+    height: 12px;
+    border-radius: 59px;
+    background: #FF3C5D;
 }
 
-/* Button Layout */
-.btn-stack {
+/* Slide track */
+.ob-track {
+    display: flex;
+    flex: 1;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.ob-slide {
+    min-width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--spacing-sm);
-    width: 100%;
-    max-width: 320px;
-    /* Increased from 240px */
 }
 
-.skip-container {
-    height: 40px;
+/* Image */
+.ob-image-wrapper {
+    width: 100%;
+    max-width: 420px;
+    height: 50vh;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+    margin-top: 20px;
 }
 
-.skip-btn {
-    /* Grey White with Slight Red Tone */
-    color: #9E9494;
-    /* Desaturated Grey-Red */
-    font-size: 15px;
-    font-weight: 500;
-    /* Slightly thinner for subtle look */
-    transition: color 0.2s;
+.ob-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
-.skip-btn:hover {
-    color: var(--color-brand-primary);
-    /* Hover reveals full red */
+/* Text content */
+.ob-text {
+    text-align: center;
+    padding: 0 40px;
+    margin-top: 16px;
+}
+
+.ob-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 56px;
+    line-height: 68px;
+    text-align: center;
+    color: #1C1C1C;
+    margin-bottom: 16px;
+}
+
+.ob-description {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 22px;
+    text-align: center;
+    color: #979797;
+    max-width: 276px;
+    margin: 0 auto;
+}
+
+/* Footer */
+.ob-footer {
+    padding: 0 24px;
+    padding-bottom: 70px;
+    display: flex;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.ob-next-btn {
+    width: 181px;
+    height: 72px;
+    background: #1C1C1C;
+    border: 1px solid #2C2C2C;
+    border-radius: 48px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 100%;
+    color: #F5F5F5;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.ob-next-btn:hover {
+    background: #2C2C2C;
+}
+
+.ob-next-btn:active {
+    background: #111111;
 }

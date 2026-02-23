@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Check } from 'lucide-react';
-import Button from '../components/Button';
-import Card from '../components/Card';
+import { ChevronLeft, Check } from 'lucide-react';
 import './Questionnaire.css';
 
 const questions = [
-    { id: 1, question: 'How much time do you need to get ready?', options: ['15 mins', '30 mins', '45 mins', '1 hour+'] },
+    { id: 1, question: 'How much time do you need to get ready?', options: ['15 minutes', '30 minutes', '45 minutes', '1 hour+'] },
     { id: 2, question: 'How do you prefer to arrive?', options: ['Early (15m buffer)', 'On Time', 'Just in Time'] },
     { id: 3, question: 'How do you usually move?', options: ['Car', 'Public Transit', 'Walking', 'Bicycle'] },
     { id: 4, question: 'What is your main goal with Punct?', options: ['Never be late', 'Reduce stress', 'Coordinate with friends'] },
@@ -14,20 +12,11 @@ const questions = [
     { id: 6, question: 'Enable "Invisible Time" checking?', options: ['Yes, analyze all delays', 'No, simpler is better'] }
 ];
 
-const loadingSteps = [
-    { label: 'Analyzing your answers', threshold: 25 },
-    { label: 'Defining nutrient requirements', threshold: 55 },
-    { label: 'Estimating weight progress', threshold: 85 }, // Placeholder text from user screenshot, keeping it or adapting? User updated screenshot showed nutrition but context is time. I'll stick to generic or screenshot text. Screenshot had nutrition text? Let's use screenshot text as requested "like this screenshot"
-    { label: 'Adjusting nutrition tips', threshold: 100 }
-];
-// Wait, user app is about TIME. The screenshot they uploaded had nutrition text. 
-// I should probably adapt it to TIME context but keep the visual structure.
-// "like this screenshot" usually means visual structure. I will use Time context text but visual structure.
 const timeSteps = [
-    { label: 'Analyzing your answers', threshold: 25 },
-    { label: 'Calculating travel buffers', threshold: 50 },
-    { label: 'Optimizing daily routes', threshold: 80 },
-    { label: 'Finalizing your plan', threshold: 100 }
+    { label: 'Analyzing your answers.', threshold: 25 },
+    { label: 'Calculating travel buffers.', threshold: 50 },
+    { label: 'Optimizing daily routes.', threshold: 80 },
+    { label: 'Finalizing your plan.', threshold: 100 }
 ];
 
 const Questionnaire = () => {
@@ -36,14 +25,15 @@ const Questionnaire = () => {
     const [answers, setAnswers] = useState({});
     const [view, setView] = useState('questions');
     const [loadingProgress, setLoadingProgress] = useState(0);
+    const [shake, setShake] = useState(false);
 
     useEffect(() => {
         if (view === 'loading') {
             const interval = setInterval(() => {
                 setLoadingProgress(prev => {
-                    if (prev >= 100) {
+                    if (prev >= 99) {
                         clearInterval(interval);
-                        return 100;
+                        return 99;
                     }
                     return prev + 1;
                 });
@@ -56,17 +46,13 @@ const Questionnaire = () => {
         setAnswers(prev => ({ ...prev, [questions[currentQ].id]: option }));
     };
 
-    const [shake, setShake] = useState(false);
-
     const handleNext = () => {
         const hasAnswer = answers[questions[currentQ].id];
-
         if (!hasAnswer) {
             setShake(true);
-            setTimeout(() => setShake(false), 300); // Reset after animation
+            setTimeout(() => setShake(false), 300);
             return;
         }
-
         if (currentQ < questions.length - 1) {
             setCurrentQ(prev => prev + 1);
         } else {
@@ -74,149 +60,142 @@ const Questionnaire = () => {
         }
     };
 
+    const handleBack = () => {
+        if (currentQ > 0) {
+            setCurrentQ(prev => prev - 1);
+        } else {
+            navigate('/onboarding');
+        }
+    };
+
     const isSelected = (option) => answers[questions[currentQ].id] === option;
 
-    const renderCircle = () => {
-        const radius = 100; // 200px width
-        const stroke = 16; // Thicker (was 12)
-        const normalizedRadius = radius - stroke * 2;
-        const circumference = normalizedRadius * 2 * Math.PI;
+    // Finalizing/Loading screen
+    if (view === 'loading') {
+        const circumference = 2 * Math.PI * 88; // radius 88
         const strokeDashoffset = circumference - (loadingProgress / 100) * circumference;
 
         return (
-            <div className="progress-ring-wrapper">
-                <svg height={radius * 2} width={radius * 2}>
-                    <circle
-                        stroke="#F1F2F6"
-                        strokeWidth={stroke}
-                        fill="transparent"
-                        r={normalizedRadius}
-                        cx={radius}
-                        cy={radius}
-                    />
-                    <circle
-                        stroke="var(--color-brand-primary)"
-                        fill="transparent"
-                        strokeWidth={stroke}
-                        strokeDasharray={circumference + ' ' + circumference}
-                        style={{ strokeDashoffset, transition: 'stroke-dashoffset 0.1s linear' }}
-                        strokeLinecap="round" // Round Caps
-                        r={normalizedRadius}
-                        cx={radius}
-                        cy={radius}
-                        transform={`rotate(-90 ${radius} ${radius})`}
-                    />
-                </svg>
-                <div className="ring-text">
-                    <span className="ring-percent">{loadingProgress}%</span>
-                </div>
-            </div>
-        );
-    };
-
-    if (view === 'loading') {
-        return (
-            <div className="questionnaire-container"> {/* Re-use container for full height */}
-                <div className="processing-screen">
-                    <div className="loading-content">
-                        {renderCircle()}
-
-                        <div className="loading-text-block">
-                            <h2 className="loading-title">Personalizing plan</h2>
-
-                            <div className="steps-list">
-                                {timeSteps.map((step, idx) => {
-                                    const isCompleted = loadingProgress >= step.threshold;
-                                    // Is current if not completed but previous one is completed (or it's first)
-                                    const isCurrent = !isCompleted && (idx === 0 || loadingProgress >= timeSteps[idx - 1].threshold);
-
-                                    return (
-                                        <div key={idx} className={`step-item ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''}`}>
-                                            <div className="step-icon">
-                                                {isCompleted ? (
-                                                    <div className="step-check"><Check size={14} strokeWidth={3} /></div>
-                                                ) : isCurrent ? (
-                                                    <div className="step-spinner" />
-                                                ) : (
-                                                    <div className="step-circle" />
-                                                )}
-                                            </div>
-                                            <span className="step-label">{step.label}</span>
-                                        </div>
-                                    );
-                                })}
-                            </div>
+            <div className="q-container">
+                <div className="finalizing-screen">
+                    {/* Progress ring */}
+                    <div className="final-ring-wrapper">
+                        <svg width="212" height="212" viewBox="0 0 212 212">
+                            <circle
+                                cx="106"
+                                cy="106"
+                                r="88"
+                                stroke="#F0F0F0"
+                                strokeWidth="18"
+                                fill="transparent"
+                            />
+                            <circle
+                                cx="106"
+                                cy="106"
+                                r="88"
+                                stroke="#FF3C5D"
+                                strokeWidth="18"
+                                fill="transparent"
+                                strokeDasharray={circumference}
+                                strokeDashoffset={strokeDashoffset}
+                                strokeLinecap="round"
+                                transform="rotate(-90 106 106)"
+                                style={{ transition: 'stroke-dashoffset 0.1s linear' }}
+                            />
+                        </svg>
+                        <div className="final-ring-text">
+                            <span className="final-percent">{loadingProgress}%</span>
                         </div>
                     </div>
 
-                    <div className="finish-action-wrapper">
-                        <div className={`finish-btn ${loadingProgress === 100 ? 'visible' : ''}`}>
-                            <Button
-                                variant="accent"
-                                size="lg"
-                                onClick={() => navigate('/auth')}
-                                className="fitted-btn"
-                            >
-                                Continue
-                            </Button>
-                        </div>
+                    {/* Title */}
+                    <h2 className="final-title">Personalizing Plan</h2>
+
+                    {/* Steps card */}
+                    <div className="final-steps-card">
+                        {timeSteps.map((step, idx) => {
+                            const isCompleted = loadingProgress >= step.threshold;
+                            const isCurrent = !isCompleted && (idx === 0 || loadingProgress >= timeSteps[idx - 1].threshold);
+
+                            return (
+                                <div key={idx} className={`final-step ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''}`}>
+                                    <div className="final-step-icon">
+                                        {isCompleted ? (
+                                            <div className="final-check-circle">
+                                                <Check size={12} strokeWidth={3} color="#FFFFFF" />
+                                            </div>
+                                        ) : isCurrent ? (
+                                            <div className="final-spinner" />
+                                        ) : (
+                                            <div className="final-empty-circle" />
+                                        )}
+                                    </div>
+                                    <span className="final-step-label">{step.label}</span>
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    {/* Continue button */}
+                    <div className="final-footer">
+                        <button
+                            className={`q-next-btn ${loadingProgress >= 99 ? 'visible' : 'hidden'}`}
+                            onClick={() => navigate('/auth')}
+                        >
+                            Continue
+                        </button>
                     </div>
                 </div>
             </div>
         );
     }
 
+    // Questions view
+    const progressPercent = ((currentQ + 1) / questions.length) * 100;
+
     return (
-        <div className="questionnaire-container">
-            <header className="questionnaire-header">
-                <Button variant="ghost" size="sm" onClick={() => {
-                    if (currentQ > 0) setCurrentQ(prev => prev - 1);
-                    else navigate('/onboarding');
-                }}>
-                    <ArrowLeft size={24} />
-                </Button>
-                <div className="progress-track">
-                    <div
-                        className="progress-fill"
-                        style={{ width: `${((currentQ + 1) / questions.length) * 100}%` }}
-                    />
+        <div className="q-container">
+            {/* Header */}
+            <div className="q-header">
+                <button className="q-back-btn" onClick={handleBack}>
+                    <ChevronLeft size={26} strokeWidth={3} />
+                </button>
+                <div className="q-progress-track">
+                    <div className="q-progress-fill" style={{ width: `${progressPercent}%` }} />
                 </div>
-                <div style={{ width: 32 }} />
-            </header>
+            </div>
 
-            <main className="question-content">
-                <span className="step-count">Question {currentQ + 1} of {questions.length}</span>
-                <h2 className="question-text">{questions[currentQ].question}</h2>
+            {/* Question label */}
+            <div className="q-label">QUESTION {currentQ + 1} OF {questions.length}</div>
 
-                <div className="options-list">
-                    {questions[currentQ].options.map((option) => (
-                        <Card
-                            key={option}
-                            className={`option-card ${isSelected(option) ? 'active-option' : ''}`}
-                            padding="md"
-                            onClick={() => handleSelect(option)}
-                        >
-                            <span className="option-text">{option}</span>
-                            {isSelected(option) && <Check size={20} className="check-icon" />}
-                        </Card>
-                    ))}
-                </div>
-            </main>
+            {/* Question text */}
+            <h2 className="q-question">{questions[currentQ].question}</h2>
 
-            <footer className="questionnaire-footer-wrapper">
-                <Button
-                    variant="accent"
-                    size="lg"
+            {/* Options */}
+            <div className="q-options">
+                {questions[currentQ].options.map((option) => (
+                    <button
+                        key={option}
+                        className={`q-option ${isSelected(option) ? 'selected' : ''}`}
+                        onClick={() => handleSelect(option)}
+                    >
+                        <span className="q-option-text">{option}</span>
+                        <div className={`q-radio ${isSelected(option) ? 'checked' : ''}`}>
+                            {isSelected(option) && <Check size={14} strokeWidth={3} color="#FF3C5D" />}
+                        </div>
+                    </button>
+                ))}
+            </div>
+
+            {/* Next button */}
+            <div className="q-footer">
+                <button
+                    className={`q-next-btn ${shake ? 'btn-shake' : ''}`}
                     onClick={handleNext}
-                    className={`fitted-btn ${shake ? 'btn-shake' : ''}`}
-                    style={{
-                        backgroundColor: !answers[questions[currentQ].id] ? '#323235' : undefined, // Matches new Button Hover/Lighter Grey
-                        transition: 'background-color 0.3s ease'
-                    }}
                 >
-                    {currentQ === questions.length - 1 ? 'Finish' : 'Next'}
-                </Button>
-            </footer>
+                    Next
+                </button>
+            </div>
         </div>
     );
 };

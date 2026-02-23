@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AppProvider } from './context/AppContext';
 import Splash from './pages/Splash';
 import Welcome from './pages/Welcome';
 import Onboarding from './pages/Onboarding';
@@ -17,30 +18,32 @@ import AppLayout from './components/AppLayout';
 
 function App() {
   return (
-    <Router>
-      <div className="app-container">
-        <Routes>
-          <Route path="/" element={<Splash />} />
-          <Route path="/welcome" element={<Welcome />} />
-          <Route path="/onboarding" element={<Onboarding />} />
-          <Route path="/questionnaire" element={<Questionnaire />} />
-          <Route path="/auth" element={<Auth />} />
+    <AppProvider>
+      <Router>
+        <div className="app-container">
+          <Routes>
+            <Route path="/" element={<Splash />} />
+            <Route path="/welcome" element={<Welcome />} />
+            <Route path="/onboarding" element={<Onboarding />} />
+            <Route path="/questionnaire" element={<Questionnaire />} />
+            <Route path="/auth" element={<Auth />} />
 
-          {/* Main App Routes Wrapped in Layout */}
-          <Route path="/app" element={<AppLayout />}>
-            <Route path="home" element={<Dashboard />} />
-            <Route path="calendar" element={<CalendarView />} />
-            <Route path="groups" element={<SocialSync />} />
-            <Route path="insights" element={<Insights />} />
-            <Route path="profile" element={<Profile />} />
-          </Route>
+            {/* Main App Routes Wrapped in Layout */}
+            <Route path="/app" element={<AppLayout />}>
+              <Route path="home" element={<Dashboard />} />
+              <Route path="calendar" element={<CalendarView />} />
+              <Route path="groups" element={<SocialSync />} />
+              <Route path="insights" element={<Insights />} />
+              <Route path="profile" element={<Profile />} />
+            </Route>
 
-          <Route path="/dashboard" element={<Navigate to="/app/home" replace />} />
-          <Route path="/logistics" element={<Logistics />} />
-          <Route path="/social" element={<Navigate to="/app/groups" replace />} />
-        </Routes>
-      </div>
-    </Router>
+            <Route path="/dashboard" element={<Navigate to="/app/home" replace />} />
+            <Route path="/logistics" element={<Logistics />} />
+            <Route path="/social" element={<Navigate to="/app/groups" replace />} />
+          </Routes>
+        </div>
+      </Router>
+    </AppProvider>
   );
 }
 

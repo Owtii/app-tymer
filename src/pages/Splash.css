@@ -4,7 +4,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--color-bg-app);
+    background: #FFFFFF;
+    position: relative;
+    overflow: hidden;
     transition: opacity 0.5s ease;
 }
 
@@ -12,19 +14,110 @@
     opacity: 0;
 }
 
-.logo-wrapper {
-    animation: scaleIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-    color: var(--color-brand-primary);
+/* Colorful blobs */
+.splash-blobs {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 0;
 }
 
-@keyframes scaleIn {
+.blob {
+    position: absolute;
+    border-radius: 40% 60% 50% 50%;
+}
+
+.blob-yellow {
+    width: 80%;
+    height: 65%;
+    left: -20%;
+    top: 38%;
+    background: #FFCC00;
+    border-radius: 30% 70% 60% 40%;
+}
+
+.blob-red {
+    width: 85%;
+    height: 42%;
+    left: -15%;
+    bottom: 0;
+    background: #FF0037;
+    border-radius: 20% 80% 0% 0%;
+}
+
+.blob-purple-1 {
+    width: 55%;
+    height: 26%;
+    left: 5%;
+    top: 58%;
+    background: #5500FF;
+    border-radius: 40% 60% 30% 70%;
+}
+
+.blob-purple-2 {
+    width: 55%;
+    height: 18%;
+    left: -25%;
+    top: 51%;
+    background: #5500FF;
+    border-radius: 30% 70% 50% 50%;
+}
+
+.blob-white {
+    width: 42%;
+    height: 14%;
+    right: 0;
+    bottom: 3%;
+    background: #FFFFFF;
+    border-radius: 50% 50% 30% 70%;
+}
+
+.blob-pink {
+    width: 45%;
+    height: 50%;
+    left: -5%;
+    top: 36%;
+    background: #FF1346;
+    border-radius: 30% 70% 60% 40%;
+    transform: rotate(-15deg);
+    opacity: 0.9;
+}
+
+/* Frosted glass overlay */
+.splash-glass {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(100px);
+    -webkit-backdrop-filter: blur(100px);
+    z-index: 1;
+}
+
+/* Logo text */
+.splash-logo-text {
+    position: relative;
+    z-index: 2;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 58px;
+    color: #FFFFFF;
+    animation: fadeInLogo 0.8s ease-out;
+}
+
+@keyframes fadeInLogo {
     from {
-        transform: scale(0.8);
         opacity: 0;
+        transform: scale(0.9);
     }
 
     to {
-        transform: scale(1);
         opacity: 1;
+        transform: scale(1);
     }
 }
