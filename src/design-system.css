@@ -1,51 +1,77 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
-  /* Brand Colors — Figma */
-  --color-brand-primary: #FF3C5D;
-  --color-brand-primary-hover: #E0354F;
-  --color-brand-secondary: #FFAB91;
+  /* ───── Brand ───── */
+  --color-brand: #E8364E;
+  --color-brand-hover: #D42E44;
+  --color-brand-light: #FFF0F1;
+  --color-brand-soft: #FFDFE3;
 
-  /* Neutral Colors */
-  --color-bg-app: #FFFFFF;
-  --color-bg-surface: #FFFFFF;
-  --color-bg-surface-elevated: #FFFFFF;
+  /* ───── Surfaces ───── */
+  --color-bg-app: #F8F8F8;
+  --color-bg-card: #FFFFFF;
+  --color-bg-input: #F5F5F7;
+  --color-bg-pill: #F0F0F2;
 
-  --color-text-primary: #1C1C1C;
-  --color-text-secondary: #979797;
+  /* ───── Text ───── */
+  --color-text-primary: #1A1A1A;
+  --color-text-secondary: #8E8E93;
   --color-text-tertiary: #C7C7CC;
-  --color-border: #E2E2E2;
+  --color-text-inverted: #FFFFFF;
 
-  /* Status Colors */
-  --color-success: #34C759;
-  --color-warning: #FFCC00;
-  --color-danger: #FF3B30;
+  /* ───── Borders ───── */
+  --color-border: #EBEBEB;
+  --color-border-subtle: rgba(0, 0, 0, 0.04);
 
-  /* Typography — Inter only */
-  --font-family-display: 'Inter', sans-serif;
-  --font-family-body: 'Inter', sans-serif;
+  /* ───── Status ───── */
+  --color-success: #30D158;
+  --color-warning: #FFD60A;
+  --color-danger: #FF453A;
+  --color-info: #5E5CE6;
 
-  /* Spacing */
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
-  --spacing-2xl: 48px;
+  /* ───── Typography ───── */
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
-  /* Radius */
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-  --radius-xl: 30px;
-  --radius-pill: 9999px;
+  /* ───── Spacing ───── */
+  --sp-2: 4px;
+  --sp-4: 8px;
+  --sp-6: 12px;
+  --sp-8: 16px;
+  --sp-12: 24px;
+  --sp-16: 32px;
+  --sp-24: 48px;
 
-  /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 4px 30px rgba(0, 0, 0, 0.1);
+  /* Legacy aliases */
+  --spacing-xs: var(--sp-2);
+  --spacing-sm: var(--sp-4);
+  --spacing-md: var(--sp-8);
+  --spacing-lg: var(--sp-12);
+  --spacing-xl: var(--sp-16);
+  --spacing-2xl: var(--sp-24);
+
+  /* ───── Radius ───── */
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 22px;
+  --r-xl: 28px;
+  --r-pill: 9999px;
+
+  /* Legacy aliases */
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-xl: var(--r-xl);
+  --radius-pill: var(--r-pill);
+
+  /* ───── Shadows ───── */
+  --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.03);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04), 0 0 1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.08), 0 0 1px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.05), 0 0 1px rgba(0, 0, 0, 0.08);
 }
 
+/* ───── Global Reset ───── */
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
@@ -54,13 +80,14 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: var(--font-family-body);
+  font-family: var(--font);
   background-color: var(--color-bg-app);
   color: var(--color-text-primary);
   overflow-x: hidden;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 h1,
@@ -69,12 +96,31 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-family-display);
+  font-family: var(--font);
   font-weight: 700;
   margin: 0;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.025em;
+  color: var(--color-text-primary);
 }
 
 button {
-  font-family: var(--font-family-body);
+  font-family: var(--font);
+}
+
+/* ───── Smooth scrollbar ───── */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* ───── Default focus ring ───── */
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+/* ───── Selection ───── */
+::selection {
+  background: var(--color-brand-soft);
+  color: var(--color-text-primary);
 }

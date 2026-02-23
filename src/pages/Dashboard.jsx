@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CloudRain, Sunrise, Clock, Home as HomeIcon, Car, Footprints, ChevronRight, Cpu, Plus, X, Bus, PersonStanding, CalendarOff, Pencil, Trash2, MapPin, Navigation } from 'lucide-react';
+import { CloudRain, Sunrise, Clock, Home as HomeIcon, Car, Footprints, ChevronRight, Cpu, Plus, X, Bus, PersonStanding, CalendarOff, Pencil, Trash2, MapPin, Navigation, MoreVertical, Bell, ChevronDown } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import './Dashboard.css';
 
@@ -14,7 +14,9 @@ const Dashboard = () => {
     const [editingAlarm, setEditingAlarm] = useState(null);
     const [showAddAlarm, setShowAddAlarm] = useState(false);
     const [editingEvent, setEditingEvent] = useState(null);
-    const [confirmDelete, setConfirmDelete] = useState(null); // { type: 'alarm'|'event', id }
+    const [confirmDelete, setConfirmDelete] = useState(null);
+    const [showPlanSwitcher, setShowPlanSwitcher] = useState(false);
+    const [selectedEventId, setSelectedEventId] = useState(null);
     const [newAlarm, setNewAlarm] = useState({
         name: '', time: '07:00', type: 'regular', smart: false, active: true,
         days: [false, true, true, true, true, true, false]
@@ -26,8 +28,14 @@ const Dashboard = () => {
         return () => clearInterval(t);
     }, []);
 
-    // Next upcoming event
-    const nextEvent = useMemo(() => getNextEvent(), [events, now]);
+    // Next upcoming event (or selected event)
+    const nextEvent = useMemo(() => {
+        if (selectedEventId) {
+            const found = events.find(e => e.id === selectedEventId);
+            if (found) return found;
+        }
+        return getNextEvent();
+    }, [events, now, selectedEventId]);
 
     // Countdown to departure
     const countdown = useMemo(() => {
@@ -48,7 +56,7 @@ const Dashboard = () => {
         };
     }, [nextEvent, now]);
 
-    // Timer display: >24h = "24h+", >1min = "H:MM" or "MM", last min = "0:SS"
+    // Timer display
     const timeDisplay = useMemo(() => {
         if (!countdown) return '--:--';
         if (countdown.totalSec <= 0) return "0:00";
@@ -83,7 +91,7 @@ const Dashboard = () => {
         return `${dH % 12 || 12}:${dM.toString().padStart(2, '0')} ${ampm}`;
     };
 
-    // Route progress: percentage of journey elapsed
+    // Route progress
     const routeProgress = useMemo(() => {
         if (!nextEvent || !countdown) return 0;
         const totalTravel = (nextEvent.travelMinutes || 0) + (nextEvent.walkMinutes || 0);
@@ -92,7 +100,6 @@ const Dashboard = () => {
         return Math.max(0, Math.min(100, (elapsed / totalTravel) * 100));
     }, [nextEvent, countdown]);
 
-    // Current leg label for route
     const currentLeg = useMemo(() => {
         if (!nextEvent || !countdown) return 'home';
         const totalTravel = (nextEvent.travelMinutes || 0) + (nextEvent.walkMinutes || 0);
@@ -103,10 +110,10 @@ const Dashboard = () => {
         return 'walk';
     }, [nextEvent, countdown]);
 
-    // Filtered alarms (only regular now)
+    // Filtered alarms
     const filteredAlarms = alarms.filter(a => a.type === 'regular');
 
-    // Sleep calculation for alarm display
+    // Sleep calculation
     const calcSleep = (alarmTime) => {
         const [h, m] = alarmTime.split(':').map(Number);
         const alarmMin = h * 60 + m;
@@ -146,6 +153,12 @@ const Dashboard = () => {
         setEditingEvent(null);
     };
 
+    // Switch plan
+    const handleSwitchPlan = (eventId) => {
+        setSelectedEventId(eventId);
+        setShowPlanSwitcher(false);
+    };
+
     const TravelIcon = nextEvent?.travelMode === 'transit' ? Bus : nextEvent?.travelMode === 'walk' ? PersonStanding : Car;
     const getTravelIcon = (mode) => mode === 'transit' ? Bus : mode === 'walk' ? PersonStanding : Car;
 
@@ -175,9 +188,27 @@ const Dashboard = () => {
                             </span>
                         </div>
                         <div className="hero-top-actions">
-                            <button className="hero-edit-btn" onClick={() => setEditingEvent({ ...nextEvent })}>
-                                <Pencil size={15} color="#979797" />
-                            </button>
+                            <div className="hero-plan-switcher-wrapper">
+                                <button className="hero-edit-btn" onClick={() => setShowPlanSwitcher(!showPlanSwitcher)}>
+                                    <ChevronDown size={15} color="#979797" />
+                                </button>
+                                {showPlanSwitcher && (
+                                    <div className="hero-plan-dropdown">
+                                        <div className="hero-plan-dropdown-title">Switch Plan</div>
+                                        {events.map(ev => (
+                                            <button key={ev.id}
+                                                className={`hero-plan-dropdown-item ${nextEvent.id === ev.id ? 'active' : ''}`}
+                                                onClick={() => handleSwitchPlan(ev.id)}>
+                                                <span>{ev.title}</span>
+                                                <span className="hero-plan-dropdown-time">{fmt(ev.time)}</span>
+                                            </button>
+                                        ))}
+                                        {events.length === 0 && (
+                                            <div className="hero-plan-dropdown-empty">No plans available</div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
                             <div className="hero-arrive-pill">
                                 <span>Arrive {fmt(nextEvent.time)}</span>
                             </div>
@@ -192,7 +223,7 @@ const Dashboard = () => {
                             {timerUnit && <span className="hero-timer-unit">{timerUnit}</span>}
                         </div>
                         <div className="hero-status">
-                            <div className="status-dot-outer">
+                            <div className="status-dot-outer pulse-animation">
                                 <div className="status-dot-inner"></div>
                             </div>
                             <span className="status-text">
@@ -201,14 +232,14 @@ const Dashboard = () => {
                         </div>
                     </div>
 
-                    {/* Route Breakdown */}
-                    <div className="hero-route">
+                    {/* Route Breakdown — Clickable */}
+                    <div className="hero-route" onClick={() => navigate(`/app/route-details/${nextEvent.id}`)} style={{ cursor: 'pointer' }}>
                         <div className="route-header">
                             <span className="route-title">Route</span>
                             <span className="route-total">{(nextEvent.travelMinutes || 0) + (nextEvent.walkMinutes || 0)} min</span>
                         </div>
 
-                        {/* Progress bar with position indicator */}
+                        {/* Progress bar */}
                         <div className="route-slider-wrapper">
                             <div className="route-slider-track">
                                 <div className="route-slider-fill" style={{ width: `${routeProgress}%` }}></div>
@@ -292,44 +323,54 @@ const Dashboard = () => {
                         const EventIcon = getTravelIcon(event.travelMode);
                         const totalTravel = (event.travelMinutes || 0) + (event.walkMinutes || 0);
                         return (
-                            <div key={event.id} className="alarm-card">
-                                <div className="alarm-card-top">
-                                    <div className="alarm-label-row">
-                                        <EventIcon size={14} color="#FF3C5D" />
-                                        <span className="alarm-name-label smart-pink">{fmt(event.time)}</span>
+                            <div key={event.id} className="dash-plan-card">
+                                {/* Top: SMART PLAN + menu */}
+                                <div className="dash-plan-top">
+                                    <div className="dash-plan-smart-label">
+                                        <Cpu size={16} strokeWidth={1.5} color="#FF3C5D" />
+                                        <span>SMART PLAN</span>
                                     </div>
-                                    <div className="alarm-actions">
-                                        <button className="alarm-action-btn" onClick={() => setEditingEvent({ ...event })}>
-                                            <Pencil size={14} color="#979797" />
-                                        </button>
-                                        <button className="alarm-action-btn" onClick={() => setConfirmDelete({ type: 'event', id: event.id })}>
-                                            <Trash2 size={14} color="#979797" />
-                                        </button>
-                                    </div>
+                                    <button className="dash-plan-menu-btn" onClick={() => setEditingEvent({ ...event })}>
+                                        <MoreVertical size={14} color="#1C1C1C" />
+                                    </button>
                                 </div>
 
-                                <div className="alarm-card-mid">
-                                    <div className="alarm-time-col">
-                                        <span className="alarm-time" style={{ fontSize: '28px', lineHeight: '34px' }}>{event.title}</span>
-                                    </div>
-                                </div>
+                                {/* Title */}
+                                <h3 className="dash-plan-title">{event.title}</h3>
 
-                                <div className="plan-info-row">
-                                    <div className="plan-detail-item">
-                                        <EventIcon size={13} color="#979797" />
-                                        <span>{totalTravel} min travel</span>
-                                    </div>
-                                    <div className="plan-detail-item">
-                                        <Clock size={13} color="#979797" />
-                                        <span>Depart {getDepartTime(event)}</span>
-                                    </div>
-                                </div>
+                                {/* Location */}
                                 {event.location && (
-                                    <div className="plan-address">
-                                        <MapPin size={12} color="#979797" />
+                                    <div className="dash-plan-location">
+                                        <MapPin size={13} strokeWidth={1.5} color="#979797" />
                                         <span>{event.location}</span>
                                     </div>
                                 )}
+
+                                {/* Info Pills */}
+                                <div className="dash-plan-pills">
+                                    <div className="dash-plan-pill">
+                                        <Bell size={14} strokeWidth={1.5} />
+                                        <span>{fmt(event.time)}</span>
+                                    </div>
+                                    <div className="dash-plan-pill">
+                                        <EventIcon size={14} strokeWidth={1.5} />
+                                        <span>{totalTravel}min {event.travelMode}</span>
+                                    </div>
+                                </div>
+
+                                {/* Bottom: Avatars + View */}
+                                <div className="dash-plan-bottom">
+                                    <div className="dash-plan-avatars">
+                                        <div className="dash-plan-avatar"></div>
+                                        <div className="dash-plan-avatar"></div>
+                                        <div className="dash-plan-avatar">
+                                            <span className="dash-plan-avatar-count">+3</span>
+                                        </div>
+                                    </div>
+                                    <button className="dash-plan-view-btn" onClick={() => navigate(`/app/route-details/${event.id}`)}>
+                                        <span>View</span>
+                                    </button>
+                                </div>
                             </div>
                         );
                     })}

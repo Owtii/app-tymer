@@ -10,10 +10,11 @@ import Auth from './pages/Auth';
 import Dashboard from './pages/Dashboard';
 import Logistics from './pages/Logistics';
 import SocialSync from './pages/SocialSync';
-// New pages will be imported here
 import CalendarView from './pages/CalendarView';
 import Profile from './pages/Profile';
 import Insights from './pages/Insights';
+import AlarmPage from './pages/AlarmPage';
+import RouteDetails from './pages/RouteDetails';
 import AppLayout from './components/AppLayout';
 
 function App() {
@@ -32,9 +33,11 @@ function App() {
             <Route path="/app" element={<AppLayout />}>
               <Route path="home" element={<Dashboard />} />
               <Route path="calendar" element={<CalendarView />} />
+              <Route path="alarm" element={<AlarmPage />} />
               <Route path="groups" element={<SocialSync />} />
               <Route path="insights" element={<Insights />} />
               <Route path="profile" element={<Profile />} />
+              <Route path="route-details/:eventId" element={<RouteDetails />} />
             </Route>
 
             <Route path="/dashboard" element={<Navigate to="/app/home" replace />} />

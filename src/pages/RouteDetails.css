@@ -1,0 +1,227 @@
+/* ═══════════════════════ */
+/* ROUTE DETAILS PAGE      */
+/* ═══════════════════════ */
+.route-details-container {
+    min-height: 100vh;
+    background: var(--color-bg-app);
+    padding: 52px 24px 140px;
+}
+
+/* Header */
+.route-details-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.route-back-btn {
+    background: var(--color-bg-pill);
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    color: var(--color-text-primary);
+    border-radius: 50%;
+    transition: background 0.2s;
+}
+
+.route-back-btn:hover {
+    background: var(--color-border);
+}
+
+.route-details-title {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--color-text-primary);
+}
+
+/* Not Found */
+.route-not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.route-not-found p {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--color-text-primary);
+    margin: 16px 0 0;
+}
+
+/* Event Card */
+.route-event-card {
+    background: var(--color-bg-card);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--r-xl);
+    padding: 22px 24px;
+    margin-bottom: 28px;
+}
+
+.route-event-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.route-event-name {
+    font-family: var(--font);
+    font-weight: 800;
+    font-size: 22px;
+    color: var(--color-text-primary);
+    letter-spacing: -0.02em;
+}
+
+.route-event-times {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.route-time-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.route-time-label {
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 11px;
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.route-time-value {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 19px;
+    color: var(--color-text-primary);
+    letter-spacing: -0.02em;
+}
+
+.route-event-total {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.route-event-total span {
+    font-family: var(--font);
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+}
+
+.route-event-destination {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.route-event-destination span {
+    font-family: var(--font);
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+}
+
+/* Steps */
+.route-steps-title {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--color-text-primary);
+    margin: 0 0 16px 0;
+}
+
+.route-steps {
+    display: flex;
+    flex-direction: column;
+}
+
+.route-step {
+    display: flex;
+    gap: 16px;
+    min-height: 80px;
+}
+
+.route-step:last-child {
+    min-height: auto;
+}
+
+.route-step-line-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 36px;
+    flex-shrink: 0;
+}
+
+.route-step-dot {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-xs);
+}
+
+.route-step-line {
+    width: 2px;
+    flex: 1;
+    background: var(--color-border);
+    margin: 4px 0;
+    border-radius: 1px;
+}
+
+.route-step-content {
+    flex: 1;
+    padding-bottom: 16px;
+}
+
+.route-step:last-child .route-step-content {
+    padding-bottom: 0;
+}
+
+.route-step-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.route-step-label {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--color-text-primary);
+}
+
+.route-step-time {
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--color-brand);
+}
+
+.route-step-desc {
+    font-family: var(--font);
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+}

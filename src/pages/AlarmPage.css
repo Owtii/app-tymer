@@ -1,0 +1,527 @@
+/* ═══════════════════════ */
+/* ALARM PAGE              */
+/* ═══════════════════════ */
+.alarm-page-container {
+    min-height: 100vh;
+    background: var(--color-bg-app);
+    padding: 52px 24px 140px;
+}
+
+/* Header */
+.alarm-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.alarm-page-title {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--color-text-primary);
+}
+
+.alarm-page-add-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    background: var(--color-text-primary);
+    color: var(--color-text-inverted);
+    border: none;
+    border-radius: var(--r-pill);
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.alarm-page-add-btn:hover {
+    background: #303030;
+    transform: scale(1.02);
+}
+
+/* List */
+.alarm-page-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.alarm-page-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.alarm-page-empty p {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--color-text-primary);
+    margin: 16px 0 4px;
+}
+
+.alarm-page-empty span {
+    font-family: var(--font);
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--color-text-secondary);
+}
+
+/* Card */
+.alarm-page-card {
+    background: var(--color-bg-card);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--r-xl);
+    padding: 20px 24px;
+    transition: opacity 0.3s, box-shadow 0.2s;
+}
+
+.alarm-page-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.alarm-page-card.off {
+    opacity: 0.4;
+}
+
+.alarm-page-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.alarm-page-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.alarm-page-label span {
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+}
+
+.alarm-page-label span.smart {
+    color: var(--color-brand);
+}
+
+.alarm-page-card-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.alarm-page-action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.15s;
+}
+
+.alarm-page-action-btn:hover {
+    transform: scale(1.15);
+}
+
+.alarm-page-action-btn:hover svg {
+    color: var(--color-brand) !important;
+}
+
+/* Mid */
+.alarm-page-card-mid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.alarm-page-time {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 34px;
+    line-height: 42px;
+    color: var(--color-text-primary);
+    letter-spacing: -0.03em;
+}
+
+/* Toggle */
+.alarm-page-toggle {
+    width: 46px;
+    height: 26px;
+    background: var(--color-border);
+    border-radius: 14px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    flex-shrink: 0;
+}
+
+.alarm-page-toggle.on {
+    background: var(--color-brand);
+}
+
+.alarm-page-toggle.small {
+    width: 40px;
+    height: 24px;
+}
+
+.alarm-page-toggle-thumb {
+    width: 18px;
+    height: 18px;
+    background: var(--color-bg-card);
+    border-radius: 50%;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.alarm-page-toggle.on .alarm-page-toggle-thumb {
+    transform: translateX(20px);
+}
+
+.alarm-page-toggle.small .alarm-page-toggle-thumb {
+    width: 16px;
+    height: 16px;
+}
+
+.alarm-page-toggle.small.on .alarm-page-toggle-thumb {
+    transform: translateX(16px);
+}
+
+/* Bottom */
+.alarm-page-card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.alarm-page-days {
+    display: flex;
+    gap: 6px;
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.alarm-page-days .day-on {
+    color: var(--color-text-primary);
+}
+
+.alarm-page-days .day-off {
+    color: var(--color-border);
+}
+
+.alarm-page-meta {
+    display: flex;
+    gap: 6px;
+}
+
+.alarm-meta-pill {
+    padding: 4px 10px;
+    background: var(--color-bg-pill);
+    border-radius: var(--r-pill);
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 11px;
+    color: var(--color-text-secondary);
+}
+
+/* Modal */
+.alarm-page-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(12px);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 200;
+    animation: alarmFadeIn 0.2s ease;
+}
+
+.alarm-page-modal {
+    width: 100%;
+    max-width: 440px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: var(--color-bg-card);
+    border-radius: var(--r-xl) var(--r-xl) 0 0;
+    padding: 24px 24px 36px;
+    animation: alarmSlideUp 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.alarm-page-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.alarm-page-modal-header h3 {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--color-text-primary);
+}
+
+.alarm-page-modal-close {
+    background: var(--color-bg-pill);
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    padding: 6px;
+    display: flex;
+    border-radius: 50%;
+    transition: background 0.2s;
+}
+
+.alarm-page-modal-close:hover {
+    background: var(--color-border);
+}
+
+/* Form */
+.alarm-page-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.alarm-page-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.alarm-page-form-group label {
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.alarm-page-form-group input {
+    height: 48px;
+    padding: 0 16px;
+    background: var(--color-bg-input);
+    border: 1.5px solid transparent;
+    border-radius: var(--r-md);
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--color-text-primary);
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.alarm-page-form-group input:focus {
+    border-color: var(--color-brand);
+    background: var(--color-bg-card);
+}
+
+/* Days Picker */
+.alarm-page-days-picker {
+    display: flex;
+    gap: 6px;
+}
+
+.alarm-page-day-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1.5px solid var(--color-border);
+    background: transparent;
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.alarm-page-day-btn.active {
+    background: var(--color-brand);
+    border-color: var(--color-brand);
+    color: var(--color-text-inverted);
+}
+
+/* Sound Grid */
+.alarm-page-sound-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.alarm-page-sound-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px;
+    background: var(--color-bg-input);
+    border: 1.5px solid transparent;
+    border-radius: var(--r-sm);
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.alarm-page-sound-btn.active {
+    background: var(--color-brand-light);
+    border-color: var(--color-brand);
+    color: var(--color-brand);
+}
+
+.alarm-page-sound-btn svg {
+    flex-shrink: 0;
+}
+
+/* Smart Toggle Row */
+.alarm-page-smart-row {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row !important;
+}
+
+/* Submit */
+.alarm-page-form-submit {
+    height: 52px;
+    background: var(--color-text-primary);
+    color: var(--color-text-inverted);
+    border: none;
+    border-radius: var(--r-md);
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    margin-top: 4px;
+}
+
+.alarm-page-form-submit:hover {
+    background: #303030;
+    transform: scale(1.01);
+}
+
+/* Confirm Modal */
+.alarm-page-confirm {
+    width: 320px;
+    background: var(--color-bg-card);
+    border-radius: var(--r-xl);
+    padding: 32px 24px 24px;
+    text-align: center;
+    animation: alarmSlideUp 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    margin: auto;
+}
+
+.alarm-page-confirm-icon {
+    width: 52px;
+    height: 52px;
+    background: var(--color-brand-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+}
+
+.alarm-page-confirm h3 {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--color-text-primary);
+    margin: 0 0 6px 0;
+}
+
+.alarm-page-confirm p {
+    font-family: var(--font);
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin: 0 0 22px 0;
+}
+
+.alarm-page-confirm-btns {
+    display: flex;
+    gap: 10px;
+}
+
+.alarm-page-confirm-cancel {
+    flex: 1;
+    height: 46px;
+    background: var(--color-bg-input);
+    border: none;
+    border-radius: var(--r-md);
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.alarm-page-confirm-cancel:hover {
+    background: var(--color-border);
+}
+
+.alarm-page-confirm-delete {
+    flex: 1;
+    height: 46px;
+    background: var(--color-brand);
+    border: none;
+    border-radius: var(--r-md);
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--color-text-inverted);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.alarm-page-confirm-delete:hover {
+    background: var(--color-brand-hover);
+}
+
+@keyframes alarmSlideUp {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes alarmFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

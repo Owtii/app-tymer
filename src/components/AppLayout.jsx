@@ -1,5 +1,5 @@
 import { Outlet, NavLink } from 'react-router-dom';
-import { Home, Calendar, Users, User } from 'lucide-react';
+import { Home, Calendar, Bell, BarChart3, User } from 'lucide-react';
 import './AppLayout.css';
 
 const AppLayout = () => {
@@ -18,15 +18,12 @@ const AppLayout = () => {
                     <Calendar size={20} />
                 </NavLink>
 
-                {/* Center FAB */}
-                <div className="nav-fab-wrapper">
-                    <button className="nav-fab">
-                        <span className="nav-fab-plus">+</span>
-                    </button>
-                </div>
+                <NavLink to="/app/alarm" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+                    <Bell size={20} />
+                </NavLink>
 
-                <NavLink to="/app/groups" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-                    <Users size={20} />
+                <NavLink to="/app/insights" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+                    <BarChart3 size={20} />
                 </NavLink>
 
                 <NavLink to="/app/profile" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>

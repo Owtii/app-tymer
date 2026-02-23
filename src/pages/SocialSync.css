@@ -1,6 +1,9 @@
+/* ═══════════════════════ */
+/* SOCIAL SYNC PAGE        */
+/* ═══════════════════════ */
 .social-container {
     min-height: 100vh;
-    padding: var(--spacing-lg);
+    padding: 52px 24px 140px;
     display: flex;
     flex-direction: column;
     background: var(--color-bg-app);
@@ -10,7 +13,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: var(--spacing-xl);
+    margin-bottom: var(--sp-16);
     min-height: 48px;
 }
 
@@ -20,6 +23,7 @@
 
 .header-title h2 {
     font-size: 18px;
+    font-weight: 700;
     color: var(--color-text-primary);
     margin-bottom: 2px;
 }
@@ -38,8 +42,8 @@
 /* List View */
 .action-row {
     display: flex;
-    gap: var(--spacing-md);
-    margin-bottom: var(--spacing-xl);
+    gap: var(--sp-6);
+    margin-bottom: var(--sp-16);
 }
 
 .action-card {
@@ -47,14 +51,20 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--spacing-sm);
+    gap: var(--sp-4);
     cursor: pointer;
     transition: transform 0.2s;
     text-align: center;
+    background: var(--color-bg-card);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--r-lg);
+    padding: 18px 12px;
 }
 
 .action-card:hover {
     transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
 .action-card span {
@@ -66,46 +76,58 @@
 .icon-badge {
     width: 40px;
     height: 40px;
-    border-radius: 50%;
-    background-color: var(--color-bg-app);
+    border-radius: var(--r-sm);
+    background-color: var(--color-bg-pill);
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--color-text-primary);
-    border: 1px solid var(--color-border);
+    border: none;
 }
 
 .badge-blue {
-    background-color: rgba(0, 122, 255, 0.1);
-    color: var(--color-brand-primary);
+    background-color: var(--color-brand-light);
+    color: var(--color-brand);
     border: none;
 }
 
 .section-title {
-    font-size: 14px;
+    font-size: 12px;
+    font-weight: 600;
     text-transform: uppercase;
+    letter-spacing: 0.06em;
     color: var(--color-text-secondary);
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--sp-8);
 }
 
 .groups-list {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-md);
+    gap: 10px;
 }
 
 .group-item-card {
     display: flex;
     align-items: center;
-    gap: var(--spacing-md);
+    gap: var(--sp-8);
     cursor: pointer;
+    background: var(--color-bg-card);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--r-lg);
+    padding: 14px 16px;
+    transition: box-shadow 0.2s;
+}
+
+.group-item-card:hover {
+    box-shadow: var(--shadow-md);
 }
 
 .group-icon {
     width: 40px;
     height: 40px;
-    border-radius: var(--radius-md);
-    background-color: var(--color-bg-surface-elevated);
+    border-radius: var(--r-sm);
+    background-color: var(--color-bg-pill);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -117,13 +139,15 @@
 }
 
 .group-name {
-    font-size: 16px;
+    font-size: 15px;
+    font-weight: 600;
     color: var(--color-text-primary);
     margin-bottom: 2px;
 }
 
 .group-meta {
     font-size: 12px;
+    font-weight: 500;
     color: var(--color-text-secondary);
 }
 
@@ -140,22 +164,26 @@
 
 .form-desc {
     color: var(--color-text-secondary);
-    margin-bottom: var(--spacing-lg);
+    font-weight: 500;
+    margin-bottom: var(--sp-12);
 }
 
 .code-input,
 .text-input {
     width: 100%;
     padding: 12px;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    background: var(--color-bg-app);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--r-md);
+    background: var(--color-bg-input);
     color: var(--color-text-primary);
     font-size: 18px;
     text-align: center;
     letter-spacing: 2px;
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--sp-12);
     outline: none;
+    font-family: var(--font);
+    font-weight: 600;
+    transition: border-color 0.2s, background 0.2s;
 }
 
 .text-input {
@@ -165,10 +193,11 @@
 
 .code-input:focus,
 .text-input:focus {
-    border-color: var(--color-brand-primary);
+    border-color: var(--color-brand);
+    background: var(--color-bg-card);
 }
 
-/* Detail View (Existing logic re-used) */
+/* Detail View */
 .social-view {
     flex: 1;
     display: flex;
@@ -183,14 +212,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: var(--spacing-xl);
+    margin-bottom: var(--sp-16);
 }
 
 .sync-svg {
     width: 100%;
     height: 100%;
     transform: rotate(-90deg);
-    /* 0 is now top */
 }
 
 .sync-track {
@@ -198,7 +226,7 @@
     stroke: var(--color-border);
     stroke-width: 2;
     stroke-dasharray: 10 10;
-    opacity: 0.5;
+    opacity: 0.4;
 }
 
 .destination-marker {
@@ -217,10 +245,12 @@
     font-size: 32px;
     font-weight: 800;
     color: var(--color-text-primary);
+    letter-spacing: -0.03em;
 }
 
 .info-label {
     font-size: 14px;
+    font-weight: 500;
     color: var(--color-text-secondary);
 }
 
@@ -228,15 +258,19 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-md);
+    gap: 10px;
     padding-bottom: 80px;
-    /* Space for footer */
 }
 
 .member-card {
     display: flex;
     align-items: center;
-    gap: var(--spacing-md);
+    gap: var(--sp-8);
+    background: var(--color-bg-card);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--r-lg);
+    padding: 14px 16px;
 }
 
 .member-avatar {
@@ -250,7 +284,7 @@
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
-    border: 1px solid var(--color-border);
+    border: 2px solid var(--color-bg-card);
 }
 
 .avatar-status {
@@ -260,7 +294,7 @@
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    border: 2px solid var(--color-bg-surface);
+    border: 2px solid var(--color-bg-card);
 }
 
 .status-ontrack {
@@ -272,7 +306,7 @@
 }
 
 .status-arrived {
-    background-color: var(--color-brand-primary);
+    background-color: var(--color-brand);
 }
 
 .member-info {
@@ -289,20 +323,21 @@
 
 .member-status-text {
     font-size: 12px;
+    font-weight: 500;
     color: var(--color-text-secondary);
 }
 
 .nudge-btn {
     font-size: 12px;
-    color: var(--color-brand-primary);
+    font-weight: 600;
+    color: var(--color-brand);
 }
 
 .social-footer {
     position: fixed;
-    bottom: 80px;
-    /* Above nav bar */
+    bottom: 100px;
     left: 0;
     width: 100%;
-    padding: var(--spacing-lg);
+    padding: var(--sp-12);
     background: linear-gradient(to top, var(--color-bg-app), transparent);
 }

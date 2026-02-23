@@ -1,59 +1,72 @@
+/* ═══════════════════════ */
+/* INSIGHTS PAGE           */
+/* ═══════════════════════ */
 .insights-container {
     min-height: 100vh;
-    padding: var(--spacing-lg);
+    padding: 52px 24px 140px;
     background-color: var(--color-bg-app);
 }
 
 .insights-header {
-    margin-bottom: var(--spacing-xl);
+    margin-bottom: var(--sp-16);
 }
 
 .insights-header h2 {
-    font-size: 24px;
+    font-size: 26px;
+    font-weight: 700;
     color: var(--color-text-primary);
     margin-bottom: 4px;
+    letter-spacing: -0.025em;
 }
 
 .subtitle {
     font-size: 14px;
+    font-weight: 500;
     color: var(--color-text-secondary);
 }
 
 .insights-content {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-lg);
+    gap: var(--sp-12);
 }
 
 .chart-card {
     display: flex;
     flex-direction: column;
+    background: var(--color-bg-card);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--r-xl);
+    padding: 22px 24px;
 }
 
 .card-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--sp-8);
 }
 
 .card-title {
-    font-size: 16px;
-    color: var(--color-text-primary);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
     margin-bottom: 4px;
 }
 
 .card-val {
-    font-size: 24px;
+    font-size: 26px;
     font-weight: 800;
     color: var(--color-text-primary);
     display: flex;
     align-items: center;
     gap: 8px;
+    letter-spacing: -0.02em;
 }
 
 .trend-up {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     color: var(--color-success);
     display: flex;
@@ -64,19 +77,19 @@
 .icon-badge {
     width: 40px;
     height: 40px;
-    border-radius: 50%;
+    border-radius: var(--r-sm);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .badge-gold {
-    background-color: rgba(255, 204, 0, 0.1);
-    color: #FFCC00;
+    background-color: rgba(255, 204, 0, 0.08);
+    color: #F5A623;
 }
 
 .chart-wrapper {
-    margin-top: var(--spacing-sm);
+    margin-top: var(--sp-4);
     position: relative;
 }
 
@@ -86,7 +99,7 @@
     padding: 0 10px;
     margin-top: 8px;
     color: var(--color-text-tertiary);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
 }
 
@@ -100,7 +113,6 @@
     flex-direction: column;
     justify-content: space-around;
     pointer-events: none;
-    /* Let clicks pass to chart */
 }
 
 .cat-row {
@@ -108,21 +120,19 @@
     justify-content: space-between;
     padding-right: 10px;
     transform: translateY(-8px);
-    /* optical adjustment alignment with bars */
 }
 
 .cat-name,
 .cat-val {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     color: var(--color-text-primary);
-    text-shadow: 0 0 2px var(--color-bg-surface);
-    /* readability over bars */
+    text-shadow: 0 0 4px var(--color-bg-card);
 }
 
 .stats-row {
     display: flex;
-    gap: var(--spacing-md);
+    gap: var(--sp-6);
 }
 
 .mini-stat-card {
@@ -132,6 +142,11 @@
     align-items: center;
     text-align: center;
     gap: 4px;
+    background: var(--color-bg-card);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--r-lg);
+    padding: 18px 12px;
 }
 
 .stat-icon {
@@ -139,20 +154,22 @@
 }
 
 .icon-blue {
-    color: var(--color-brand-primary);
+    color: var(--color-brand);
 }
 
 .icon-gold {
-    color: #FFCC00;
+    color: #F5A623;
 }
 
 .stat-num {
-    font-size: 20px;
-    font-weight: 700;
+    font-size: 22px;
+    font-weight: 800;
     color: var(--color-text-primary);
+    letter-spacing: -0.02em;
 }
 
 .stat-desc {
     font-size: 12px;
+    font-weight: 500;
     color: var(--color-text-secondary);
 }
