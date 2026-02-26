@@ -8,7 +8,25 @@
 .app-content {
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
     padding-bottom: 120px;
+}
+
+/* ───── Page Transition — Horizontal Slide ───── */
+.page-transition {
+    animation: pageSlideIn 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@keyframes pageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 /* ───── Bottom Nav ───── */
@@ -19,49 +37,62 @@
     right: 20px;
     max-width: 400px;
     margin: 0 auto;
-    height: 72px;
-    /* Refined glassmorphism — whiter, softer */
+    height: 64px;
+    /* Glassy background */
     background: rgba(255, 255, 255, 0.82);
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06),
         0 0 1px rgba(0, 0, 0, 0.08);
     backdrop-filter: blur(24px) saturate(180%);
     -webkit-backdrop-filter: blur(24px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.6);
-    border-radius: 40px;
+    border-radius: 36px;
     display: flex;
-    justify-content: space-evenly;
     align-items: center;
     z-index: 100;
-    padding: 0 6px;
+    padding: 0 8px;
+    transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Glide Indicator — proper centering */
+.nav-glide-indicator {
+    position: absolute;
+    width: calc((100% - 16px) / 5);
+    height: 44px;
+    top: 50%;
+    left: 8px;
+    margin-top: -22px;
+    background: var(--color-brand-light, #FFF0F3);
+    border-radius: 16px;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 0;
+    pointer-events: none;
 }
 
 .nav-item {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 52px;
-    height: 46px;
+    flex: 1;
+    height: 44px;
     text-decoration: none;
     color: #B8B8BD;
-    border-radius: 20px;
-    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border-radius: 16px;
+    transition: color 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    z-index: 1;
 }
 
 .nav-item svg {
     stroke-width: 1.8px;
-    transition: all 0.3s ease;
+    transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .nav-item.active {
-    width: 66px;
-    height: 52px;
-    background: var(--color-brand-light, #FFF0F1);
-    box-shadow: none;
-    border-radius: 18px;
-    color: var(--color-brand, #E8364E);
+    color: var(--color-brand, #FF3C5D);
+    background: transparent;
 }
 
 .nav-item.active svg {
     stroke-width: 2.2px;
-    color: var(--color-brand, #E8364E);
+    color: var(--color-brand, #FF3C5D);
 }

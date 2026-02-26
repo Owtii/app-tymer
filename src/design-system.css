@@ -2,10 +2,10 @@
 
 :root {
   /* ───── Brand ───── */
-  --color-brand: #E8364E;
-  --color-brand-hover: #D42E44;
-  --color-brand-light: #FFF0F1;
-  --color-brand-soft: #FFDFE3;
+  --color-brand: #FF3C5D;
+  --color-brand-hover: #E8354F;
+  --color-brand-light: #FFF0F3;
+  --color-brand-soft: #FFE0E6;
 
   /* ───── Surfaces ───── */
   --color-bg-app: #F8F8F8;

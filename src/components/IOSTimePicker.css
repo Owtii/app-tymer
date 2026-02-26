@@ -1,0 +1,109 @@
+/* ═══════════════════════ */
+/* iOS TIME PICKER         */
+/* ═══════════════════════ */
+.ios-picker-wrapper {
+    position: relative;
+    width: 100%;
+    border-radius: var(--r-lg, 16px);
+    background: var(--color-bg-input, #F5F5F7);
+    overflow: hidden;
+    padding: 0;
+}
+
+.ios-picker-highlight {
+    position: absolute;
+    top: 50%;
+    left: 8px;
+    right: 8px;
+    height: 44px;
+    transform: translateY(-50%);
+    background: rgba(120, 120, 128, 0.08);
+    border-radius: 10px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.ios-picker-columns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+}
+
+.ios-picker-column {
+    position: relative;
+    overflow: hidden;
+    flex: 0 0 auto;
+    width: 72px;
+}
+
+.ios-picker-scroll {
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.ios-picker-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.ios-picker-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    scroll-snap-align: start;
+    font-family: var(--font, 'Inter', sans-serif);
+    font-weight: 500;
+    font-size: 22px;
+    color: rgba(60, 60, 67, 0.25);
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.2s ease, font-weight 0.2s ease, transform 0.2s ease;
+}
+
+.ios-picker-item.selected {
+    color: var(--color-text-primary, #1C1C1E);
+    font-weight: 700;
+    font-size: 24px;
+    transform: scale(1.05);
+}
+
+.ios-picker-separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font, 'Inter', sans-serif);
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--color-text-primary, #1C1C1E);
+    width: 16px;
+    flex-shrink: 0;
+}
+
+/* Fade edges for 3D barrel effect */
+.ios-picker-column::before,
+.ios-picker-column::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 60px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.ios-picker-column::before {
+    top: 0;
+    background: linear-gradient(to bottom,
+            var(--color-bg-input, #F5F5F7) 0%,
+            transparent 100%);
+}
+
+.ios-picker-column::after {
+    bottom: 0;
+    background: linear-gradient(to top,
+            var(--color-bg-input, #F5F5F7) 0%,
+            transparent 100%);
+}

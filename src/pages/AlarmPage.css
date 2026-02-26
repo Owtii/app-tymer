@@ -218,7 +218,7 @@
 }
 
 .alarm-page-days .day-on {
-    color: var(--color-text-primary);
+    color: var(--color-brand);
 }
 
 .alarm-page-days .day-off {

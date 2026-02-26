@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Bell, Plus, X, Cpu, Pencil, Trash2, Volume2, Vibrate, Music, Timer, Calculator, Smartphone } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
+import IOSTimePicker from '../components/IOSTimePicker';
 import './AlarmPage.css';
 
 const DAY_NAMES = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
@@ -137,7 +138,7 @@ const AlarmPage = () => {
                             </div>
                             <div className="alarm-page-form-group">
                                 <label>Time</label>
-                                <input type="time" value={newAlarm.time} onChange={e => setNewAlarm(a => ({ ...a, time: e.target.value }))} />
+                                <IOSTimePicker value={newAlarm.time} onChange={(time) => setNewAlarm(a => ({ ...a, time }))} />
                             </div>
                             <div className="alarm-page-form-group">
                                 <label>Days</label>
@@ -210,7 +211,7 @@ const AlarmPage = () => {
                             </div>
                             <div className="alarm-page-form-group">
                                 <label>Time</label>
-                                <input type="time" value={editingAlarm.time} onChange={e => setEditingAlarm(a => ({ ...a, time: e.target.value }))} />
+                                <IOSTimePicker value={editingAlarm.time} onChange={(time) => setEditingAlarm(a => ({ ...a, time }))} />
                             </div>
                             <div className="alarm-page-form-group">
                                 <label>Days</label>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CloudRain, Sunrise, Clock, Home as HomeIcon, Car, Footprints, ChevronRight, Cpu, Plus, X, Bus, PersonStanding, CalendarOff, Pencil, Trash2, MapPin, Navigation, MoreVertical, Bell, ChevronDown } from 'lucide-react';
+import { CloudRain, Sunrise, Clock, Home as HomeIcon, Car, Footprints, ChevronRight, Cpu, Plus, X, Bus, PersonStanding, CalendarOff, Pencil, Trash2, MapPin, Navigation, MoreVertical, Bell, ChevronDown, Moon } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
+import IOSTimePicker from '../components/IOSTimePicker';
 import './Dashboard.css';
 
 const DAY_NAMES = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
@@ -232,52 +233,57 @@ const Dashboard = () => {
                         </div>
                     </div>
 
-                    {/* Route Breakdown — Clickable */}
-                    <div className="hero-route" onClick={() => navigate(`/app/route-details/${nextEvent.id}`)} style={{ cursor: 'pointer' }}>
-                        <div className="route-header">
-                            <span className="route-title">Route</span>
-                            <span className="route-total">{(nextEvent.travelMinutes || 0) + (nextEvent.walkMinutes || 0)} min</span>
+                    {/* Route Breakdown — Polished */}
+                    <div className="hero-route-widget" onClick={() => navigate(`/app/route-details/${nextEvent.id}`)}>
+                        <div className="route-widget-header">
+                            <div className="route-widget-title">
+                                <Navigation size={14} />
+                                <span>Your Route</span>
+                            </div>
+                            <span className="route-widget-total">{(nextEvent.travelMinutes || 0) + (nextEvent.walkMinutes || 0)} min</span>
                         </div>
 
-                        {/* Progress bar */}
-                        <div className="route-slider-wrapper">
-                            <div className="route-slider-track">
-                                <div className="route-slider-fill" style={{ width: `${routeProgress}%` }}></div>
-                                <div className="route-slider-thumb" style={{ left: `${routeProgress}%` }}>
-                                    <Navigation size={10} color="#FFFFFF" />
+                        <div className="route-widget-bar">
+                            <div className="route-widget-fill" style={{ width: `${routeProgress}%` }} />
+                        </div>
+
+                        <div className="route-widget-steps">
+                            <div className={`route-widget-step ${currentLeg === 'home' ? 'active' : ''}`}>
+                                <div className="route-widget-step-icon">
+                                    <HomeIcon size={16} />
                                 </div>
+                                <span className="route-widget-step-label">Home</span>
                             </div>
-                        </div>
-
-                        <div className="route-legs">
-                            <div className={`route-leg ${currentLeg === 'home' ? 'current' : ''}`}>
-                                <HomeIcon size={14} color={currentLeg === 'home' ? '#FF3C5D' : '#A1A1A1'} />
-                                <span>Home</span>
-                            </div>
-                            <ChevronRight size={12} color="#D4D4D4" />
-                            <div className={`route-leg ${currentLeg === 'travel' ? 'current' : ''}`}>
-                                <TravelIcon size={14} color={currentLeg === 'travel' ? '#FF3C5D' : '#A1A1A1'} />
-                                <span>{nextEvent.travelMinutes}m</span>
+                            <div className="route-widget-step-connector" />
+                            <div className={`route-widget-step ${currentLeg === 'travel' ? 'active' : ''}`}>
+                                <div className="route-widget-step-icon">
+                                    <TravelIcon size={16} />
+                                </div>
+                                <span className="route-widget-step-label">{nextEvent.travelMinutes || 0} min</span>
                             </div>
                             {nextEvent.walkMinutes > 0 && nextEvent.travelMode !== 'walk' && (
                                 <>
-                                    <ChevronRight size={12} color="#D4D4D4" />
-                                    <div className={`route-leg ${currentLeg === 'walk' ? 'current' : ''}`}>
-                                        <Footprints size={14} color={currentLeg === 'walk' ? '#FF3C5D' : '#A1A1A1'} />
-                                        <span>{nextEvent.walkMinutes}m</span>
+                                    <div className="route-widget-step-connector" />
+                                    <div className={`route-widget-step ${currentLeg === 'walk' ? 'active' : ''}`}>
+                                        <div className="route-widget-step-icon">
+                                            <Footprints size={16} />
+                                        </div>
+                                        <span className="route-widget-step-label">{nextEvent.walkMinutes} min</span>
                                     </div>
                                 </>
                             )}
-                            <ChevronRight size={12} color="#D4D4D4" />
-                            <div className="route-leg">
-                                <MapPin size={14} color="#A1A1A1" />
-                                <span>Arrive</span>
+                            <div className="route-widget-step-connector" />
+                            <div className="route-widget-step">
+                                <div className="route-widget-step-icon">
+                                    <MapPin size={16} />
+                                </div>
+                                <span className="route-widget-step-label">Arrive</span>
                             </div>
                         </div>
 
                         {nextEvent.location && (
-                            <div className="route-destination">
-                                <MapPin size={12} color="#979797" />
+                            <div className="route-widget-destination">
+                                <MapPin size={12} />
                                 <span>{nextEvent.location}</span>
                             </div>
                         )}
@@ -291,9 +297,10 @@ const Dashboard = () => {
                 </section>
             )}
 
-            {/* Section Tabs */}
+            {/* Section Tabs with Glide Indicator */}
             <div className="dash-section-header">
                 <div className="dash-alarm-tabs">
+                    <div className="dash-tab-indicator" style={{ transform: activeTab === 'alarm' ? 'translateX(100%)' : 'translateX(0)' }} />
                     <button
                         className={`dash-tab ${activeTab === 'plans' ? 'active' : ''}`}
                         onClick={() => setActiveTab('plans')}
@@ -326,9 +333,9 @@ const Dashboard = () => {
                             <div key={event.id} className="dash-plan-card">
                                 {/* Top: SMART PLAN + menu */}
                                 <div className="dash-plan-top">
-                                    <div className="dash-plan-smart-label">
-                                        <Cpu size={16} strokeWidth={1.5} color="#FF3C5D" />
-                                        <span>SMART PLAN</span>
+                                    <div className="dash-plan-smart-label" style={{ color: event.color || '#FF3C5D' }}>
+                                        <Cpu size={16} strokeWidth={1.5} style={{ color: event.color || '#FF3C5D' }} />
+                                        <span style={{ color: event.color || '#FF3C5D' }}>SMART PLAN</span>
                                     </div>
                                     <button className="dash-plan-menu-btn" onClick={() => setEditingEvent({ ...event })}>
                                         <MoreVertical size={14} color="#1C1C1C" />
@@ -346,11 +353,11 @@ const Dashboard = () => {
                                     </div>
                                 )}
 
-                                {/* Info Pills */}
+                                {/* Info Pills — with event color */}
                                 <div className="dash-plan-pills">
-                                    <div className="dash-plan-pill">
-                                        <Bell size={14} strokeWidth={1.5} />
-                                        <span>{fmt(event.time)}</span>
+                                    <div className="dash-plan-pill" style={{ background: `${event.color || '#FF3C5D'}15` }}>
+                                        <Bell size={14} strokeWidth={1.5} style={{ color: event.color || '#FF3C5D' }} />
+                                        <span style={{ color: event.color || '#FF3C5D' }}>{fmt(event.time)}</span>
                                     </div>
                                     <div className="dash-plan-pill">
                                         <EventIcon size={14} strokeWidth={1.5} />
@@ -367,7 +374,7 @@ const Dashboard = () => {
                                             <span className="dash-plan-avatar-count">+3</span>
                                         </div>
                                     </div>
-                                    <button className="dash-plan-view-btn" onClick={() => navigate(`/app/route-details/${event.id}`)}>
+                                    <button className="dash-plan-view-btn" style={{ background: event.color || 'var(--color-brand)' }} onClick={() => navigate(`/app/route-details/${event.id}`)}>
                                         <span>View</span>
                                     </button>
                                 </div>
@@ -409,7 +416,7 @@ const Dashboard = () => {
                             </div>
 
                             <div className="alarm-card-bottom">
-                                <span className="alarm-sleep">{alarm.active ? calcSleep(alarm.time) + ' sleep' : ''}</span>
+                                <span className="alarm-sleep">{alarm.active ? <><Moon size={12} color="#979797" style={{ marginRight: 4, verticalAlign: 'middle' }} />{calcSleep(alarm.time)} sleep</> : ''}</span>
                                 <div className="alarm-actions">
                                     <button className="alarm-action-btn" onClick={() => setEditingAlarm({ ...alarm })}>
                                         <Pencil size={14} color="#979797" />
@@ -444,7 +451,7 @@ const Dashboard = () => {
                             </div>
                             <div className="alarm-form-group">
                                 <label>Time</label>
-                                <input type="time" value={newAlarm.time} onChange={e => setNewAlarm(a => ({ ...a, time: e.target.value }))} />
+                                <IOSTimePicker value={newAlarm.time} onChange={(time) => setNewAlarm(a => ({ ...a, time }))} />
                             </div>
                             <div className="alarm-form-group">
                                 <label>Days</label>
@@ -484,7 +491,7 @@ const Dashboard = () => {
                             </div>
                             <div className="alarm-form-group">
                                 <label>Time</label>
-                                <input type="time" value={editingAlarm.time} onChange={e => setEditingAlarm(a => ({ ...a, time: e.target.value }))} />
+                                <IOSTimePicker value={editingAlarm.time} onChange={(time) => setEditingAlarm(a => ({ ...a, time }))} />
                             </div>
                             <div className="alarm-form-group">
                                 <label>Days</label>
@@ -524,7 +531,7 @@ const Dashboard = () => {
                             </div>
                             <div className="alarm-form-group">
                                 <label>Time</label>
-                                <input type="time" value={editingEvent.time} onChange={e => setEditingEvent(ev => ({ ...ev, time: e.target.value }))} />
+                                <IOSTimePicker value={editingEvent.time} onChange={(time) => setEditingEvent(ev => ({ ...ev, time }))} />
                             </div>
                             <div className="alarm-form-group">
                                 <label>Address</label>

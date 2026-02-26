@@ -340,116 +340,165 @@
     color: var(--color-brand);
 }
 
-/* ───── Route Section ───── */
-.hero-route {
+/* ───── Route Widget — Polished ───── */
+.hero-route-widget {
     background: var(--color-bg-pill);
-    border-radius: var(--r-lg);
-    padding: 16px 18px;
-    transition: background 0.2s;
+    border-radius: var(--r-xl);
+    padding: 18px 20px 16px;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
 }
 
-.hero-route:hover {
+.hero-route-widget:hover {
     background: #EAEAEC;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
-.route-header {
+/* Header */
+.route-widget-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
-.route-title {
+.route-widget-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     font-family: var(--font);
     font-weight: 700;
-    font-size: 14px;
-    color: var(--color-text-primary);
-}
-
-.route-total {
-    font-family: var(--font);
-    font-weight: 500;
     font-size: 13px;
-    color: var(--color-text-secondary);
+    color: var(--color-text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
 }
 
-/* Route Slider */
-.route-slider-wrapper {
-    margin-bottom: 12px;
-    padding: 0 2px;
+.route-widget-title svg {
+    color: var(--color-brand);
 }
 
-.route-slider-track {
-    position: relative;
-    height: 5px;
+.route-widget-total {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--color-brand);
+    background: var(--color-brand-soft, rgba(255, 60, 93, 0.08));
+    padding: 4px 10px;
+    border-radius: var(--r-pill);
+}
+
+/* Progress Bar */
+.route-widget-bar {
+    height: 4px;
     background: var(--color-border);
     border-radius: var(--r-pill);
-    overflow: visible;
+    overflow: hidden;
+    margin-bottom: 16px;
 }
 
-.route-slider-fill {
+.route-widget-fill {
     height: 100%;
-    background: var(--color-brand);
+    background: linear-gradient(90deg, var(--color-brand), var(--color-brand-hover, #e03350));
     border-radius: var(--r-pill);
     transition: width 1s linear;
 }
 
-.route-slider-thumb {
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 20px;
-    height: 20px;
-    background: var(--color-brand);
+/* Steps Row */
+.route-widget-steps {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.route-widget-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+    transition: all 0.3s ease;
+}
+
+.route-widget-step-icon {
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    border: 3px solid var(--color-bg-card);
-    box-shadow: 0 2px 8px rgba(232, 54, 78, 0.3);
+    background: var(--color-bg-card);
+    border: 1.5px solid var(--color-border);
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: left 1s linear;
-    z-index: 2;
+    transition: all 0.3s ease;
 }
 
-/* Route Legs */
-.route-legs {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
+.route-widget-step-icon svg {
+    color: #B8B8BD;
+    transition: color 0.3s ease;
 }
 
-.route-leg {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-}
-
-.route-leg span {
+.route-widget-step-label {
     font-family: var(--font);
     font-weight: 600;
-    font-size: 12px;
+    font-size: 11px;
     color: #B8B8BD;
+    white-space: nowrap;
+    transition: color 0.3s ease;
 }
 
-.route-leg.current span {
+/* Active state */
+.route-widget-step.active .route-widget-step-icon {
+    background: var(--color-brand-soft, rgba(255, 60, 93, 0.08));
+    border-color: var(--color-brand);
+}
+
+.route-widget-step.active .route-widget-step-icon svg {
+    color: var(--color-brand);
+}
+
+.route-widget-step.active .route-widget-step-label {
     color: var(--color-brand);
     font-weight: 700;
 }
 
-.route-destination {
+/* Connector lines */
+.route-widget-step-connector {
+    flex: 1;
+    height: 1.5px;
+    background: var(--color-border);
+    min-width: 12px;
+    margin: 0 4px;
+    margin-bottom: 18px;
+}
+
+/* Destination */
+.route-widget-destination {
     display: flex;
     align-items: center;
-    gap: 4px;
-    margin-top: 8px;
+    gap: 5px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--color-border-subtle);
+}
+
+.route-widget-destination svg {
+    color: #979797;
+    flex-shrink: 0;
+}
+
+.route-widget-destination span {
     font-family: var(--font);
     font-weight: 500;
     font-size: 12px;
     color: var(--color-text-secondary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
+
 /* ═══════════════════════ */
-/* SECTION TABS            */
+/* SECTION TABS + GLIDE    */
 /* ═══════════════════════ */
 .dash-section-header {
     margin-bottom: 16px;
@@ -464,6 +513,21 @@
     border-radius: var(--r-pill);
     overflow: hidden;
     padding: 3px;
+    position: relative;
+}
+
+/* Sliding indicator */
+.dash-tab-indicator {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: calc(50% - 3px);
+    height: calc(100% - 6px);
+    background: var(--color-text-primary);
+    border-radius: var(--r-pill);
+    transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 0;
+    box-shadow: var(--shadow-xs);
 }
 
 .dash-tab {
@@ -479,23 +543,26 @@
     color: var(--color-text-secondary);
     background: transparent;
     border-radius: var(--r-pill);
-    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: color 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     white-space: nowrap;
+    position: relative;
+    z-index: 1;
 }
 
 .dash-tab svg {
     flex-shrink: 0;
+    transition: color 0.25s;
 }
 
 .dash-tab.active {
-    background: var(--color-text-primary);
     color: var(--color-text-inverted);
-    box-shadow: var(--shadow-xs);
+    background: transparent;
 }
 
 .dash-tab.active svg {
     color: var(--color-text-inverted);
 }
+
 
 /* ═══════════════════════ */
 /* PLAN CARDS              */
@@ -724,7 +791,7 @@
 }
 
 .day-active {
-    color: var(--color-text-primary);
+    color: var(--color-brand);
 }
 
 .day-inactive {
@@ -866,20 +933,25 @@
     background: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(12px);
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: center;
     z-index: 200;
     animation: fadeIn 0.2s ease;
 }
 
+
 .alarm-modal {
     width: 100%;
     max-width: 440px;
+    max-height: 85vh;
+    overflow-y: auto;
     background: var(--color-bg-card);
-    border-radius: var(--r-xl) var(--r-xl) 0 0;
-    padding: 24px 24px 36px;
+    border-radius: var(--r-xl);
+    padding: 24px 24px 32px;
     animation: slideUp 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    margin: 16px;
 }
+
 
 .alarm-modal-header {
     display: flex;

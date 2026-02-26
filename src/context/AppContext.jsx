@@ -2,12 +2,19 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const AppContext = createContext();
 
+const getTodayStr = () => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+};
+
 // Seed data
 const SEED_EVENTS = [
     {
         id: 'evt-1',
         title: 'Dentist Appointment',
         time: '13:30',
+        date: getTodayStr(),
+        color: '#FF3C5D',
         duration: 60,
         location: 'Central Dental Clinic, NY',
         travelMode: 'drive',
@@ -19,6 +26,8 @@ const SEED_EVENTS = [
         id: 'evt-2',
         title: 'Team Sync',
         time: '15:00',
+        date: getTodayStr(),
+        color: '#5E5CE6',
         duration: 60,
         location: 'Office Meeting Room 2',
         travelMode: 'drive',
@@ -70,6 +79,7 @@ const loadFromStorage = (key, fallback) => {
 export const AppProvider = ({ children }) => {
     const [events, setEvents] = useState(() => loadFromStorage('punct_events', SEED_EVENTS));
     const [alarms, setAlarms] = useState(() => loadFromStorage('punct_alarms', SEED_ALARMS));
+    const [homeLocation, setHomeLocationState] = useState(() => loadFromStorage('punct_home', null));
 
     // Persist on change
     useEffect(() => {
@@ -80,9 +90,22 @@ export const AppProvider = ({ children }) => {
         localStorage.setItem('punct_alarms', JSON.stringify(alarms));
     }, [alarms]);
 
+    useEffect(() => {
+        if (homeLocation) localStorage.setItem('punct_home', JSON.stringify(homeLocation));
+    }, [homeLocation]);
+
+    const setHomeLocation = (location) => {
+        setHomeLocationState(location);
+    };
+
     // Event CRUD
     const addEvent = (event) => {
-        const newEvent = { ...event, id: `evt-${Date.now()}` };
+        const newEvent = {
+            ...event,
+            id: `evt-${Date.now()}`,
+            date: event.date || getTodayStr(),
+            color: event.color || '#FF3C5D'
+        };
         setEvents(prev => [...prev, newEvent]);
         return newEvent;
     };
@@ -114,12 +137,19 @@ export const AppProvider = ({ children }) => {
         setAlarms(prev => prev.map(a => a.id === id ? { ...a, active: !a.active } : a));
     };
 
-    // Get nearest upcoming event based on current time
+    // Get events for a specific date
+    const getEventsForDate = (dateStr) => {
+        return events.filter(e => e.date === dateStr);
+    };
+
+    // Get nearest upcoming event based on current time (today only)
     const getNextEvent = () => {
         const now = new Date();
+        const todayStr = getTodayStr();
         const nowMinutes = now.getHours() * 60 + now.getMinutes();
 
         const upcoming = events
+            .filter(e => !e.date || e.date === todayStr)
             .map(e => {
                 const [h, m] = e.time.split(':').map(Number);
                 const eventMinutes = h * 60 + m;
@@ -136,7 +166,8 @@ export const AppProvider = ({ children }) => {
         <AppContext.Provider value={{
             events, addEvent, updateEvent, deleteEvent,
             alarms, addAlarm, updateAlarm, deleteAlarm, toggleAlarm,
-            getNextEvent
+            getNextEvent, getEventsForDate,
+            homeLocation, setHomeLocation
         }}>
             {children}
         </AppContext.Provider>
