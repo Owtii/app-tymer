@@ -343,8 +343,6 @@ const Dashboard = () => {
                         const totalTravel = (event.travelMinutes || 0) + (event.walkMinutes || 0);
                         return (
                             <div key={event.id} className="dash-plan-card" onClick={() => navigate(`/app/route-details/${event.id}`)} style={{ cursor: 'pointer' }}>
-                                {/* Color accent bar */}
-                                <div className="dash-plan-accent" style={{ background: event.color || '#FF3C5D' }} />
                                 {/* Top: SMART PLAN + menu */}
                                 <div className="dash-plan-top">
                                     <div className="dash-plan-smart-label" style={{ color: event.color || '#FF3C5D' }}>

@@ -583,14 +583,8 @@
     transform: scale(0.98);
 }
 
-.dash-plan-accent {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    border-radius: var(--r-xl) var(--r-xl) 0 0;
-}
+
+
 
 .dash-plan-card:hover {
     box-shadow: var(--shadow-md);
