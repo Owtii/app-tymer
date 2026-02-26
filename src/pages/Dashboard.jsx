@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CloudRain, Sunrise, Clock, Home as HomeIcon, Car, Footprints, ChevronRight, Cpu, Plus, X, Bus, PersonStanding, CalendarOff, Pencil, Trash2, MapPin, Navigation, MoreVertical, Bell, ChevronDown, Moon } from 'lucide-react';
+import { CloudRain, Cloud, Sun, CloudSnow, CloudLightning, CloudDrizzle, CloudFog, Snowflake, Sunrise, Clock, Home as HomeIcon, Car, Footprints, ChevronRight, Cpu, Plus, X, Bus, PersonStanding, CalendarOff, Pencil, Trash2, MapPin, Navigation, MoreVertical, Bell, ChevronDown, Moon } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import IOSTimePicker from '../components/IOSTimePicker';
+import { getWeather } from '../services/WeatherService';
 import './Dashboard.css';
 
 const DAY_NAMES = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
@@ -18,6 +19,8 @@ const Dashboard = () => {
     const [confirmDelete, setConfirmDelete] = useState(null);
     const [showPlanSwitcher, setShowPlanSwitcher] = useState(false);
     const [selectedEventId, setSelectedEventId] = useState(null);
+    const [weather, setWeather] = useState({ temp: null, label: 'Weather', icon: 'cloud' });
+    const [userName] = useState(() => localStorage.getItem('punct_user_name') || 'there');
     const [newAlarm, setNewAlarm] = useState({
         name: '', time: '07:00', type: 'regular', smart: false, active: true,
         days: [false, true, true, true, true, true, false]
@@ -28,6 +31,15 @@ const Dashboard = () => {
         const t = setInterval(() => setNow(new Date()), 1000);
         return () => clearInterval(t);
     }, []);
+
+    // Fetch real-time weather
+    useEffect(() => {
+        getWeather().then(w => setWeather(w));
+        const wt = setInterval(() => getWeather().then(w => setWeather(w)), 600000); // refresh every 10 min
+        return () => clearInterval(wt);
+    }, []);
+
+    const WeatherIcon = weather.icon === 'sun' ? Sun : weather.icon === 'cloud-rain' ? CloudRain : weather.icon === 'snowflake' ? Snowflake : weather.icon === 'cloud-lightning' ? CloudLightning : weather.icon === 'cloud-drizzle' ? CloudDrizzle : weather.icon === 'cloud-fog' ? CloudFog : weather.icon === 'cloud-snow' ? CloudSnow : Cloud;
 
     // Next upcoming event (or selected event)
     const nextEvent = useMemo(() => {
@@ -169,11 +181,11 @@ const Dashboard = () => {
             <header className="dash-header">
                 <div className="dash-header-left">
                     <p className="dash-date">{dateStr}</p>
-                    <h1 className="dash-greeting">{greeting},<br />Alex</h1>
+                    <h1 className="dash-greeting">{greeting},<br />{userName}</h1>
                 </div>
                 <div className="dash-weather-pill">
-                    <CloudRain size={16} strokeWidth={2} />
-                    <span>Rain: 15° C</span>
+                    <WeatherIcon size={16} strokeWidth={2} />
+                    <span>{weather.temp !== null ? `${weather.label}: ${weather.temp}°C` : 'Loading...'}</span>
                 </div>
             </header>
 
@@ -330,14 +342,16 @@ const Dashboard = () => {
                         const EventIcon = getTravelIcon(event.travelMode);
                         const totalTravel = (event.travelMinutes || 0) + (event.walkMinutes || 0);
                         return (
-                            <div key={event.id} className="dash-plan-card">
+                            <div key={event.id} className="dash-plan-card" onClick={() => navigate(`/app/route-details/${event.id}`)} style={{ cursor: 'pointer' }}>
+                                {/* Color accent bar */}
+                                <div className="dash-plan-accent" style={{ background: event.color || '#FF3C5D' }} />
                                 {/* Top: SMART PLAN + menu */}
                                 <div className="dash-plan-top">
                                     <div className="dash-plan-smart-label" style={{ color: event.color || '#FF3C5D' }}>
                                         <Cpu size={16} strokeWidth={1.5} style={{ color: event.color || '#FF3C5D' }} />
                                         <span style={{ color: event.color || '#FF3C5D' }}>SMART PLAN</span>
                                     </div>
-                                    <button className="dash-plan-menu-btn" onClick={() => setEditingEvent({ ...event })}>
+                                    <button className="dash-plan-menu-btn" onClick={(e) => { e.stopPropagation(); setEditingEvent({ ...event }); }}>
                                         <MoreVertical size={14} color="#1C1C1C" />
                                     </button>
                                 </div>
@@ -363,20 +377,6 @@ const Dashboard = () => {
                                         <EventIcon size={14} strokeWidth={1.5} />
                                         <span>{totalTravel}min {event.travelMode}</span>
                                     </div>
-                                </div>
-
-                                {/* Bottom: Avatars + View */}
-                                <div className="dash-plan-bottom">
-                                    <div className="dash-plan-avatars">
-                                        <div className="dash-plan-avatar"></div>
-                                        <div className="dash-plan-avatar"></div>
-                                        <div className="dash-plan-avatar">
-                                            <span className="dash-plan-avatar-count">+3</span>
-                                        </div>
-                                    </div>
-                                    <button className="dash-plan-view-btn" style={{ background: event.color || 'var(--color-brand)' }} onClick={() => navigate(`/app/route-details/${event.id}`)}>
-                                        <span>View</span>
-                                    </button>
                                 </div>
                             </div>
                         );

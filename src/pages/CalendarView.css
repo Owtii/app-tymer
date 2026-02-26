@@ -64,6 +64,13 @@ body:has(.cal-modal-overlay) .bottom-nav {
     display: none;
 }
 
+/* Expanded state — wraps into grid */
+.cal-week-strip.expanded {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    scroll-snap-type: none;
+}
+
 .cal-day {
     display: flex;
     flex-direction: column;
@@ -88,9 +95,10 @@ body:has(.cal-modal-overlay) .bottom-nav {
     background: var(--color-bg-pill);
 }
 
-.cal-day.sunday {
-    background: var(--color-bg-pill);
-    border: none;
+/* Sunday — same look, bolder name */
+.cal-day-name.sunday-bold {
+    font-weight: 800;
+    color: var(--color-text-primary);
 }
 
 /* Yesterday — muted/dimmed */
@@ -119,9 +127,7 @@ body:has(.cal-modal-overlay) .bottom-nav {
     text-align: center;
 }
 
-.cal-day.sunday .cal-day-name {
-    color: var(--color-text-tertiary);
-}
+/* Sunday active state inherits from .cal-day.active */
 
 .cal-day.active .cal-day-name {
     color: rgba(255, 255, 255, 0.8);
@@ -137,9 +143,7 @@ body:has(.cal-modal-overlay) .bottom-nav {
     text-align: center;
 }
 
-.cal-day.sunday .cal-day-num {
-    color: var(--color-text-tertiary);
-}
+/* (Sunday num inherits normal styling) */
 
 .cal-day.active .cal-day-num {
     color: var(--color-text-inverted);
@@ -194,6 +198,36 @@ body:has(.cal-modal-overlay) .bottom-nav {
     font-weight: 600;
     font-size: 10px;
     color: var(--color-text-secondary);
+}
+
+/* Expand/Collapse Toggle */
+.cal-expand-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 100%;
+    padding: 8px 0 2px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 12px;
+    transition: color 0.2s;
+}
+
+.cal-expand-toggle:hover {
+    color: var(--color-text-primary);
+}
+
+.cal-expand-toggle svg {
+    transition: transform 0.3s ease;
+}
+
+.cal-expand-toggle svg.rotated {
+    transform: rotate(180deg);
 }
 
 /* ───── Today Header Row ───── */
@@ -389,31 +423,7 @@ body:has(.cal-modal-overlay) .bottom-nav {
     color: var(--color-text-secondary);
 }
 
-/* View Button */
-.cal-view-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 88px;
-    height: 32px;
-    background: var(--color-brand);
-    border: none;
-    border-radius: var(--r-pill);
-    cursor: pointer;
-    transition: background 0.2s, transform 0.15s;
-}
-
-.cal-view-btn:hover {
-    background: var(--color-brand-hover);
-    transform: scale(1.02);
-}
-
-.cal-view-btn span {
-    font-family: var(--font);
-    font-weight: 600;
-    font-size: 13px;
-    color: var(--color-text-inverted);
-}
+/* (View button removed — entire card is clickable) */
 
 /* Empty state */
 .cal-empty {
@@ -480,7 +490,7 @@ body:has(.cal-modal-overlay) .bottom-nav {
 }
 
 /* ═══════════════════════ */
-/* COLOR PICKER — 8 colors */
+/* COLOR PICKER — 6 colors */
 /* ═══════════════════════ */
 .cal-color-picker {
     display: flex;

@@ -16,8 +16,8 @@ const TRAVEL_MODES = [
 ];
 
 const COLOR_PRESETS = [
-    '#FF3C5D', '#FF9500', '#FFCC00', '#34C759',
-    '#5E5CE6', '#007AFF', '#AF52DE', '#00C7BE'
+    '#FF3C5D', '#FF9500', '#34C759',
+    '#5E5CE6', '#007AFF', '#AF52DE'
 ];
 
 const toDateStr = (d) => {
@@ -29,7 +29,8 @@ const CalendarView = () => {
     const [showForm, setShowForm] = useState(false);
     const [editingEvent, setEditingEvent] = useState(null);
     const [activeMenu, setActiveMenu] = useState(null);
-    const [daysToShow, setDaysToShow] = useState(30);
+    const [daysToShow, setDaysToShow] = useState(14);
+    const [expanded, setExpanded] = useState(false);
     const scrollRef = useRef(null);
 
     const today = new Date();
@@ -91,6 +92,10 @@ const CalendarView = () => {
 
     const handleShowMore = () => {
         setDaysToShow(prev => prev + 30);
+    };
+
+    const toggleExpand = () => {
+        setExpanded(prev => !prev);
     };
 
     // Auto-calculate route from home
@@ -184,14 +189,14 @@ const CalendarView = () => {
 
             {/* Horizontal Scrollable Day Strip */}
             <div className="cal-scroll-wrapper">
-                <div className="cal-week-strip" ref={scrollRef}>
+                <div className={`cal-week-strip ${expanded ? 'expanded' : ''}`} ref={scrollRef}>
                     {calendarDays.map((day) => (
                         <div
                             key={day.dateStr}
-                            className={`cal-day ${day.isSelected ? 'active' : ''} ${day.isSunday ? 'sunday' : ''} ${day.isYesterday ? 'yesterday' : ''}`}
+                            className={`cal-day ${day.isSelected ? 'active' : ''} ${day.isYesterday ? 'yesterday' : ''}`}
                             onClick={() => handleSelectDay(day.dateStr)}
                         >
-                            <span className="cal-day-name">{day.dayName}</span>
+                            <span className={`cal-day-name ${day.isSunday ? 'sunday-bold' : ''}`}>{day.dayName}</span>
                             <span className="cal-day-num">{day.date}</span>
                             {day.hasEvents && (
                                 <div className="cal-day-dots">
@@ -207,6 +212,10 @@ const CalendarView = () => {
                         <span>More</span>
                     </button>
                 </div>
+                <button className="cal-expand-toggle" onClick={toggleExpand}>
+                    <ChevronDown size={16} className={expanded ? 'rotated' : ''} />
+                    <span>{expanded ? 'Less' : 'Expand'}</span>
+                </button>
             </div>
 
             {/* Today Row */}
@@ -280,7 +289,7 @@ const CalendarView = () => {
                                 </div>
                             </div>
 
-                            {/* Bottom: Avatars + View */}
+                            {/* Bottom: Avatars */}
                             <div className="cal-event-bottom">
                                 <div className="cal-avatar-group">
                                     <div className="cal-avatar"></div>
@@ -289,9 +298,6 @@ const CalendarView = () => {
                                         <span className="cal-avatar-count">+3</span>
                                     </div>
                                 </div>
-                                <button className="cal-view-btn">
-                                    <span>View</span>
-                                </button>
                             </div>
                         </div>
                     );

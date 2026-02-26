@@ -6,6 +6,7 @@ import Welcome from './pages/Welcome';
 import Onboarding from './pages/Onboarding';
 import Questionnaire from './pages/Questionnaire';
 import './design-system.css';
+import NameSetup from './pages/NameSetup';
 import Auth from './pages/Auth';
 import Dashboard from './pages/Dashboard';
 import Logistics from './pages/Logistics';
@@ -27,6 +28,7 @@ function App() {
             <Route path="/welcome" element={<Welcome />} />
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/questionnaire" element={<Questionnaire />} />
+            <Route path="/name-setup" element={<NameSetup />} />
             <Route path="/auth" element={<Auth />} />
 
             {/* Main App Routes Wrapped in Layout */}

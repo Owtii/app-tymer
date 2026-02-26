@@ -342,7 +342,7 @@
 
 /* ───── Route Widget — Polished ───── */
 .hero-route-widget {
-    background: var(--color-bg-pill);
+    background: #F5F5F7;
     border-radius: var(--r-xl);
     padding: 18px 20px 16px;
     cursor: pointer;
@@ -350,7 +350,7 @@
 }
 
 .hero-route-widget:hover {
-    background: #EAEAEC;
+    background: #EDEDEF;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
@@ -574,7 +574,22 @@
     border-radius: var(--r-xl);
     padding: 20px 24px 22px;
     margin-bottom: 14px;
-    transition: box-shadow 0.2s;
+    transition: box-shadow 0.2s, transform 0.15s;
+    position: relative;
+    overflow: hidden;
+}
+
+.dash-plan-card:active {
+    transform: scale(0.98);
+}
+
+.dash-plan-accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: var(--r-xl) var(--r-xl) 0 0;
 }
 
 .dash-plan-card:hover {
