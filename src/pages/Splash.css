@@ -4,7 +4,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #FFFFFF;
+    background: var(--color-bg-app);
     position: relative;
     overflow: hidden;
     transition: opacity 0.5s ease;
@@ -43,7 +43,7 @@
     height: 42%;
     left: -15%;
     bottom: 0;
-    background: #FF0037;
+    background: var(--color-brand);
     border-radius: 20% 80% 0% 0%;
 }
 
@@ -70,7 +70,7 @@
     height: 14%;
     right: 0;
     bottom: 3%;
-    background: #FFFFFF;
+    background: var(--color-bg-card);
     border-radius: 50% 50% 30% 70%;
 }
 
@@ -102,11 +102,12 @@
 .splash-logo-text {
     position: relative;
     z-index: 2;
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    font-size: 48px;
-    line-height: 58px;
-    color: #FFFFFF;
+    font-family: var(--font);
+    font-weight: 800;
+    font-size: 36px;
+    line-height: 44px;
+    letter-spacing: -0.03em;
+    color: var(--color-text-inverted);
     animation: fadeInLogo 0.8s ease-out;
 }
 

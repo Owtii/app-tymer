@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Menu, Clock, MapPin, Plus, X, Car, PersonStanding, Bus, MoreVertical, Cpu, Pencil, Trash2, Bell, ChevronRight, ChevronDown } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { Menu, Clock, MapPin, Plus, X, Car, PersonStanding, Bus, MoreVertical, Cpu, Pencil, Trash2, Bell, ChevronRight, ChevronDown, ChevronLeft } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import IOSTimePicker from '../components/IOSTimePicker';
 import AddressInput from '../components/AddressInput';
@@ -7,6 +7,7 @@ import { getDirections } from '../services/MapboxService';
 import './CalendarView.css';
 
 const DAY_NAMES_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const DAY_HEADERS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 const TRAVEL_MODES = [
@@ -31,12 +32,12 @@ const CalendarView = () => {
     const [activeMenu, setActiveMenu] = useState(null);
     const [daysToShow, setDaysToShow] = useState(14);
     const [expanded, setExpanded] = useState(false);
+    const [expandedMonth, setExpandedMonth] = useState(null); // { month, year }
     const scrollRef = useRef(null);
 
     const today = new Date();
     const todayStr = toDateStr(today);
 
-    // Start from yesterday
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
 
@@ -50,7 +51,59 @@ const CalendarView = () => {
 
     const [form, setForm] = useState(emptyForm);
 
-    // Build array of days: starts from yesterday (-1)
+    // Initialize expanded month to current month when toggling
+    const toggleExpand = () => {
+        if (!expanded) {
+            setExpandedMonth({ month: today.getMonth(), year: today.getFullYear() });
+        }
+        setExpanded(prev => !prev);
+    };
+
+    const prevMonth = () => {
+        setExpandedMonth(prev => {
+            const m = prev.month - 1;
+            return m < 0 ? { month: 11, year: prev.year - 1 } : { month: m, year: prev.year };
+        });
+    };
+
+    const nextMonth = () => {
+        setExpandedMonth(prev => {
+            const m = prev.month + 1;
+            return m > 11 ? { month: 0, year: prev.year + 1 } : { month: m, year: prev.year };
+        });
+    };
+
+    // Build month grid for expanded view
+    const getMonthGrid = (month, year) => {
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+        const startDayOfWeek = firstDay.getDay();
+        const daysInMonth = lastDay.getDate();
+
+        const grid = [];
+        // Empty cells before first day
+        for (let i = 0; i < startDayOfWeek; i++) {
+            grid.push(null);
+        }
+        // Days of the month
+        for (let d = 1; d <= daysInMonth; d++) {
+            const date = new Date(year, month, d);
+            const dateStr = toDateStr(date);
+            const dayEvents = events.filter(e => e.date === dateStr);
+            grid.push({
+                date: d,
+                dateStr,
+                isToday: dateStr === todayStr,
+                isSelected: dateStr === selectedDate,
+                isSunday: date.getDay() === 0,
+                hasEvents: dayEvents.length > 0,
+                eventColors: [...new Set(dayEvents.map(e => e.color || '#FF3C5D'))]
+            });
+        }
+        return grid;
+    };
+
+    // Build horizontal strip days
     const calendarDays = [];
     for (let i = -1; i < daysToShow; i++) {
         const d = new Date(today);
@@ -79,26 +132,17 @@ const CalendarView = () => {
         selectedDate === yesterdayStr ? 'Yesterday' :
             selDate.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
 
-    // Selected month display
+    // Current month display (for strip mode)
     const selMonth = MONTH_NAMES[selDate.getMonth()];
     const selYear = selDate.getFullYear();
 
     // Events for selected date
     const dateEvents = events.filter(e => e.date === selectedDate);
 
-    const handleSelectDay = (dateStr) => {
-        setSelectedDate(dateStr);
-    };
+    const handleSelectDay = (dateStr) => setSelectedDate(dateStr);
+    const handleShowMore = () => setDaysToShow(prev => prev + 30);
 
-    const handleShowMore = () => {
-        setDaysToShow(prev => prev + 30);
-    };
-
-    const toggleExpand = () => {
-        setExpanded(prev => !prev);
-    };
-
-    // Auto-calculate route from home
+    // Auto-calculate route
     const autoCalcRoute = async (destCoords, travelMode) => {
         if (!homeLocation?.coords || !destCoords) return { travel: 0, walk: 0 };
         try {
@@ -112,8 +156,6 @@ const CalendarView = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!form.title || !form.time) return;
-
-        // Auto-calc route if we have coords
         let travelMinutes = form.travelMinutes || 0;
         let walkMinutes = form.walkMinutes || 0;
         if (form.locationCoords && homeLocation?.coords) {
@@ -121,18 +163,10 @@ const CalendarView = () => {
             travelMinutes = route.travel;
             walkMinutes = route.walk;
         }
-
         addEvent({
-            title: form.title,
-            time: form.time,
-            date: selectedDate,
-            color: form.color,
-            location: form.location,
-            locationCoords: form.locationCoords,
-            travelMode: form.travelMode,
-            travelMinutes,
-            walkMinutes,
-            type: form.type
+            title: form.title, time: form.time, date: selectedDate, color: form.color,
+            location: form.location, locationCoords: form.locationCoords,
+            travelMode: form.travelMode, travelMinutes, walkMinutes, type: form.type
         });
         setForm(emptyForm);
         setShowForm(false);
@@ -141,7 +175,6 @@ const CalendarView = () => {
     const handleEditSubmit = async (e) => {
         e.preventDefault();
         if (!editingEvent || !editingEvent.title || !editingEvent.time) return;
-
         let travelMinutes = editingEvent.travelMinutes || 0;
         let walkMinutes = editingEvent.walkMinutes || 0;
         if (editingEvent.locationCoords && homeLocation?.coords) {
@@ -149,16 +182,10 @@ const CalendarView = () => {
             travelMinutes = route.travel;
             walkMinutes = route.walk;
         }
-
         updateEvent(editingEvent.id, {
-            title: editingEvent.title,
-            time: editingEvent.time,
-            color: editingEvent.color,
-            location: editingEvent.location,
-            locationCoords: editingEvent.locationCoords,
-            travelMode: editingEvent.travelMode,
-            travelMinutes,
-            walkMinutes
+            title: editingEvent.title, time: editingEvent.time, color: editingEvent.color,
+            location: editingEvent.location, locationCoords: editingEvent.locationCoords,
+            travelMode: editingEvent.travelMode, travelMinutes, walkMinutes
         });
         setEditingEvent(null);
     };
@@ -166,8 +193,7 @@ const CalendarView = () => {
     const formatTime = (t) => {
         const [h, m] = t.split(':').map(Number);
         const ampm = h >= 12 ? 'PM' : 'AM';
-        const hr = h % 12 || 12;
-        return `${hr}:${m.toString().padStart(2, '0')} ${ampm}`;
+        return `${h % 12 || 12}:${m.toString().padStart(2, '0')} ${ampm}`;
     };
 
     const getTravelIcon = (mode) => mode === 'transit' ? Bus : mode === 'walk' ? PersonStanding : Car;
@@ -185,33 +211,85 @@ const CalendarView = () => {
             </button>
 
             {/* Month Title */}
-            <h2 className="cal-month-title">{selMonth} {selYear}</h2>
+            {!expanded && (
+                <h2 className="cal-month-title">{selMonth} {selYear}</h2>
+            )}
 
-            {/* Horizontal Scrollable Day Strip */}
-            <div className="cal-scroll-wrapper">
-                <div className={`cal-week-strip ${expanded ? 'expanded' : ''}`} ref={scrollRef}>
-                    {calendarDays.map((day) => (
-                        <div
-                            key={day.dateStr}
-                            className={`cal-day ${day.isSelected ? 'active' : ''} ${day.isYesterday ? 'yesterday' : ''}`}
-                            onClick={() => handleSelectDay(day.dateStr)}
-                        >
-                            <span className={`cal-day-name ${day.isSunday ? 'sunday-bold' : ''}`}>{day.dayName}</span>
-                            <span className="cal-day-num">{day.date}</span>
-                            {day.hasEvents && (
-                                <div className="cal-day-dots">
-                                    {day.eventColors.slice(0, 3).map((color, i) => (
-                                        <span key={i} className="cal-day-dot" style={{ background: color }} />
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    ))}
-                    <button className="cal-show-more-btn" onClick={handleShowMore}>
-                        <ChevronRight size={18} />
-                        <span>More</span>
-                    </button>
+            {/* ─── Expanded Month Grid ─── */}
+            {expanded && expandedMonth && (
+                <div className="cal-month-view">
+                    <div className="cal-month-nav">
+                        <button className="cal-month-arrow" onClick={prevMonth}>
+                            <ChevronLeft size={20} />
+                        </button>
+                        <h2 className="cal-month-title-center">
+                            {MONTH_NAMES[expandedMonth.month]} {expandedMonth.year}
+                        </h2>
+                        <button className="cal-month-arrow" onClick={nextMonth}>
+                            <ChevronRight size={20} />
+                        </button>
+                    </div>
+                    <div className="cal-month-headers">
+                        {DAY_HEADERS.map((d, i) => (
+                            <span key={i} className={`cal-month-header ${i === 0 ? 'sunday' : ''}`}>{d}</span>
+                        ))}
+                    </div>
+                    <div className="cal-month-grid">
+                        {getMonthGrid(expandedMonth.month, expandedMonth.year).map((cell, i) => (
+                            cell ? (
+                                <button
+                                    key={i}
+                                    className={`cal-month-cell ${cell.isSelected ? 'active' : ''} ${cell.isToday ? 'today' : ''}`}
+                                    onClick={() => handleSelectDay(cell.dateStr)}
+                                >
+                                    <span className="cal-month-cell-num">{cell.date}</span>
+                                    {cell.hasEvents && (
+                                        <div className="cal-month-cell-dots">
+                                            {cell.eventColors.slice(0, 2).map((c, j) => (
+                                                <span key={j} className="cal-month-cell-dot" style={{ background: c }} />
+                                            ))}
+                                        </div>
+                                    )}
+                                </button>
+                            ) : (
+                                <div key={i} className="cal-month-cell empty" />
+                            )
+                        ))}
+                    </div>
                 </div>
+            )}
+
+            {/* ─── Horizontal Strip (non-expanded) ─── */}
+            {!expanded && (
+                <div className="cal-scroll-wrapper">
+                    <div className="cal-week-strip" ref={scrollRef}>
+                        {calendarDays.map((day) => (
+                            <div
+                                key={day.dateStr}
+                                className={`cal-day ${day.isSelected ? 'active' : ''} ${day.isYesterday ? 'yesterday' : ''}`}
+                                onClick={() => handleSelectDay(day.dateStr)}
+                            >
+                                <span className={`cal-day-name ${day.isSunday ? 'sunday-bold' : ''}`}>{day.dayName}</span>
+                                <span className="cal-day-num">{day.date}</span>
+                                {day.hasEvents && (
+                                    <div className="cal-day-dots">
+                                        {day.eventColors.slice(0, 3).map((color, i) => (
+                                            <span key={i} className="cal-day-dot" style={{ background: color }} />
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                        <button className="cal-show-more-btn" onClick={handleShowMore}>
+                            <ChevronRight size={18} />
+                            <span>More</span>
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Expand/Collapse Toggle */}
+            <div className="cal-expand-bar">
                 <button className="cal-expand-toggle" onClick={toggleExpand}>
                     <ChevronDown size={16} className={expanded ? 'rotated' : ''} />
                     <span>{expanded ? 'Less' : 'Expand'}</span>
@@ -241,7 +319,6 @@ const CalendarView = () => {
                     const eventColor = event.color || '#FF3C5D';
                     return (
                         <div key={event.id} className="cal-event-card">
-                            {/* Top: SMART PLAN + menu */}
                             <div className="cal-event-top">
                                 <div className="cal-smart-label" style={{ color: eventColor }}>
                                     <Cpu size={16} strokeWidth={1.5} style={{ color: eventColor }} />
@@ -252,7 +329,6 @@ const CalendarView = () => {
                                 </button>
                             </div>
 
-                            {/* Actions Menu */}
                             {activeMenu === event.id && (
                                 <div className="cal-event-actions-menu">
                                     <button onClick={() => openEditModal(event)}>
@@ -266,10 +342,8 @@ const CalendarView = () => {
                                 </div>
                             )}
 
-                            {/* Title */}
                             <h3 className="cal-event-title">{event.title}</h3>
 
-                            {/* Location */}
                             {event.location && (
                                 <div className="cal-event-location">
                                     <MapPin size={13} strokeWidth={1.5} />
@@ -277,7 +351,6 @@ const CalendarView = () => {
                                 </div>
                             )}
 
-                            {/* Info Pills */}
                             <div className="cal-event-pills">
                                 <div className="cal-pill" style={{ background: `${eventColor}15` }}>
                                     <Bell size={14} strokeWidth={1.5} style={{ color: eventColor }} />
@@ -289,7 +362,6 @@ const CalendarView = () => {
                                 </div>
                             </div>
 
-                            {/* Bottom: Avatars */}
                             <div className="cal-event-bottom">
                                 <div className="cal-avatar-group">
                                     <div className="cal-avatar"></div>
@@ -317,68 +389,43 @@ const CalendarView = () => {
                         <form onSubmit={handleSubmit} className="cal-form">
                             <div className="cal-form-group">
                                 <label>Title</label>
-                                <input
-                                    type="text"
-                                    placeholder="Dentist Appointment"
-                                    value={form.title}
-                                    onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
-                                    required
-                                />
+                                <input type="text" placeholder="Dentist Appointment" value={form.title}
+                                    onChange={e => setForm(f => ({ ...f, title: e.target.value }))} required />
                             </div>
                             <div className="cal-form-group">
                                 <label>Time</label>
-                                <IOSTimePicker
-                                    value={form.time}
-                                    onChange={(time) => setForm(f => ({ ...f, time }))}
-                                />
+                                <IOSTimePicker value={form.time} onChange={(time) => setForm(f => ({ ...f, time }))} />
                             </div>
                             <div className="cal-form-group">
                                 <label>Address</label>
-                                <AddressInput
-                                    value={{ address: form.location }}
-                                    onChange={(loc) => setForm(f => ({
-                                        ...f,
-                                        location: loc.address,
-                                        locationCoords: loc.coords
-                                    }))}
-                                    placeholder="Search address..."
-                                />
+                                <AddressInput value={{ address: form.location }}
+                                    onChange={(loc) => setForm(f => ({ ...f, location: loc.address, locationCoords: loc.coords }))}
+                                    placeholder="Search address..." />
                             </div>
-
-                            {/* Color Picker */}
                             <div className="cal-form-group">
                                 <label>Event Color</label>
                                 <div className="cal-color-picker">
                                     {COLOR_PRESETS.map(color => (
-                                        <button
-                                            type="button"
-                                            key={color}
+                                        <button type="button" key={color}
                                             className={`cal-color-swatch ${form.color === color ? 'active' : ''}`}
                                             style={{ background: color }}
-                                            onClick={() => setForm(f => ({ ...f, color }))}
-                                        />
+                                            onClick={() => setForm(f => ({ ...f, color }))} />
                                     ))}
                                 </div>
                             </div>
-
-                            {/* Travel mode selector */}
                             <div className="cal-form-group">
                                 <label>Travel Mode</label>
                                 <div className="cal-mode-selector">
                                     {TRAVEL_MODES.map(mode => (
-                                        <button
-                                            type="button"
-                                            key={mode.id}
+                                        <button type="button" key={mode.id}
                                             className={`cal-mode-btn ${form.travelMode === mode.id ? 'active' : ''}`}
-                                            onClick={() => setForm(f => ({ ...f, travelMode: mode.id }))}
-                                        >
+                                            onClick={() => setForm(f => ({ ...f, travelMode: mode.id }))}>
                                             <mode.icon size={16} />
                                             <span>{mode.label}</span>
                                         </button>
                                     ))}
                                 </div>
                             </div>
-
                             <button type="submit" className="cal-form-submit">Add Event</button>
                         </form>
                     </div>
@@ -398,67 +445,44 @@ const CalendarView = () => {
                         <form onSubmit={handleEditSubmit} className="cal-form">
                             <div className="cal-form-group">
                                 <label>Title</label>
-                                <input
-                                    type="text"
-                                    value={editingEvent.title}
-                                    onChange={e => setEditingEvent(ev => ({ ...ev, title: e.target.value }))}
-                                    required
-                                />
+                                <input type="text" value={editingEvent.title}
+                                    onChange={e => setEditingEvent(ev => ({ ...ev, title: e.target.value }))} required />
                             </div>
                             <div className="cal-form-group">
                                 <label>Time</label>
-                                <IOSTimePicker
-                                    value={editingEvent.time}
-                                    onChange={(time) => setEditingEvent(ev => ({ ...ev, time }))}
-                                />
+                                <IOSTimePicker value={editingEvent.time}
+                                    onChange={(time) => setEditingEvent(ev => ({ ...ev, time }))} />
                             </div>
                             <div className="cal-form-group">
                                 <label>Address</label>
-                                <AddressInput
-                                    value={{ address: editingEvent.location }}
-                                    onChange={(loc) => setEditingEvent(ev => ({
-                                        ...ev,
-                                        location: loc.address,
-                                        locationCoords: loc.coords
-                                    }))}
-                                    placeholder="Search address..."
-                                />
+                                <AddressInput value={{ address: editingEvent.location }}
+                                    onChange={(loc) => setEditingEvent(ev => ({ ...ev, location: loc.address, locationCoords: loc.coords }))}
+                                    placeholder="Search address..." />
                             </div>
-
-                            {/* Color Picker */}
                             <div className="cal-form-group">
                                 <label>Event Color</label>
                                 <div className="cal-color-picker">
                                     {COLOR_PRESETS.map(color => (
-                                        <button
-                                            type="button"
-                                            key={color}
+                                        <button type="button" key={color}
                                             className={`cal-color-swatch ${editingEvent.color === color ? 'active' : ''}`}
                                             style={{ background: color }}
-                                            onClick={() => setEditingEvent(ev => ({ ...ev, color }))}
-                                        />
+                                            onClick={() => setEditingEvent(ev => ({ ...ev, color }))} />
                                     ))}
                                 </div>
                             </div>
-
-                            {/* Travel mode selector */}
                             <div className="cal-form-group">
                                 <label>Travel Mode</label>
                                 <div className="cal-mode-selector">
                                     {TRAVEL_MODES.map(mode => (
-                                        <button
-                                            type="button"
-                                            key={mode.id}
+                                        <button type="button" key={mode.id}
                                             className={`cal-mode-btn ${editingEvent.travelMode === mode.id ? 'active' : ''}`}
-                                            onClick={() => setEditingEvent(ev => ({ ...ev, travelMode: mode.id }))}
-                                        >
+                                            onClick={() => setEditingEvent(ev => ({ ...ev, travelMode: mode.id }))}>
                                             <mode.icon size={16} />
                                             <span>{mode.label}</span>
                                         </button>
                                     ))}
                                 </div>
                             </div>
-
                             <button type="submit" className="cal-form-submit">Save Changes</button>
                         </form>
                     </div>

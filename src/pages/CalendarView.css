@@ -64,12 +64,7 @@ body:has(.cal-modal-overlay) .bottom-nav {
     display: none;
 }
 
-/* Expanded state — wraps into grid */
-.cal-week-strip.expanded {
-    flex-wrap: wrap;
-    overflow-x: visible;
-    scroll-snap-type: none;
-}
+/* (expanded state is now a separate month grid) */
 
 .cal-day {
     display: flex;
@@ -115,7 +110,6 @@ body:has(.cal-modal-overlay) .bottom-nav {
 .cal-day.active {
     background: var(--color-brand);
     border: none;
-    box-shadow: 0 4px 12px rgba(255, 60, 93, 0.25);
 }
 
 .cal-day-name {
@@ -201,13 +195,18 @@ body:has(.cal-modal-overlay) .bottom-nav {
 }
 
 /* Expand/Collapse Toggle */
+.cal-expand-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
 .cal-expand-toggle {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 4px;
-    width: 100%;
-    padding: 8px 0 2px;
+    padding: 6px 16px;
     background: none;
     border: none;
     cursor: pointer;
@@ -228,6 +227,133 @@ body:has(.cal-modal-overlay) .bottom-nav {
 
 .cal-expand-toggle svg.rotated {
     transform: rotate(180deg);
+}
+
+/* ───── Month Grid (Expanded) ───── */
+.cal-month-view {
+    margin-bottom: 8px;
+}
+
+.cal-month-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.cal-month-arrow {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-text-primary);
+    transition: background 0.15s;
+}
+
+.cal-month-arrow:hover {
+    background: var(--color-bg-pill);
+}
+
+.cal-month-title-center {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.cal-month-headers {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-bottom: 8px;
+}
+
+.cal-month-header {
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 11px;
+    color: var(--color-text-tertiary);
+    text-align: center;
+    padding: 4px 0;
+}
+
+.cal-month-header.sunday {
+    font-weight: 800;
+    color: var(--color-text-secondary);
+}
+
+.cal-month-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.cal-month-cell {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    border-radius: var(--r-md);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+    padding: 0;
+}
+
+.cal-month-cell.empty {
+    cursor: default;
+}
+
+.cal-month-cell:not(.empty):hover {
+    background: var(--color-bg-pill);
+}
+
+.cal-month-cell.active {
+    background: var(--color-brand);
+}
+
+.cal-month-cell.today:not(.active) {
+    background: var(--color-bg-card);
+    border: 1.5px solid var(--color-border);
+}
+
+.cal-month-cell-num {
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--color-text-primary);
+    line-height: 1;
+}
+
+.cal-month-cell.active .cal-month-cell-num {
+    color: var(--color-text-inverted);
+    font-weight: 700;
+}
+
+.cal-month-cell-dots {
+    display: flex;
+    gap: 2px;
+    height: 5px;
+}
+
+.cal-month-cell-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+}
+
+.cal-month-cell.active .cal-month-cell-dot {
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5);
 }
 
 /* ───── Today Header Row ───── */

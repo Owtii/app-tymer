@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, Check } from 'lucide-react';
+import { ChevronLeft, Check, MapPin } from 'lucide-react';
+import AddressInput from '../components/AddressInput';
 import './Questionnaire.css';
 
 const questions = [
@@ -21,9 +22,11 @@ const timeSteps = [
 
 const Questionnaire = () => {
     const navigate = useNavigate();
+    const [view, setView] = useState('name'); // 'name' | 'location' | 'questions' | 'loading'
+    const [userName, setUserName] = useState('');
+    const [userLocation, setUserLocation] = useState({ address: '', coords: null });
     const [currentQ, setCurrentQ] = useState(0);
     const [answers, setAnswers] = useState({});
-    const [view, setView] = useState('questions');
     const [loadingProgress, setLoadingProgress] = useState(0);
     const [shake, setShake] = useState(false);
 
@@ -42,6 +45,29 @@ const Questionnaire = () => {
         }
     }, [view]);
 
+    // ─── Name step ───
+    const handleNameContinue = () => {
+        if (!userName.trim()) {
+            setShake(true);
+            setTimeout(() => setShake(false), 300);
+            return;
+        }
+        localStorage.setItem('punct_user_name', userName.trim());
+        setView('location');
+    };
+
+    // ─── Location step ───
+    const handleLocationContinue = () => {
+        if (userLocation.coords) {
+            localStorage.setItem('punct_home', JSON.stringify({
+                address: userLocation.address,
+                coords: userLocation.coords
+            }));
+        }
+        setView('questions');
+    };
+
+    // ─── Question navigation ───
     const handleSelect = (option) => {
         setAnswers(prev => ({ ...prev, [questions[currentQ].id]: option }));
     };
@@ -61,62 +87,119 @@ const Questionnaire = () => {
     };
 
     const handleBack = () => {
-        if (currentQ > 0) {
-            setCurrentQ(prev => prev - 1);
-        } else {
+        if (view === 'name') {
             navigate('/onboarding');
+        } else if (view === 'location') {
+            setView('name');
+        } else if (view === 'questions' && currentQ === 0) {
+            setView('location');
+        } else if (view === 'questions') {
+            setCurrentQ(prev => prev - 1);
         }
     };
 
     const isSelected = (option) => answers[questions[currentQ].id] === option;
 
-    // Finalizing/Loading screen
+    // ─── Name screen ───
+    if (view === 'name') {
+        return (
+            <div className="q-container">
+                <div className="q-header">
+                    <button className="q-back-btn" onClick={handleBack}>
+                        <ChevronLeft size={26} strokeWidth={3} />
+                    </button>
+                    <div className="q-progress-track">
+                        <div className="q-progress-fill" style={{ width: '0%' }} />
+                    </div>
+                </div>
+                <div className="q-setup-screen">
+                    <div className="q-setup-emoji">👋</div>
+                    <h2 className="q-setup-title">What's your name?</h2>
+                    <p className="q-setup-subtitle">We'll use this to personalize your experience</p>
+                    <input
+                        className="q-setup-input"
+                        type="text"
+                        placeholder="Enter your name"
+                        value={userName}
+                        onChange={(e) => setUserName(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleNameContinue()}
+                        autoFocus
+                        maxLength={30}
+                    />
+                </div>
+                <div className="q-setup-footer">
+                    <button
+                        className={`q-next-btn ${shake ? 'btn-shake' : ''}`}
+                        onClick={handleNameContinue}
+                    >
+                        Continue
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    // ─── Location screen ───
+    if (view === 'location') {
+        return (
+            <div className="q-container">
+                <div className="q-header">
+                    <button className="q-back-btn" onClick={handleBack}>
+                        <ChevronLeft size={26} strokeWidth={3} />
+                    </button>
+                    <div className="q-progress-track">
+                        <div className="q-progress-fill" style={{ width: '5%' }} />
+                    </div>
+                </div>
+                <div className="q-setup-screen">
+                    <div className="q-setup-emoji">📍</div>
+                    <h2 className="q-setup-title">Where do you live?</h2>
+                    <p className="q-setup-subtitle">This helps us calculate travel times accurately</p>
+                    <div className="q-setup-address">
+                        <AddressInput
+                            value={{ address: userLocation.address }}
+                            onChange={(loc) => setUserLocation({
+                                address: loc.address,
+                                coords: loc.coords
+                            })}
+                            placeholder="Search your home address..."
+                        />
+                    </div>
+                </div>
+                <div className="q-setup-footer">
+                    <button className="q-next-btn" onClick={handleLocationContinue}>
+                        Continue
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    // ─── Finalizing screen ───
     if (view === 'loading') {
-        const circumference = 2 * Math.PI * 88; // radius 88
+        const circumference = 2 * Math.PI * 74;
         const strokeDashoffset = circumference - (loadingProgress / 100) * circumference;
 
         return (
             <div className="q-container">
                 <div className="finalizing-screen">
-                    {/* Progress ring */}
                     <div className="final-ring-wrapper">
-                        <svg width="212" height="212" viewBox="0 0 212 212">
-                            <circle
-                                cx="106"
-                                cy="106"
-                                r="88"
-                                stroke="#F0F0F0"
-                                strokeWidth="18"
-                                fill="transparent"
-                            />
-                            <circle
-                                cx="106"
-                                cy="106"
-                                r="88"
-                                stroke="#FF3C5D"
-                                strokeWidth="18"
-                                fill="transparent"
-                                strokeDasharray={circumference}
-                                strokeDashoffset={strokeDashoffset}
-                                strokeLinecap="round"
-                                transform="rotate(-90 106 106)"
-                                style={{ transition: 'stroke-dashoffset 0.1s linear' }}
+                        <svg width="180" height="180" viewBox="0 0 180 180">
+                            <circle cx="90" cy="90" r="74" stroke="var(--color-border)" strokeWidth="14" fill="transparent" />
+                            <circle cx="90" cy="90" r="74" stroke="var(--color-brand)" strokeWidth="14" fill="transparent"
+                                strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} strokeLinecap="round"
+                                transform="rotate(-90 90 90)" style={{ transition: 'stroke-dashoffset 0.1s linear' }}
                             />
                         </svg>
                         <div className="final-ring-text">
                             <span className="final-percent">{loadingProgress}%</span>
                         </div>
                     </div>
-
-                    {/* Title */}
                     <h2 className="final-title">Personalizing Plan</h2>
-
-                    {/* Steps card */}
                     <div className="final-steps-card">
                         {timeSteps.map((step, idx) => {
                             const isCompleted = loadingProgress >= step.threshold;
                             const isCurrent = !isCompleted && (idx === 0 || loadingProgress >= timeSteps[idx - 1].threshold);
-
                             return (
                                 <div key={idx} className={`final-step ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''}`}>
                                     <div className="final-step-icon">
@@ -135,8 +218,6 @@ const Questionnaire = () => {
                             );
                         })}
                     </div>
-
-                    {/* Continue button */}
                     <div className="final-footer">
                         <button
                             className={`q-next-btn ${loadingProgress >= 99 ? 'visible' : 'hidden'}`}
@@ -150,12 +231,11 @@ const Questionnaire = () => {
         );
     }
 
-    // Questions view
-    const progressPercent = ((currentQ + 1) / questions.length) * 100;
+    // ─── Questions view ───
+    const progressPercent = 10 + ((currentQ + 1) / questions.length) * 90;
 
     return (
         <div className="q-container">
-            {/* Header */}
             <div className="q-header">
                 <button className="q-back-btn" onClick={handleBack}>
                     <ChevronLeft size={26} strokeWidth={3} />
@@ -165,13 +245,9 @@ const Questionnaire = () => {
                 </div>
             </div>
 
-            {/* Question label */}
             <div className="q-label">QUESTION {currentQ + 1} OF {questions.length}</div>
-
-            {/* Question text */}
             <h2 className="q-question">{questions[currentQ].question}</h2>
 
-            {/* Options */}
             <div className="q-options">
                 {questions[currentQ].options.map((option) => (
                     <button
@@ -187,7 +263,6 @@ const Questionnaire = () => {
                 ))}
             </div>
 
-            {/* Next button */}
             <div className="q-footer">
                 <button
                     className={`q-next-btn ${shake ? 'btn-shake' : ''}`}
