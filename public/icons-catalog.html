@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Punct App – Icons Catalog</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #ffffff;
+            color: #1a1a2e;
+            padding: 40px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid #f0f0f5;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 4px;
+        }
+
+        .header .subtitle {
+            font-size: 14px;
+            color: #8e8e93;
+        }
+
+        .header .stats {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-top: 16px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .header .stats .stat-value {
+            font-weight: 700;
+            font-size: 20px;
+            color: #FF3C5D;
+            display: block;
+        }
+
+        .section {
+            margin-bottom: 32px;
+            break-inside: avoid;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 12px;
+            padding: 8px 14px;
+            background: #f5f5fa;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title .file-name {
+            font-weight: 400;
+            color: #8e8e93;
+            font-size: 12px;
+            margin-left: auto;
+        }
+
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+        }
+
+        .icon-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 8px;
+            border: 1px solid #eeeef2;
+            border-radius: 10px;
+            background: #fafafc;
+            transition: all 0.2s;
+        }
+
+        .icon-card svg {
+            width: 28px;
+            height: 28px;
+            margin-bottom: 8px;
+            color: #1a1a2e;
+        }
+
+        .icon-card .icon-name {
+            font-size: 10px;
+            font-weight: 500;
+            color: #555;
+            text-align: center;
+            word-break: break-word;
+        }
+
+        /* Full unique list section at the top */
+        .all-icons-section {
+            margin-bottom: 48px;
+        }
+
+        .all-icons-section .section-title {
+            background: linear-gradient(135deg, #FF3C5D 0%, #FF6B81 100%);
+            color: #fff;
+        }
+
+        .all-icons-section .section-title .file-name {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .all-icons-section .icon-card {
+            border-color: #ffe0e6;
+            background: #fff5f7;
+        }
+
+        hr.divider {
+            border: none;
+            border-top: 1px solid #f0f0f5;
+            margin: 32px 0 24px;
+        }
+
+        .page-sections-header {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 24px;
+        }
+
+        @media print {
+            body { padding: 20px; }
+            .section { break-inside: avoid; }
+            .icon-card { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 1px solid #f0f0f5;
+            font-size: 11px;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📦 Punct – Icons Catalog</h1>
+        <p class="subtitle">Complete reference of all icons used in the application</p>
+        <div class="stats">
+            <div><span class="stat-value" id="total-unique">–</span>Unique Icons</div>
+            <div><span class="stat-value" id="total-files">13</span>Source Files</div>
+            <div><span class="stat-value">Lucide React</span>Icon Library</div>
+        </div>
+    </div>
+
+    <div id="content"></div>
+
+    <div class="footer">
+        Generated on <span id="gen-date"></span> &nbsp;|&nbsp; Punct App &nbsp;|&nbsp; Icons sourced from Lucide React
+    </div>
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>
+        const iconsByPage = {
+            "Dashboard": {
+                file: "Dashboard.jsx",
+                icons: ["cloud-rain","cloud","sun","cloud-snow","cloud-lightning","cloud-drizzle","cloud-fog","snowflake","sunrise","clock","home","car","footprints","chevron-right","cpu","plus","x","bus","person-standing","calendar-off","pencil","trash-2","map-pin","navigation","more-vertical","bell","chevron-down","moon"]
+            },
+            "Calendar View": {
+                file: "CalendarView.jsx",
+                icons: ["menu","clock","map-pin","plus","x","car","person-standing","bus","more-vertical","cpu","pencil","trash-2","bell","chevron-right","chevron-down","chevron-left"]
+            },
+            "Alarm Page": {
+                file: "AlarmPage.jsx",
+                icons: ["bell","plus","x","cpu","pencil","trash-2","volume-2","vibrate","music","timer","calculator","smartphone"]
+            },
+            "Insights": {
+                file: "Insights.jsx",
+                icons: ["trending-up","trending-down","clock","zap","target","award","calendar-check","route"]
+            },
+            "Profile / Settings": {
+                file: "Profile.jsx",
+                icons: ["user","settings","bell","shield","log-out","chevron-right","clock","car","map-pin","file-text","trash-2","info","mail","lock","download","help-circle","smartphone"]
+            },
+            "Route Details": {
+                file: "RouteDetails.jsx",
+                icons: ["arrow-left","home","car","person-standing","bus","map-pin","clock","navigation","chevron-right","footprints"]
+            },
+            "Logistics": {
+                file: "Logistics.jsx",
+                icons: ["arrow-left","car","coffee","map-pin","footprints","parking-square"]
+            },
+            "Social Sync": {
+                file: "SocialSync.jsx",
+                icons: ["arrow-left","users","plus","hash","share-2","message-circle","chevron-right"]
+            },
+            "Questionnaire": {
+                file: "Questionnaire.jsx",
+                icons: ["chevron-left","check","map-pin"]
+            },
+            "Onboarding": {
+                file: "Onboarding.jsx",
+                icons: ["chevron-left"]
+            },
+            "Auth": {
+                file: "Auth.jsx",
+                icons: ["apple","mail"]
+            },
+            "Navigation Bar": {
+                file: "AppLayout.jsx",
+                icons: ["home","calendar","bell","bar-chart-3","user"]
+            },
+            "Address Input": {
+                file: "AddressInput.jsx",
+                icons: ["map-pin"]
+            }
+        };
+
+        // Collect all unique icons
+        const allUniqueIcons = new Set();
+        for (const page of Object.values(iconsByPage)) {
+            page.icons.forEach(i => allUniqueIcons.add(i));
+        }
+        const sortedUnique = [...allUniqueIcons].sort();
+
+        document.getElementById('total-unique').textContent = sortedUnique.length;
+        document.getElementById('gen-date').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+        const content = document.getElementById('content');
+
+        // Render all unique icons section
+        function renderIconCard(iconName) {
+            return `<div class="icon-card">
+                <i data-lucide="${iconName}"></i>
+                <span class="icon-name">${iconName}</span>
+            </div>`;
+        }
+
+        let html = `<div class="all-icons-section">
+            <div class="section-title">
+                All Unique Icons
+                <span class="file-name">${sortedUnique.length} total</span>
+            </div>
+            <div class="icon-grid">
+                ${sortedUnique.map(renderIconCard).join('')}
+            </div>
+        </div>`;
+
+        html += `<hr class="divider">`;
+        html += `<h2 class="page-sections-header">Icons by Page / Component</h2>`;
+
+        // Render per-page sections
+        for (const [pageName, data] of Object.entries(iconsByPage)) {
+            html += `<div class="section">
+                <div class="section-title">
+                    ${pageName}
+                    <span class="file-name">${data.file} — ${data.icons.length} icons</span>
+                </div>
+                <div class="icon-grid">
+                    ${data.icons.map(renderIconCard).join('')}
+                </div>
+            </div>`;
+        }
+
+        content.innerHTML = html;
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

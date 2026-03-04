@@ -97,7 +97,7 @@
     width: 100%;
     max-width: 392px;
     margin: 0 auto;
-    height: 58px;
+    height: 64px;
     background: var(--color-bg-card);
     border-radius: var(--r-xl);
     border: 1.5px solid var(--color-border-subtle);
@@ -127,7 +127,7 @@
     color: var(--color-text-primary);
 }
 
-/* Radio circle */
+/* Radio circle — hidden when checked, only checkmark shows */
 .q-radio {
     width: 20px;
     height: 20px;
@@ -138,11 +138,14 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    transition: border-color 0.2s;
+    transition: all 0.2s;
 }
 
 .q-radio.checked {
-    border-color: var(--color-brand);
+    border: none;
+    background: none;
+    width: 20px;
+    height: 20px;
 }
 
 /* Footer */
@@ -194,16 +197,101 @@
     transform: translateY(0);
 }
 
+/* ======================== */
+/* INPUT AREA (Name/Loc)    */
+/* ======================== */
+.q-input-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 24px 0;
+    flex: 1;
+}
+
+.q-underline-input {
+    width: 100%;
+    max-width: 392px;
+    height: 64px;
+    padding: 0 22px;
+    background: var(--color-bg-card);
+    border: 1.5px solid var(--color-border-subtle);
+    border-radius: var(--r-xl);
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--color-text-primary);
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+    box-shadow: var(--shadow-xs);
+}
+
+.q-underline-input:focus {
+    border-color: var(--color-text-secondary);
+}
+
+.q-underline-input::placeholder {
+    color: var(--color-text-tertiary);
+    font-weight: 500;
+}
+
+/* Address input override for questionnaire */
+.q-underline-address {
+    width: 100%;
+    max-width: 392px;
+}
+
+.q-underline-address .address-input-field {
+    background: var(--color-bg-card);
+    border: 1.5px solid var(--color-border-subtle);
+    border-radius: var(--r-xl);
+    box-shadow: var(--shadow-xs);
+    transition: border-color 0.2s;
+}
+
+.q-underline-address .address-input-field:focus-within {
+    border-color: var(--color-text-secondary);
+}
+
+.q-underline-address .address-input {
+    background: transparent;
+    border: none;
+    border-radius: var(--r-xl);
+    height: 60px;
+    font-size: 15px;
+}
+
+.q-underline-address .address-input:focus {
+    background: transparent;
+    border: none;
+}
+
 /* ================== */
 /* FINALIZING SCREEN  */
 /* ================== */
+.finalizing-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
 
 .finalizing-screen {
-    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 0 24px;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.finalizing-screen.done {
+    opacity: 0;
+    transform: scale(0.9);
+    pointer-events: none;
+    position: absolute;
 }
 
 /* Progress Ring */
@@ -211,7 +299,6 @@
     position: relative;
     width: 180px;
     height: 180px;
-    margin-top: 80px;
     margin-bottom: 24px;
 }
 
@@ -318,6 +405,55 @@
     color: var(--color-text-primary);
 }
 
+/* ======================== */
+/* SUCCESS STATE            */
+/* ======================== */
+.final-success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+    transition: opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s;
+    pointer-events: none;
+    position: absolute;
+}
+
+.final-success.show {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: auto;
+}
+
+.final-success-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--color-brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s both;
+}
+
+.final-success-title {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 34px;
+    letter-spacing: -0.02em;
+    color: var(--color-text-primary);
+    margin-bottom: 8px;
+}
+
+.final-success-subtitle {
+    font-family: var(--font);
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--color-text-secondary);
+}
+
 /* Footer */
 .final-footer {
     margin-top: auto;
@@ -370,105 +506,4 @@
 
 .btn-shake {
     animation: shake 0.25s cubic-bezier(0.36, 0.07, 0.19, 0.97);
-}
-
-/* ================== */
-/* NAME & LOCATION    */
-/* ================== */
-
-.q-setup-screen {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0 24px;
-}
-
-.q-setup-emoji {
-    font-size: 48px;
-    margin-top: 80px;
-    margin-bottom: 16px;
-    animation: wave 1.5s ease-in-out infinite;
-}
-
-@keyframes wave {
-
-    0%,
-    100% {
-        transform: rotate(0deg);
-    }
-
-    25% {
-        transform: rotate(20deg);
-    }
-
-    50% {
-        transform: rotate(-10deg);
-    }
-
-    75% {
-        transform: rotate(15deg);
-    }
-}
-
-.q-setup-title {
-    font-family: var(--font);
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 30px;
-    letter-spacing: -0.02em;
-    color: var(--color-text-primary);
-    margin-bottom: 8px;
-    text-align: center;
-}
-
-.q-setup-subtitle {
-    font-family: var(--font);
-    font-weight: 500;
-    font-size: 14px;
-    color: var(--color-text-secondary);
-    margin-bottom: 32px;
-    text-align: center;
-}
-
-.q-setup-input {
-    width: 100%;
-    max-width: 392px;
-    height: 54px;
-    padding: 0 20px;
-    background: var(--color-bg-card);
-    border: 1.5px solid var(--color-border);
-    border-radius: var(--r-xl);
-    font-family: var(--font);
-    font-weight: 600;
-    font-size: 16px;
-    color: var(--color-text-primary);
-    text-align: center;
-    outline: none;
-    transition: border-color 0.2s;
-    box-sizing: border-box;
-    box-shadow: var(--shadow-xs);
-}
-
-.q-setup-input:focus {
-    border-color: var(--color-brand);
-}
-
-.q-setup-input::placeholder {
-    color: var(--color-text-tertiary);
-    font-weight: 500;
-}
-
-.q-setup-address {
-    width: 100%;
-    max-width: 392px;
-}
-
-.q-setup-footer {
-    margin-top: auto;
-    padding: 16px 24px;
-    padding-bottom: 44px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
 }

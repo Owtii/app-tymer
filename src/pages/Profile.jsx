@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    User, Settings, Bell, Shield, LogOut, ChevronRight,
-    Clock, Car, MapPin, FileText, Trash2, Info, Mail,
+    Settings, Shield, LogOut, ChevronRight,
+    Car, FileText, Info, Mail,
     Lock, Download, HelpCircle, Smartphone
 } from 'lucide-react';
+import { CustomUser, CustomTimer, CustomBell, CustomTrash, CustomMapPin, CustomLock, CustomExport } from '../components/CustomIcons';
 import './Profile.css';
 
 const Profile = () => {
@@ -39,7 +40,7 @@ const Profile = () => {
                     <div className="prof-item">
                         <div className="prof-item-left">
                             <div className="prof-item-icon" style={{ background: 'rgba(94, 92, 230, 0.08)', color: '#5E5CE6' }}>
-                                <User size={18} />
+                                <CustomUser size={18} />
                             </div>
                             <div className="prof-item-text">
                                 <span className="prof-item-label">Display Name</span>
@@ -65,7 +66,7 @@ const Profile = () => {
                     <div className="prof-item">
                         <div className="prof-item-left">
                             <div className="prof-item-icon" style={{ background: 'rgba(52, 199, 89, 0.08)', color: '#34C759' }}>
-                                <Lock size={18} />
+                                <CustomLock size={18} />
                             </div>
                             <span className="prof-item-label">Change Password</span>
                         </div>
@@ -81,7 +82,7 @@ const Profile = () => {
                     <div className="prof-item">
                         <div className="prof-item-left">
                             <div className="prof-item-icon" style={{ background: 'rgba(255, 149, 0, 0.08)', color: '#FF9500' }}>
-                                <Clock size={18} />
+                                <CustomTimer size={18} />
                             </div>
                             <div className="prof-item-text">
                                 <span className="prof-item-label">Ready Time</span>
@@ -107,7 +108,7 @@ const Profile = () => {
                     <div className="prof-item">
                         <div className="prof-item-left">
                             <div className="prof-item-icon" style={{ background: 'rgba(94, 92, 230, 0.08)', color: '#5E5CE6' }}>
-                                <MapPin size={18} />
+                                <CustomMapPin size={18} />
                             </div>
                             <div className="prof-item-text">
                                 <span className="prof-item-label">Home Address</span>
@@ -120,7 +121,7 @@ const Profile = () => {
                     <div className="prof-item">
                         <div className="prof-item-left">
                             <div className="prof-item-icon" style={{ background: 'rgba(0, 122, 255, 0.08)', color: '#007AFF' }}>
-                                <Bell size={18} />
+                                <CustomBell size={18} />
                             </div>
                             <span className="prof-item-label">Notifications</span>
                         </div>
@@ -136,7 +137,7 @@ const Profile = () => {
                     <div className="prof-item">
                         <div className="prof-item-left">
                             <div className="prof-item-icon" style={{ background: 'rgba(52, 199, 89, 0.08)', color: '#34C759' }}>
-                                <Download size={18} />
+                                <CustomExport size={18} />
                             </div>
                             <span className="prof-item-label">Export Data</span>
                         </div>
@@ -156,7 +157,7 @@ const Profile = () => {
                     <div className="prof-item">
                         <div className="prof-item-left">
                             <div className="prof-item-icon" style={{ background: 'rgba(142, 142, 147, 0.08)', color: '#8E8E93' }}>
-                                <Trash2 size={18} />
+                                <CustomTrash size={18} />
                             </div>
                             <span className="prof-item-label">Clear History</span>
                         </div>
@@ -210,7 +211,7 @@ const Profile = () => {
                     <span>Log Out</span>
                 </button>
                 <button className="prof-delete-btn">
-                    <Trash2 size={16} />
+                    <CustomTrash size={16} />
                     <span>Delete Account</span>
                 </button>
             </div>

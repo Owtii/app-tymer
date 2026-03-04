@@ -3,6 +3,8 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     background: var(--color-bg-app);
     padding: 0 24px;
     overflow: hidden;
@@ -10,38 +12,37 @@
 
 /* Header */
 .auth-header {
-    margin-top: 80px;
-    margin-bottom: auto;
+    margin-bottom: 36px;
+    text-align: center;
 }
 
 .auth-title {
     font-family: var(--font);
     font-weight: 800;
-    font-size: 32px;
-    line-height: 38px;
+    font-size: 36px;
+    line-height: 42px;
     letter-spacing: -0.03em;
     color: var(--color-text-primary);
-    max-width: 320px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 .auth-subtitle {
     font-family: var(--font);
     font-weight: 500;
-    font-size: 15px;
-    line-height: 21px;
+    font-size: 16px;
+    line-height: 22px;
     color: var(--color-text-secondary);
     max-width: 320px;
+    margin: 0 auto;
 }
 
 /* Auth buttons */
 .auth-buttons {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     width: 100%;
     max-width: 392px;
-    margin: 0 auto;
 }
 
 .auth-btn {
@@ -117,13 +118,13 @@
 /* Footer */
 .auth-footer {
     text-align: center;
-    padding: 32px 0 48px;
+    padding: 20px 0 0;
 }
 
 .auth-signup-text {
     font-family: var(--font);
     font-weight: 500;
-    font-size: 14px;
+    font-size: 15px;
     line-height: 100%;
     color: var(--color-text-secondary);
 }

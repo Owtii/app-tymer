@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { Menu, Clock, MapPin, Plus, X, Car, PersonStanding, Bus, MoreVertical, Cpu, Pencil, Trash2, Bell, ChevronRight, ChevronDown, ChevronLeft } from 'lucide-react';
+import { Plus, X, Car, PersonStanding, Bus, Cpu, ChevronRight, ChevronDown, ChevronLeft } from 'lucide-react';
+import { CustomTimer, CustomTrash, CustomBell, CustomMapPin, CustomMoreVertical, CustomPencil } from '../components/CustomIcons';
 import { useAppContext } from '../context/AppContext';
 import IOSTimePicker from '../components/IOSTimePicker';
 import AddressInput from '../components/AddressInput';
@@ -32,7 +33,11 @@ const CalendarView = () => {
     const [activeMenu, setActiveMenu] = useState(null);
     const [daysToShow, setDaysToShow] = useState(14);
     const [expanded, setExpanded] = useState(false);
-    const [expandedMonth, setExpandedMonth] = useState(null); // { month, year }
+    const [expandedMonth, setExpandedMonth] = useState(() => {
+        const now = new Date();
+        return { month: now.getMonth(), year: now.getFullYear() };
+    });
+    const [showMonthPicker, setShowMonthPicker] = useState(false);
     const scrollRef = useRef(null);
 
     const today = new Date();
@@ -51,12 +56,9 @@ const CalendarView = () => {
 
     const [form, setForm] = useState(emptyForm);
 
-    // Initialize expanded month to current month when toggling
     const toggleExpand = () => {
-        if (!expanded) {
-            setExpandedMonth({ month: today.getMonth(), year: today.getFullYear() });
-        }
         setExpanded(prev => !prev);
+        setShowMonthPicker(false);
     };
 
     const prevMonth = () => {
@@ -81,11 +83,9 @@ const CalendarView = () => {
         const daysInMonth = lastDay.getDate();
 
         const grid = [];
-        // Empty cells before first day
         for (let i = 0; i < startDayOfWeek; i++) {
             grid.push(null);
         }
-        // Days of the month
         for (let d = 1; d <= daysInMonth; d++) {
             const date = new Date(year, month, d);
             const dateStr = toDateStr(date);
@@ -132,7 +132,6 @@ const CalendarView = () => {
         selectedDate === yesterdayStr ? 'Yesterday' :
             selDate.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
 
-    // Current month display (for strip mode)
     const selMonth = MONTH_NAMES[selDate.getMonth()];
     const selYear = selDate.getFullYear();
 
@@ -203,28 +202,65 @@ const CalendarView = () => {
         setActiveMenu(null);
     };
 
+    const handleMonthSelect = (monthIndex) => {
+        setExpandedMonth(prev => ({ ...prev, month: monthIndex }));
+        setShowMonthPicker(false);
+        if (!expanded) setExpanded(true);
+    };
+
     return (
         <div className={`calendar-container ${showForm || editingEvent ? 'modal-open' : ''}`}>
-            {/* Hamburger Menu */}
-            <button className="cal-menu-btn" onClick={() => { }}>
-                <Menu size={24} />
-            </button>
+            {/* Page Header */}
+            <header className="cal-page-header">
+                <h1 className="cal-page-title">Calendar</h1>
+                <p className="cal-page-subtitle">Your upcoming schedule</p>
+            </header>
 
-            {/* Month Title */}
+            {/* Month Title - not expanded */}
             {!expanded && (
-                <h2 className="cal-month-title">{selMonth} {selYear}</h2>
+                <button className="cal-month-title cal-month-title-btn" onClick={() => setShowMonthPicker(!showMonthPicker)}>
+                    {selMonth} {selYear}
+                </button>
+            )}
+
+            {/* Month Picker Popover */}
+            {showMonthPicker && (
+                <div className="cal-month-picker-backdrop" onClick={() => setShowMonthPicker(false)}>
+                    <div className="cal-month-picker" onClick={e => e.stopPropagation()}>
+                        <div className="cal-month-picker-header">
+                            <button className="cal-month-picker-arrow" onClick={() => setExpandedMonth(prev => ({ ...prev, year: prev.year - 1 }))}>
+                                <ChevronLeft size={16} />
+                            </button>
+                            <span className="cal-month-picker-year">{expandedMonth.year}</span>
+                            <button className="cal-month-picker-arrow" onClick={() => setExpandedMonth(prev => ({ ...prev, year: prev.year + 1 }))}>
+                                <ChevronRight size={16} />
+                            </button>
+                        </div>
+                        <div className="cal-month-picker-grid">
+                            {MONTH_NAMES.map((name, i) => (
+                                <button
+                                    key={i}
+                                    className={`cal-month-picker-item ${expandedMonth.month === i ? 'active' : ''} ${i === today.getMonth() && expandedMonth.year === today.getFullYear() ? 'is-today' : ''}`}
+                                    onClick={() => handleMonthSelect(i)}
+                                >
+                                    {name.substring(0, 3)}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
             )}
 
             {/* ─── Expanded Month Grid ─── */}
-            {expanded && expandedMonth && (
+            <div className={`cal-month-view-wrapper ${expanded ? 'is-open' : ''}`}>
                 <div className="cal-month-view">
                     <div className="cal-month-nav">
                         <button className="cal-month-arrow" onClick={prevMonth}>
                             <ChevronLeft size={20} />
                         </button>
-                        <h2 className="cal-month-title-center">
+                        <button className="cal-month-nav-btn" onClick={() => setShowMonthPicker(!showMonthPicker)}>
                             {MONTH_NAMES[expandedMonth.month]} {expandedMonth.year}
-                        </h2>
+                        </button>
                         <button className="cal-month-arrow" onClick={nextMonth}>
                             <ChevronRight size={20} />
                         </button>
@@ -257,10 +293,10 @@ const CalendarView = () => {
                         ))}
                     </div>
                 </div>
-            )}
+            </div>
 
             {/* ─── Horizontal Strip (non-expanded) ─── */}
-            {!expanded && (
+            <div className={`cal-strip-wrapper ${expanded ? '' : 'is-open'}`}>
                 <div className="cal-scroll-wrapper">
                     <div className="cal-week-strip" ref={scrollRef}>
                         {calendarDays.map((day) => (
@@ -286,7 +322,7 @@ const CalendarView = () => {
                         </button>
                     </div>
                 </div>
-            )}
+            </div>
 
             {/* Expand/Collapse Toggle */}
             <div className="cal-expand-bar">
@@ -308,7 +344,7 @@ const CalendarView = () => {
             <div className="cal-events">
                 {dateEvents.length === 0 && (
                     <div className="cal-empty">
-                        <Clock size={40} color="#E2E2E2" />
+                        <CustomTimer size={40} color="#E2E2E2" />
                         <p>No events planned</p>
                         <span>Tap "+ Add Event" to create one</span>
                     </div>
@@ -325,18 +361,18 @@ const CalendarView = () => {
                                     <span style={{ color: eventColor }}>SMART PLAN</span>
                                 </div>
                                 <button className="cal-event-menu-btn" onClick={() => setActiveMenu(activeMenu === event.id ? null : event.id)}>
-                                    <MoreVertical size={14} />
+                                    <CustomMoreVertical size={14} />
                                 </button>
                             </div>
 
                             {activeMenu === event.id && (
                                 <div className="cal-event-actions-menu">
                                     <button onClick={() => openEditModal(event)}>
-                                        <Pencil size={14} />
+                                        <CustomPencil size={14} />
                                         <span>Edit</span>
                                     </button>
                                     <button className="delete-action" onClick={() => { deleteEvent(event.id); setActiveMenu(null); }}>
-                                        <Trash2 size={14} />
+                                        <CustomTrash size={14} />
                                         <span>Delete</span>
                                     </button>
                                 </div>
@@ -346,14 +382,14 @@ const CalendarView = () => {
 
                             {event.location && (
                                 <div className="cal-event-location">
-                                    <MapPin size={13} strokeWidth={1.5} />
+                                    <CustomMapPin size={13} strokeWidth={1.5} />
                                     <span>{event.location}</span>
                                 </div>
                             )}
 
                             <div className="cal-event-pills">
                                 <div className="cal-pill" style={{ background: `${eventColor}15` }}>
-                                    <Bell size={14} strokeWidth={1.5} style={{ color: eventColor }} />
+                                    <CustomBell size={14} strokeWidth={1.5} style={{ color: eventColor }} />
                                     <span style={{ color: eventColor }}>{formatTime(event.time)}</span>
                                 </div>
                                 <div className="cal-pill">
@@ -379,7 +415,7 @@ const CalendarView = () => {
             {/* Add Event Modal */}
             {showForm && (
                 <div className="cal-modal-overlay" onClick={() => setShowForm(false)}>
-                    <div className="cal-modal cal-modal-fullscreen" onClick={(e) => e.stopPropagation()}>
+                    <div className="cal-modal cal-modal-sheet" onClick={(e) => e.stopPropagation()}>
                         <div className="cal-modal-header">
                             <h3>New Event</h3>
                             <button className="cal-modal-close" onClick={() => setShowForm(false)}>
@@ -435,7 +471,7 @@ const CalendarView = () => {
             {/* Edit Event Modal */}
             {editingEvent && (
                 <div className="cal-modal-overlay" onClick={() => setEditingEvent(null)}>
-                    <div className="cal-modal cal-modal-fullscreen" onClick={(e) => e.stopPropagation()}>
+                    <div className="cal-modal" onClick={(e) => e.stopPropagation()}>
                         <div className="cal-modal-header">
                             <h3>Edit Event</h3>
                             <button className="cal-modal-close" onClick={() => setEditingEvent(null)}>

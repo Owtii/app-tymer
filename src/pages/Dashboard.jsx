@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CloudRain, Cloud, Sun, CloudSnow, CloudLightning, CloudDrizzle, CloudFog, Snowflake, Sunrise, Clock, Home as HomeIcon, Car, Footprints, ChevronRight, Cpu, Plus, X, Bus, PersonStanding, CalendarOff, Pencil, Trash2, MapPin, Navigation, MoreVertical, Bell, ChevronDown, Moon } from 'lucide-react';
+import { CloudRain, Cloud, Sun, CloudSnow, CloudLightning, CloudDrizzle, CloudFog, Snowflake, Sunrise, Car, Footprints, ChevronRight, Cpu, Plus, X, Bus, PersonStanding, CalendarOff, ChevronDown } from 'lucide-react';
+import { CustomHome, CustomTimer, CustomTrash, CustomBell, CustomMapPin, CustomNavigation, CustomMoreVertical, CustomMoon, CustomPencil, CustomPlans } from '../components/CustomIcons';
 import { useAppContext } from '../context/AppContext';
 import IOSTimePicker from '../components/IOSTimePicker';
 import { getWeather } from '../services/WeatherService';
@@ -249,7 +250,7 @@ const Dashboard = () => {
                     <div className="hero-route-widget" onClick={() => navigate(`/app/route-details/${nextEvent.id}`)}>
                         <div className="route-widget-header">
                             <div className="route-widget-title">
-                                <Navigation size={14} />
+                                <CustomNavigation size={14} />
                                 <span>Your Route</span>
                             </div>
                             <span className="route-widget-total">{(nextEvent.travelMinutes || 0) + (nextEvent.walkMinutes || 0)} min</span>
@@ -262,7 +263,7 @@ const Dashboard = () => {
                         <div className="route-widget-steps">
                             <div className={`route-widget-step ${currentLeg === 'home' ? 'active' : ''}`}>
                                 <div className="route-widget-step-icon">
-                                    <HomeIcon size={16} />
+                                    <CustomHome size={16} />
                                 </div>
                                 <span className="route-widget-step-label">Home</span>
                             </div>
@@ -287,7 +288,7 @@ const Dashboard = () => {
                             <div className="route-widget-step-connector" />
                             <div className="route-widget-step">
                                 <div className="route-widget-step-icon">
-                                    <MapPin size={16} />
+                                    <CustomMapPin size={16} />
                                 </div>
                                 <span className="route-widget-step-label">Arrive</span>
                             </div>
@@ -295,7 +296,7 @@ const Dashboard = () => {
 
                         {nextEvent.location && (
                             <div className="route-widget-destination">
-                                <MapPin size={12} />
+                                <CustomMapPin size={12} />
                                 <span>{nextEvent.location}</span>
                             </div>
                         )}
@@ -324,7 +325,7 @@ const Dashboard = () => {
                         className={`dash-tab ${activeTab === 'alarm' ? 'active' : ''}`}
                         onClick={() => setActiveTab('alarm')}
                     >
-                        <Clock size={13} />
+                        <CustomTimer size={13} />
                         <span>Alarm</span>
                     </button>
                 </div>
@@ -350,7 +351,7 @@ const Dashboard = () => {
                                         <span style={{ color: event.color || '#FF3C5D' }}>SMART PLAN</span>
                                     </div>
                                     <button className="dash-plan-menu-btn" onClick={(e) => { e.stopPropagation(); setEditingEvent({ ...event }); }}>
-                                        <MoreVertical size={14} color="#1C1C1C" />
+                                        <CustomMoreVertical size={14} color="#1C1C1C" />
                                     </button>
                                 </div>
 
@@ -360,7 +361,7 @@ const Dashboard = () => {
                                 {/* Location */}
                                 {event.location && (
                                     <div className="dash-plan-location">
-                                        <MapPin size={13} strokeWidth={1.5} color="#979797" />
+                                        <CustomMapPin size={13} strokeWidth={1.5} color="#979797" />
                                         <span>{event.location}</span>
                                     </div>
                                 )}
@@ -368,7 +369,7 @@ const Dashboard = () => {
                                 {/* Info Pills — with event color */}
                                 <div className="dash-plan-pills">
                                     <div className="dash-plan-pill" style={{ background: `${event.color || '#FF3C5D'}15` }}>
-                                        <Bell size={14} strokeWidth={1.5} style={{ color: event.color || '#FF3C5D' }} />
+                                        <CustomBell size={14} strokeWidth={1.5} style={{ color: event.color || '#FF3C5D' }} />
                                         <span style={{ color: event.color || '#FF3C5D' }}>{fmt(event.time)}</span>
                                     </div>
                                     <div className="dash-plan-pill">
@@ -414,13 +415,13 @@ const Dashboard = () => {
                             </div>
 
                             <div className="alarm-card-bottom">
-                                <span className="alarm-sleep">{alarm.active ? <><Moon size={12} color="#979797" style={{ marginRight: 4, verticalAlign: 'middle' }} />{calcSleep(alarm.time)} sleep</> : ''}</span>
+                                <span className="alarm-sleep">{alarm.active ? <><CustomMoon size={12} color="#979797" style={{ marginRight: 4, verticalAlign: 'middle' }} />{calcSleep(alarm.time)} sleep</> : ''}</span>
                                 <div className="alarm-actions">
                                     <button className="alarm-action-btn" onClick={() => setEditingAlarm({ ...alarm })}>
-                                        <Pencil size={14} color="#979797" />
+                                        <CustomPencil size={14} color="#979797" />
                                     </button>
                                     <button className="alarm-action-btn" onClick={() => setConfirmDelete({ type: 'alarm', id: alarm.id })}>
-                                        <Trash2 size={14} color="#979797" />
+                                        <CustomTrash size={14} color="#979797" />
                                     </button>
                                 </div>
                             </div>
@@ -556,7 +557,7 @@ const Dashboard = () => {
                 <div className="alarm-modal-overlay" onClick={() => setConfirmDelete(null)}>
                     <div className="confirm-modal" onClick={e => e.stopPropagation()}>
                         <div className="confirm-icon">
-                            <Trash2 size={28} color="#FF3C5D" />
+                            <CustomTrash size={28} color="#FF3C5D" />
                         </div>
                         <h3 className="confirm-title">Delete {confirmDelete.type === 'alarm' ? 'Alarm' : 'Event'}?</h3>
                         <p className="confirm-subtitle">This action cannot be undone.</p>

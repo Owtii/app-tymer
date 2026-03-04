@@ -7,28 +7,35 @@
     background: var(--color-bg-app);
 }
 
-/* Hide navbar when modal is open */
-.calendar-container.modal-open~.bottom-nav,
-body:has(.cal-modal-overlay) .bottom-nav {
+/* Hide navbar when modal is open — global */
+body:has(.cal-modal-overlay) .bottom-nav,
+body:has(.alarm-page-modal-overlay) .bottom-nav,
+body:has(.alarm-modal-overlay) .bottom-nav {
     display: none !important;
 }
 
-/* Hamburger Menu */
-.cal-menu-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 18px;
+/* ───── Page Header ───── */
+.cal-page-header {
+    margin-bottom: 20px;
 }
 
-.cal-menu-btn svg {
+.cal-page-title {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 26px;
     color: var(--color-text-primary);
-    stroke-width: 1.8px;
+    margin: 0 0 2px 0;
 }
+
+.cal-page-subtitle {
+    font-family: var(--font);
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin: 0;
+}
+
+
 
 /* Month Title */
 .cal-month-title {
@@ -39,6 +46,52 @@ body:has(.cal-modal-overlay) .bottom-nav {
     letter-spacing: -0.025em;
     color: var(--color-text-primary);
     margin: 0 0 20px 0;
+    display: block;
+}
+
+.cal-month-title-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 30px;
+    letter-spacing: -0.025em;
+    color: var(--color-text-primary);
+    margin: 0 0 20px 0;
+    text-align: left;
+    transition: opacity 0.2s;
+}
+
+.cal-month-title-btn:active {
+    opacity: 0.6;
+}
+
+/* ───── Transition Wrappers ───── */
+.cal-month-view-wrapper {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
+}
+
+.cal-month-view-wrapper.is-open {
+    max-height: 500px;
+    opacity: 1;
+}
+
+.cal-strip-wrapper {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
+}
+
+.cal-strip-wrapper.is-open {
+    max-height: 150px;
+    opacity: 1;
 }
 
 /* ───── Horizontal Scroll Wrapper ───── */
@@ -259,13 +312,132 @@ body:has(.cal-modal-overlay) .bottom-nav {
     background: var(--color-bg-pill);
 }
 
-.cal-month-title-center {
+.cal-month-nav-btn {
     font-family: var(--font);
     font-weight: 700;
     font-size: 20px;
     letter-spacing: -0.02em;
     color: var(--color-text-primary);
     margin: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: var(--r-md);
+    transition: background 0.15s, opacity 0.2s;
+}
+
+.cal-month-nav-btn:hover {
+    background: var(--color-bg-pill);
+}
+
+.cal-month-nav-btn:active {
+    opacity: 0.6;
+}
+
+/* ───── Month Picker Popover ───── */
+.cal-month-picker-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 200;
+    background: rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 120px;
+    animation: fadeIn 0.15s ease;
+}
+
+.cal-month-picker {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--r-xl);
+    box-shadow: var(--shadow-lg);
+    padding: 20px;
+    width: 280px;
+    animation: calPickerIn 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes calPickerIn {
+    from {
+        opacity: 0;
+        transform: scale(0.92) translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.cal-month-picker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.cal-month-picker-year {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--color-text-primary);
+}
+
+.cal-month-picker-arrow {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--color-bg-pill);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-text-primary);
+    transition: background 0.15s;
+}
+
+.cal-month-picker-arrow:hover {
+    background: var(--color-border);
+}
+
+.cal-month-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+}
+
+.cal-month-picker-item {
+    padding: 10px 4px;
+    border-radius: var(--r-md);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--color-text-primary);
+    transition: all 0.15s;
+    text-align: center;
+}
+
+.cal-month-picker-item:hover {
+    background: var(--color-bg-pill);
+}
+
+.cal-month-picker-item.active {
+    background: var(--color-brand);
+    color: var(--color-text-inverted);
+}
+
+.cal-month-picker-item.is-today:not(.active) {
+    background: var(--color-bg-card);
+    border: 1.5px solid var(--color-border);
 }
 
 .cal-month-headers {
@@ -644,7 +816,7 @@ body:has(.cal-modal-overlay) .bottom-nav {
 }
 
 /* ═══════════════════════ */
-/* MODAL — Full screen     */
+/* MODAL — Bottom Sheet    */
 /* ═══════════════════════ */
 .cal-modal-overlay {
     position: fixed;
@@ -652,10 +824,11 @@ body:has(.cal-modal-overlay) .bottom-nav {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(12px);
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: center;
     z-index: 300;
     animation: fadeIn 0.2s ease;
@@ -667,30 +840,36 @@ body:has(.cal-modal-overlay) .bottom-nav {
     max-height: 85vh;
     overflow-y: auto;
     background: var(--color-bg-card);
+    border-radius: var(--r-xl);
+    padding: 24px 24px 32px;
+    animation: calModalIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    margin: 16px;
+}
+
+/* Bottom sheet style for Add Event */
+.cal-modal-sheet {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    max-width: 100%;
+    max-height: 90vh;
     border-radius: var(--r-xl) var(--r-xl) 0 0;
     padding: 24px 24px 36px;
     animation: slideUp 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.cal-modal-fullscreen {
-    height: 100%;
-    max-height: 100vh;
-    border-radius: 0;
-    padding: 20px 24px calc(env(safe-area-inset-bottom, 20px) + 20px);
-    display: flex;
-    flex-direction: column;
-}
+@keyframes calModalIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(10px);
+    }
 
-.cal-modal-fullscreen .cal-form {
-    flex: 1;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-}
-
-.cal-modal-fullscreen .cal-form-submit {
-    margin-top: auto;
-    flex-shrink: 0;
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
 .cal-modal-header {

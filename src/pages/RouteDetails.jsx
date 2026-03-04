@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Home as HomeIcon, Car, PersonStanding, Bus, MapPin, Clock, Navigation, ChevronRight, Footprints } from 'lucide-react';
+import { ArrowLeft, Car, PersonStanding, Bus, ChevronRight, Footprints } from 'lucide-react';
+import { CustomHome, CustomTimer, CustomMapPin, CustomNavigation } from '../components/CustomIcons';
 import { useAppContext } from '../context/AppContext';
 import './RouteDetails.css';
 
@@ -18,7 +19,7 @@ const RouteDetails = () => {
                     <ArrowLeft size={20} />
                 </button>
                 <div className="route-not-found">
-                    <MapPin size={40} color="#E2E2E2" />
+                    <CustomMapPin size={40} color="#E2E2E2" />
                     <p>Event not found</p>
                 </div>
             </div>
@@ -46,7 +47,7 @@ const RouteDetails = () => {
 
     const steps = [];
     steps.push({
-        icon: HomeIcon,
+        icon: CustomHome,
         label: 'Leave Home',
         time: getDepartTime(),
         description: 'Start your journey',
@@ -104,12 +105,12 @@ const RouteDetails = () => {
                     </div>
                 </div>
                 <div className="route-event-total">
-                    <Clock size={14} color="#979797" />
+                    <CustomTimer size={14} color="#979797" />
                     <span>Total travel: {totalTravel} min</span>
                 </div>
                 {event.location && (
                     <div className="route-event-destination">
-                        <MapPin size={14} color="#979797" />
+                        <CustomMapPin size={14} color="#979797" />
                         <span>{event.location}</span>
                     </div>
                 )}

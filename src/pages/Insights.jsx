@@ -1,6 +1,7 @@
 import React from 'react';
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { TrendingUp, TrendingDown, Clock, Zap, Target, Award, CalendarCheck, Route } from 'lucide-react';
+import { TrendingUp, TrendingDown, Target, Award, CalendarCheck, Route } from 'lucide-react';
+import { CustomTimer, CustomZap } from '../components/CustomIcons';
 import './Insights.css';
 
 const Insights = () => {
@@ -19,10 +20,10 @@ const Insights = () => {
     const trend = +4; // vs last week
 
     const stats = [
-        { icon: Zap, label: 'Current Streak', value: '7 days', color: '#FF9500' },
+        { icon: CustomZap, label: 'Current Streak', value: '7 days', color: '#FF9500' },
         { icon: Award, label: 'Best Streak', value: '14 days', color: '#5E5CE6' },
         { icon: CalendarCheck, label: 'Perfect Days', value: '12', color: '#34C759' },
-        { icon: Clock, label: 'Time Saved', value: '45 min', color: 'var(--color-brand)' },
+        { icon: CustomTimer, label: 'Time Saved', value: '45 min', color: 'var(--color-brand)' },
     ];
 
     const categories = [

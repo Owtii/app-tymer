@@ -1,0 +1,806 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Punct App - Icon Usage Report</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; padding: 40px; background: #fff; color: #333; }
+        h1 { margin-bottom: 10px; font-weight: 600; color: #111; }
+        .subtitle { margin-bottom: 40px; color: #666; }
+        .icons-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+        .icon-card { display: flex; align-items: flex-start; gap: 16px; padding: 20px; border: 1px solid #e5e5e5; border-radius: 12px; background: #fafafa; page-break-inside: avoid; }
+        .icon-preview { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; min-width: 48px; background: #fff; border-radius: 8px; border: 1px solid #e5e5e5; color: #111; }
+        .icon-info { flex: 1; min-width: 0; }
+        .icon-name { font-weight: 600; font-size: 16px; margin: 0 0 8px 0; color: #111; }
+        .usage-list { margin: 0; padding: 0 0 0 16px; font-size: 14px; color: #555; }
+        .usage-item { margin-bottom: 4px; }
+        
+        @media print {
+            body { padding: 0; }
+            .icons-grid { gap: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Icon Usage Report</h1>
+    <p class="subtitle">A complete list of all Lucide React icons used in the Punct application and their component locations.</p>
+    
+    <div class="icons-grid">
+
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="home"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Home</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">RouteDetails</li><li class="usage-item">Dashboard</li><li class="usage-item">AppLayout</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="calendar"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Calendar</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">AppLayout</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="bell"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Bell</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Profile</li><li class="usage-item">Dashboard</li><li class="usage-item">CalendarView</li><li class="usage-item">AlarmPage</li><li class="usage-item">AppLayout</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="bar-chart-3"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">BarChart3</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">AppLayout</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="user"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">User</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Profile</li><li class="usage-item">AppLayout</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="arrow-left"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">ArrowLeft</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">SocialSync</li><li class="usage-item">RouteDetails</li><li class="usage-item">Logistics</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="users"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Users</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">SocialSync</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="plus"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Plus</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">SocialSync</li><li class="usage-item">Dashboard</li><li class="usage-item">CalendarView</li><li class="usage-item">AlarmPage</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="hash"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Hash</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">SocialSync</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="share2"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Share2</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">SocialSync</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="message-circle"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">MessageCircle</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">SocialSync</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="chevron-right"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">ChevronRight</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">SocialSync</li><li class="usage-item">RouteDetails</li><li class="usage-item">Profile</li><li class="usage-item">Dashboard</li><li class="usage-item">CalendarView</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="car"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Car</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">RouteDetails</li><li class="usage-item">Logistics</li><li class="usage-item">Profile</li><li class="usage-item">Dashboard</li><li class="usage-item">CalendarView</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="person-standing"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">PersonStanding</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">RouteDetails</li><li class="usage-item">Dashboard</li><li class="usage-item">CalendarView</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="bus"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Bus</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">RouteDetails</li><li class="usage-item">Dashboard</li><li class="usage-item">CalendarView</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="map-pin"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">MapPin</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">RouteDetails</li><li class="usage-item">Questionnaire</li><li class="usage-item">Logistics</li><li class="usage-item">Profile</li><li class="usage-item">Dashboard</li><li class="usage-item">CalendarView</li><li class="usage-item">AddressInput</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="clock"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Clock</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">RouteDetails</li><li class="usage-item">Profile</li><li class="usage-item">Insights</li><li class="usage-item">Dashboard</li><li class="usage-item">CalendarView</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="navigation"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Navigation</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">RouteDetails</li><li class="usage-item">Dashboard</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="footprints"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Footprints</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">RouteDetails</li><li class="usage-item">Logistics</li><li class="usage-item">Dashboard</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="chevron-left"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">ChevronLeft</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Questionnaire</li><li class="usage-item">Onboarding</li><li class="usage-item">CalendarView</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="check"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Check</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Questionnaire</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="settings"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Settings</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Profile</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="shield"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Shield</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Profile</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="log-out"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">LogOut</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Profile</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="file-text"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">FileText</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Profile</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="trash2"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Trash2</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Profile</li><li class="usage-item">Dashboard</li><li class="usage-item">CalendarView</li><li class="usage-item">AlarmPage</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="info"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Info</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Profile</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="mail"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Mail</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Profile</li><li class="usage-item">Auth</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="lock"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Lock</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Profile</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="download"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Download</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Profile</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="help-circle"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">HelpCircle</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Profile</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="smartphone"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Smartphone</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Profile</li><li class="usage-item">AlarmPage</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="coffee"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Coffee</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Logistics</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="parking-square"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">ParkingSquare</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Logistics</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="trending-up"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">TrendingUp</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Insights</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="trending-down"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">TrendingDown</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Insights</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="zap"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Zap</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Insights</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="target"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Target</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Insights</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="award"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Award</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Insights</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="calendar-check"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">CalendarCheck</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Insights</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="route"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Route</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Insights</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="cloud-rain"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">CloudRain</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Dashboard</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="cloud"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Cloud</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Dashboard</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="sun"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Sun</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Dashboard</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="cloud-snow"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">CloudSnow</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Dashboard</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="cloud-lightning"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">CloudLightning</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Dashboard</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="cloud-drizzle"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">CloudDrizzle</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Dashboard</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="cloud-fog"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">CloudFog</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Dashboard</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="snowflake"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Snowflake</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Dashboard</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="sunrise"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Sunrise</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Dashboard</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="cpu"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Cpu</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Dashboard</li><li class="usage-item">CalendarView</li><li class="usage-item">AlarmPage</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="x"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">X</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Dashboard</li><li class="usage-item">CalendarView</li><li class="usage-item">AlarmPage</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="calendar-off"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">CalendarOff</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Dashboard</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="pencil"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Pencil</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Dashboard</li><li class="usage-item">CalendarView</li><li class="usage-item">AlarmPage</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="more-vertical"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">MoreVertical</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Dashboard</li><li class="usage-item">CalendarView</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="chevron-down"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">ChevronDown</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Dashboard</li><li class="usage-item">CalendarView</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="moon"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Moon</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Dashboard</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="menu"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Menu</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">CalendarView</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="apple"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Apple</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">Auth</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="volume2"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Volume2</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">AlarmPage</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="vibrate"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Vibrate</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">AlarmPage</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="music"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Music</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">AlarmPage</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="timer"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Timer</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">AlarmPage</li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="icon-card">
+            <div class="icon-preview">
+                <i data-lucide="calculator"></i>
+            </div>
+            <div class="icon-info">
+                <h3 class="icon-name">Calculator</h3>
+                <ul class="usage-list">
+                    <li class="usage-item">AlarmPage</li>
+                </ul>
+            </div>
+        </div>
+    
+    </div>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

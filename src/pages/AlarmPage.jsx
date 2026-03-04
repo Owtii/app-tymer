@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Bell, Plus, X, Cpu, Pencil, Trash2, Volume2, Vibrate, Music, Timer, Calculator, Smartphone } from 'lucide-react';
+import { Plus, X, Cpu, Calculator, Smartphone } from 'lucide-react';
+import { CustomBell, CustomTrash, CustomTimer, CustomPencil, CustomVolume, CustomMusic } from '../components/CustomIcons';
 import { useAppContext } from '../context/AppContext';
 import IOSTimePicker from '../components/IOSTimePicker';
 import './AlarmPage.css';
@@ -7,17 +8,17 @@ import './AlarmPage.css';
 const DAY_NAMES = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
 const SOUNDS = [
-    { id: 'classic', name: 'Classic Alarm', icon: Bell },
-    { id: 'gentle', name: 'Gentle Rise', icon: Volume2 },
-    { id: 'melody', name: 'Morning Melody', icon: Music },
-    { id: 'vibrate', name: 'Vibrate Only', icon: Vibrate }
+    { id: 'classic', name: 'Classic Alarm', icon: CustomBell },
+    { id: 'gentle', name: 'Gentle Rise', icon: CustomVolume },
+    { id: 'melody', name: 'Morning Melody', icon: CustomMusic },
+    { id: 'vibrate', name: 'Vibrate Only', icon: CustomBell }
 ];
 
 const DISMISS_TASKS = [
     { id: 'none', name: 'None (Swipe)', icon: Smartphone },
     { id: 'math', name: 'Math Problem', icon: Calculator },
     { id: 'shake', name: 'Shake Phone', icon: Smartphone },
-    { id: 'timer', name: 'Hold Timer', icon: Timer }
+    { id: 'timer', name: 'Hold Timer', icon: CustomTimer }
 ];
 
 const AlarmPage = () => {
@@ -74,7 +75,7 @@ const AlarmPage = () => {
             <div className="alarm-page-list">
                 {alarms.length === 0 && (
                     <div className="alarm-page-empty">
-                        <Bell size={40} color="#E2E2E2" />
+                        <CustomBell size={40} color="#E2E2E2" />
                         <p>No alarms set</p>
                         <span>Tap "New Alarm" to create one</span>
                     </div>
@@ -89,10 +90,10 @@ const AlarmPage = () => {
                             </div>
                             <div className="alarm-page-card-actions">
                                 <button className="alarm-page-action-btn" onClick={() => setEditingAlarm({ ...alarm, sound: alarm.sound || 'classic', dismissTask: alarm.dismissTask || 'none' })}>
-                                    <Pencil size={14} color="#979797" />
+                                    <CustomPencil size={14} color="#979797" />
                                 </button>
                                 <button className="alarm-page-action-btn" onClick={() => setConfirmDelete(alarm.id)}>
-                                    <Trash2 size={14} color="#979797" />
+                                    <CustomTrash size={14} color="#979797" />
                                 </button>
                             </div>
                         </div>
@@ -272,7 +273,7 @@ const AlarmPage = () => {
                 <div className="alarm-page-modal-overlay" onClick={() => setConfirmDelete(null)}>
                     <div className="alarm-page-confirm" onClick={e => e.stopPropagation()}>
                         <div className="alarm-page-confirm-icon">
-                            <Trash2 size={28} color="#FF3C5D" />
+                            <CustomTrash size={28} color="#FF3C5D" />
                         </div>
                         <h3>Delete Alarm?</h3>
                         <p>This action cannot be undone.</p>

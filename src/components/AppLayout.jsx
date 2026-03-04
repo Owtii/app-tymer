@@ -1,14 +1,14 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Outlet, NavLink, useLocation } from 'react-router-dom';
-import { Home, Calendar, Bell, BarChart3, User } from 'lucide-react';
+import { CustomHome, CustomCalendar, CustomBell, CustomChart, CustomUser } from './CustomIcons';
 import './AppLayout.css';
 
 const NAV_ITEMS = [
-    { to: '/app/home', icon: Home },
-    { to: '/app/calendar', icon: Calendar },
-    { to: '/app/alarm', icon: Bell },
-    { to: '/app/insights', icon: BarChart3 },
-    { to: '/app/profile', icon: User },
+    { to: '/app/home', icon: CustomHome },
+    { to: '/app/calendar', icon: CustomCalendar },
+    { to: '/app/alarm', icon: CustomBell },
+    { to: '/app/insights', icon: CustomChart },
+    { to: '/app/profile', icon: CustomUser },
 ];
 
 const AppLayout = () => {

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { MapPin } from 'lucide-react';
+import { CustomMapPin } from './CustomIcons';
 import { geocodeAddress } from '../services/MapboxService';
 import './AddressInput.css';
 
@@ -57,7 +57,7 @@ const AddressInput = ({ value, onChange, placeholder = 'Search address...' }) =>
     return (
         <div className="address-input-wrapper" ref={wrapperRef}>
             <div className="address-input-field">
-                <MapPin size={16} className="address-input-icon" />
+                <CustomMapPin size={16} className="address-input-icon" />
                 <input
                     type="text"
                     value={query}
@@ -78,7 +78,7 @@ const AddressInput = ({ value, onChange, placeholder = 'Search address...' }) =>
                             onClick={() => handleSelect(s)}
                             type="button"
                         >
-                            <MapPin size={14} className="suggestion-icon" />
+                            <CustomMapPin size={14} className="suggestion-icon" />
                             <span>{s.place_name}</span>
                         </button>
                     ))}
