@@ -18,7 +18,7 @@ const Profile = () => {
     };
 
     return (
-        <div className="prof-container">
+        <div className="prof-container page-fade-child">
             {/* Header */}
             <header className="prof-header">
                 <h1 className="prof-page-title">Settings</h1>

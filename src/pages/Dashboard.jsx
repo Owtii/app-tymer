@@ -114,6 +114,30 @@ const Dashboard = () => {
         return Math.max(0, Math.min(100, (elapsed / totalTravel) * 100));
     }, [nextEvent, countdown]);
 
+    // Is the user running late?
+    const isLate = useMemo(() => {
+        if (!countdown) return false;
+        return countdown.totalSec <= 0;
+    }, [countdown]);
+
+    // Check if event time has passed (fulfilled)
+    const isEventFulfilled = (event) => {
+        const [h, m] = event.time.split(':').map(Number);
+        const eventMin = h * 60 + m;
+        const nowMin = now.getHours() * 60 + now.getMinutes();
+        return nowMin > eventMin;
+    };
+
+    // Auto-clean fulfilled events older than 1 day
+    useEffect(() => {
+        events.forEach(event => {
+            if (event.completedAt) {
+                const elapsed = Date.now() - event.completedAt;
+                if (elapsed > 86400000) deleteEvent(event.id);
+            }
+        });
+    }, [events, now]);
+
     const currentLeg = useMemo(() => {
         if (!nextEvent || !countdown) return 'home';
         const totalTravel = (nextEvent.travelMinutes || 0) + (nextEvent.walkMinutes || 0);
@@ -192,7 +216,7 @@ const Dashboard = () => {
 
             {/* Hero Widget Card */}
             {nextEvent ? (
-                <section className="dash-hero-card">
+                <section className={`dash-hero-card ${isLate ? 'dash-hero-late' : ''}`}>
                     {/* Top row */}
                     <div className="hero-top-row">
                         <div className="hero-event-info">
@@ -241,7 +265,7 @@ const Dashboard = () => {
                                 <div className="status-dot-inner"></div>
                             </div>
                             <span className="status-text">
-                                {countdown && countdown.totalMin > 15 ? 'On time' : countdown && countdown.totalMin > 0 ? 'Leaving soon' : 'Time to go!'}
+                                {countdown && countdown.totalSec <= 0 ? 'Running late!' : countdown && countdown.totalMin > 15 ? 'On time' : countdown && countdown.totalMin > 0 ? 'Leaving soon' : 'Time to go!'}
                             </span>
                         </div>
                     </div>
@@ -343,7 +367,7 @@ const Dashboard = () => {
                         const EventIcon = getTravelIcon(event.travelMode);
                         const totalTravel = (event.travelMinutes || 0) + (event.walkMinutes || 0);
                         return (
-                            <div key={event.id} className="dash-plan-card" onClick={() => navigate(`/app/route-details/${event.id}`)} style={{ cursor: 'pointer' }}>
+                            <div key={event.id} className={`dash-plan-card ${isEventFulfilled(event) ? 'dash-plan-fulfilled' : ''}`} onClick={() => navigate(`/app/route-details/${event.id}`)} style={{ cursor: 'pointer' }}>
                                 {/* Top: SMART PLAN + menu */}
                                 <div className="dash-plan-top">
                                     <div className="dash-plan-smart-label" style={{ color: event.color || '#FF3C5D' }}>
@@ -415,7 +439,7 @@ const Dashboard = () => {
                             </div>
 
                             <div className="alarm-card-bottom">
-                                <span className="alarm-sleep">{alarm.active ? <><CustomMoon size={12} color="#979797" style={{ marginRight: 4, verticalAlign: 'middle' }} />{calcSleep(alarm.time)} sleep</> : ''}</span>
+                                <span className="alarm-sleep">{alarm.active ? <><CustomMoon size={12} color="#979797" />{calcSleep(alarm.time)} sleep</> : ''}</span>
                                 <div className="alarm-actions">
                                     <button className="alarm-action-btn" onClick={() => setEditingAlarm({ ...alarm })}>
                                         <CustomPencil size={14} color="#979797" />

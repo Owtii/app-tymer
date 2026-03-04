@@ -6,6 +6,74 @@
     padding-bottom: 140px;
 }
 
+/* ───── Staggered Fade-In Animation ───── */
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dash-header {
+    animation: fadeSlideIn 0.5s cubic-bezier(.25, .46, .45, .94) both;
+    animation-delay: 0.04s;
+}
+
+.dash-hero-card {
+    animation: fadeSlideIn 0.5s cubic-bezier(.25, .46, .45, .94) both;
+    animation-delay: 0.10s;
+}
+
+.dash-section-header {
+    animation: fadeSlideIn 0.5s cubic-bezier(.25, .46, .45, .94) both;
+    animation-delay: 0.16s;
+}
+
+.dash-alarms {
+    animation: fadeSlideIn 0.5s cubic-bezier(.25, .46, .45, .94) both;
+    animation-delay: 0.22s;
+}
+
+.dash-plan-card:nth-child(1) {
+    animation: fadeSlideIn 0.45s cubic-bezier(.25, .46, .45, .94) both;
+    animation-delay: 0.24s;
+}
+
+.dash-plan-card:nth-child(2) {
+    animation: fadeSlideIn 0.45s cubic-bezier(.25, .46, .45, .94) both;
+    animation-delay: 0.30s;
+}
+
+.dash-plan-card:nth-child(3) {
+    animation: fadeSlideIn 0.45s cubic-bezier(.25, .46, .45, .94) both;
+    animation-delay: 0.36s;
+}
+
+.dash-plan-card:nth-child(4) {
+    animation: fadeSlideIn 0.45s cubic-bezier(.25, .46, .45, .94) both;
+    animation-delay: 0.42s;
+}
+
+.alarm-card:nth-child(1) {
+    animation: fadeSlideIn 0.45s cubic-bezier(.25, .46, .45, .94) both;
+    animation-delay: 0.24s;
+}
+
+.alarm-card:nth-child(2) {
+    animation: fadeSlideIn 0.45s cubic-bezier(.25, .46, .45, .94) both;
+    animation-delay: 0.30s;
+}
+
+.alarm-card:nth-child(3) {
+    animation: fadeSlideIn 0.45s cubic-bezier(.25, .46, .45, .94) both;
+    animation-delay: 0.36s;
+}
+
 /* ───── Header ───── */
 .dash-header {
     display: flex;
@@ -70,6 +138,38 @@
     border-radius: 28px;
     padding: 22px 24px 20px;
     margin-bottom: 24px;
+    transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Late indicator — red tint */
+.dash-hero-late {
+    background: linear-gradient(135deg, #FFF5F5 0%, #FFE8EA 100%);
+    border-color: #FF3C5D44;
+    box-shadow: 0 4px 20px rgba(255, 60, 93, 0.12);
+}
+
+.dash-hero-late .hero-timer-value {
+    color: #E53E3E;
+}
+
+.dash-hero-late .status-dot-inner {
+    background: #E53E3E;
+}
+
+.dash-hero-late .status-dot-outer {
+    border-color: rgba(229, 62, 62, 0.3);
+}
+
+.dash-hero-late .status-text {
+    color: #E53E3E;
+    font-weight: 600;
+}
+
+/* Fulfilled event — greyed out */
+.dash-plan-fulfilled {
+    opacity: 0.5;
+    filter: grayscale(0.6);
+    pointer-events: none;
 }
 
 .dash-hero-empty {
@@ -573,10 +673,14 @@
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--r-xl);
     padding: 20px 24px 22px;
-    margin-bottom: 14px;
+    margin-bottom: 0;
     transition: box-shadow 0.2s, transform 0.15s;
     position: relative;
     overflow: hidden;
+}
+
+.dash-plan-card+.dash-plan-card {
+    margin-top: 14px;
 }
 
 .dash-plan-card:active {
@@ -606,9 +710,14 @@
 .dash-plan-smart-label span {
     font-family: var(--font);
     font-weight: 600;
-    font-size: 13px;
-    letter-spacing: 0.02em;
+    font-size: 11px;
+    letter-spacing: 0.03em;
     color: var(--color-brand);
+}
+
+.dash-plan-smart-label svg {
+    width: 13px;
+    height: 13px;
 }
 
 .dash-plan-menu-btn {
@@ -880,6 +989,13 @@
     font-weight: 500;
     font-size: 13px;
     color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.alarm-sleep svg {
+    flex-shrink: 0;
 }
 
 .alarm-actions {

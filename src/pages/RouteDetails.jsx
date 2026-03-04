@@ -70,7 +70,7 @@ const RouteDetails = () => {
         });
     }
     steps.push({
-        icon: MapPin,
+        icon: CustomMapPin,
         label: 'Arrive',
         time: fmt(event.time),
         description: event.location || 'Destination',

@@ -61,7 +61,7 @@ const AlarmPage = () => {
     };
 
     return (
-        <div className="alarm-page-container">
+        <div className="alarm-page-container page-fade-child">
             {/* Header */}
             <header className="alarm-page-header">
                 <h2 className="alarm-page-title">Alarms</h2>

@@ -124,3 +124,60 @@ button {
   background: var(--color-brand-soft);
   color: var(--color-text-primary);
 }
+
+/* ───── Global Page Fade-in Animations ───── */
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-fade-child>* {
+  animation: pageFadeIn 0.45s cubic-bezier(.25, .46, .45, .94) both;
+}
+
+.page-fade-child>*:nth-child(1) {
+  animation-delay: 0.04s;
+}
+
+.page-fade-child>*:nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.page-fade-child>*:nth-child(3) {
+  animation-delay: 0.12s;
+}
+
+.page-fade-child>*:nth-child(4) {
+  animation-delay: 0.16s;
+}
+
+.page-fade-child>*:nth-child(5) {
+  animation-delay: 0.20s;
+}
+
+.page-fade-child>*:nth-child(6) {
+  animation-delay: 0.24s;
+}
+
+.page-fade-child>*:nth-child(7) {
+  animation-delay: 0.28s;
+}
+
+.page-fade-child>*:nth-child(8) {
+  animation-delay: 0.32s;
+}
+
+.page-fade-child>*:nth-child(9) {
+  animation-delay: 0.36s;
+}
+
+.page-fade-child>*:nth-child(10) {
+  animation-delay: 0.40s;
+}

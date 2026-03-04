@@ -40,7 +40,7 @@ const Insights = () => {
     ];
 
     return (
-        <div className="ins-container">
+        <div className="ins-container page-fade-child">
             {/* Header */}
             <header className="ins-header">
                 <div>
