@@ -342,7 +342,7 @@ const Dashboard = () => {
                         className={`dash-tab ${activeTab === 'plans' ? 'active' : ''}`}
                         onClick={() => setActiveTab('plans')}
                     >
-                        <Sunrise size={13} />
+                        <CustomPlans size={13} />
                         <span>Plans</span>
                     </button>
                     <button
