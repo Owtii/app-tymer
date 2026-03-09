@@ -16,7 +16,7 @@ const Welcome = () => {
             <div className="welcome-actions">
                 <button
                     className="welcome-btn-primary"
-                    onClick={() => navigate('/onboarding')}
+                    onClick={() => navigate('/questionnaire')}
                 >
                     Get Started
                 </button>

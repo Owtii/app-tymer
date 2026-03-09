@@ -8,7 +8,9 @@
     overflow: hidden;
 }
 
-/* Header */
+/* ======================== */
+/* HEADER                   */
+/* ======================== */
 .q-header {
     display: flex;
     align-items: center;
@@ -38,7 +40,7 @@
 
 .q-progress-track {
     flex: 1;
-    max-width: 200px;
+    max-width: 220px;
     height: 6px;
     background: var(--color-border);
     border-radius: var(--r-pill);
@@ -50,27 +52,99 @@
     height: 100%;
     background: var(--color-brand);
     border-radius: var(--r-pill);
-    transition: width 0.3s ease;
+    transition: width 0.35s cubic-bezier(.25, 1, .5, 1);
 }
 
-/* Question label */
+/* ======================== */
+/* META (PHASE + LABEL)     */
+/* ======================== */
+.q-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 24px;
+    flex-shrink: 0;
+}
+
+.q-phase-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 14px;
+    border-radius: var(--r-pill);
+    background: var(--color-brand-light);
+    color: var(--color-brand);
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1;
+}
+
 .q-label {
     font-family: var(--font);
     font-weight: 600;
-    font-size: 12px;
+    font-size: 11px;
     line-height: 16px;
     text-align: center;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--color-text-tertiary);
-    margin-top: 32px;
 }
 
-/* Question text */
+/* ======================== */
+/* CONTENT AREA (Animated)  */
+/* ======================== */
+.q-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+}
+
+.q-content.q-slide-in-right {
+    animation: slideInRight 0.35s cubic-bezier(.25, 1, .5, 1) both;
+}
+
+.q-content.q-slide-in-left {
+    animation: slideInLeft 0.35s cubic-bezier(.25, 1, .5, 1) both;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ======================== */
+/* QUESTION TEXT            */
+/* ======================== */
 .q-question {
     font-family: var(--font);
     font-weight: 700;
-    font-size: 24px;
+    font-size: 23px;
     line-height: 30px;
     text-align: center;
     letter-spacing: -0.02em;
@@ -80,12 +154,26 @@
     padding: 0 24px;
 }
 
-/* Options */
+.q-subtitle {
+    font-family: var(--font);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    color: var(--color-text-secondary);
+    max-width: 280px;
+    margin: 6px auto 0;
+    padding: 0 24px;
+}
+
+/* ======================== */
+/* OPTIONS                  */
+/* ======================== */
 .q-options {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding: 24px 24px 0;
+    padding: 20px 24px 0;
     flex: 1;
     overflow-y: auto;
 }
@@ -97,15 +185,16 @@
     width: 100%;
     max-width: 392px;
     margin: 0 auto;
-    height: 64px;
+    min-height: 58px;
+    padding: 12px 20px;
     background: var(--color-bg-card);
     border-radius: var(--r-xl);
     border: 1.5px solid var(--color-border-subtle);
-    padding: 0 22px;
     cursor: pointer;
     transition: all 0.2s ease;
     font-family: var(--font);
     box-shadow: var(--shadow-xs);
+    text-align: left;
 }
 
 .q-option:hover {
@@ -122,12 +211,16 @@
 .q-option-text {
     font-family: var(--font);
     font-weight: 600;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 20px;
     color: var(--color-text-primary);
+    flex: 1;
+    margin-right: 12px;
 }
 
-/* Radio circle — hidden when checked, only checkmark shows */
+/* ======================== */
+/* RADIO / CHECKBOX CIRCLE  */
+/* ======================== */
 .q-radio {
     width: 20px;
     height: 20px;
@@ -148,12 +241,24 @@
     height: 20px;
 }
 
-/* Footer */
+/* Multi-select: filled circle with checkmark */
+.q-option.selected .q-radio.checked {
+    background: var(--color-brand);
+    border-radius: 6px;
+    width: 22px;
+    height: 22px;
+}
+
+/* ======================== */
+/* FOOTER                   */
+/* ======================== */
 .q-footer {
-    padding: 16px 24px;
-    padding-bottom: 44px;
+    padding: 12px 24px;
+    padding-bottom: 40px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
     flex-shrink: 0;
 }
 
@@ -197,6 +302,30 @@
     transform: translateY(0);
 }
 
+/* ─── Skip button ─── */
+.q-skip-btn {
+    background: none;
+    border: none;
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    padding: 6px 16px;
+    border-radius: var(--r-pill);
+    transition: all 0.2s;
+    letter-spacing: 0.01em;
+}
+
+.q-skip-btn:hover {
+    color: var(--color-brand);
+    background: var(--color-brand-light);
+}
+
+.q-skip-btn:active {
+    transform: scale(0.96);
+}
+
 /* ======================== */
 /* INPUT AREA (Name/Loc)    */
 /* ======================== */
@@ -204,7 +333,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 24px 24px 0;
+    padding: 20px 24px 0;
     flex: 1;
 }
 
@@ -236,7 +365,7 @@
     font-weight: 500;
 }
 
-/* Address input override for questionnaire */
+/* Address input override */
 .q-underline-address {
     width: 100%;
     max-width: 392px;
@@ -267,9 +396,60 @@
     border: none;
 }
 
-/* ================== */
-/* FINALIZING SCREEN  */
-/* ================== */
+/* ======================== */
+/* INFO SLIDES              */
+/* ======================== */
+.q-info-slide {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 24px;
+}
+
+.q-info-image-wrapper {
+    width: 100%;
+    max-width: 280px;
+    height: 36vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+.q-info-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.q-info-title {
+    font-family: var(--font);
+    font-weight: 800;
+    font-size: 30px;
+    line-height: 36px;
+    text-align: center;
+    letter-spacing: -0.03em;
+    color: var(--color-text-primary);
+    margin-bottom: 10px;
+}
+
+.q-info-description {
+    font-family: var(--font);
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 21px;
+    text-align: center;
+    color: var(--color-text-secondary);
+    max-width: 280px;
+    margin: 0;
+}
+
+/* ======================== */
+/* FINALIZING SCREEN        */
+/* ======================== */
 .finalizing-wrapper {
     flex: 1;
     display: flex;
@@ -464,6 +644,9 @@
     justify-content: center;
 }
 
+/* ======================== */
+/* KEYFRAMES                */
+/* ======================== */
 @keyframes spin {
     to {
         transform: rotate(360deg);
