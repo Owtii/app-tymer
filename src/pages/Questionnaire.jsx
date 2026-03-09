@@ -228,6 +228,7 @@ const Questionnaire = () => {
     const [finalized, setFinalized] = useState(false);
     const [slideDir, setSlideDir] = useState('next'); // animation direction
     const [animating, setAnimating] = useState(false);
+    const [progressAnimating, setProgressAnimating] = useState(false);
     const contentRef = useRef(null);
 
     // ─── Loading progress timer ───
@@ -254,8 +255,10 @@ const Questionnaire = () => {
     // ─── Trigger slide-in animation on step change ───
     useEffect(() => {
         setAnimating(true);
+        setProgressAnimating(true);
         const timeout = setTimeout(() => setAnimating(false), 350);
-        return () => clearTimeout(timeout);
+        const progressTimeout = setTimeout(() => setProgressAnimating(false), 800);
+        return () => { clearTimeout(timeout); clearTimeout(progressTimeout); };
     }, [currentStep]);
 
     /* ═════════════════════════════
@@ -497,16 +500,18 @@ const Questionnaire = () => {
                     <ChevronLeft size={26} strokeWidth={3} />
                 </button>
                 <div className="q-progress-track">
-                    <div className="q-progress-fill" style={{ width: `${progressPercent}%` }} />
+                    <div className={`q-progress-fill ${progressAnimating ? 'animating' : ''}`} style={{ width: `${progressPercent}%` }} />
                 </div>
                 <div style={{ width: 26 }} /> {/* Spacer */}
             </div>
 
-            {/* ─── PHASE BADGE + STEP LABEL ─── */}
-            <div className="q-meta">
-                {phaseBadge && <span className="q-phase-badge">{phaseBadge}</span>}
-                <div className="q-label">{getStepLabel()}</div>
-            </div>
+            {/* ─── PHASE BADGE + STEP LABEL (hidden on question steps) ─── */}
+            {!isQuestionStep && (
+                <div className="q-meta">
+                    {phaseBadge && <span className="q-phase-badge">{phaseBadge}</span>}
+                    <div className="q-label">{getStepLabel()}</div>
+                </div>
+            )}
 
             {/* ─── ANIMATED CONTENT AREA ─── */}
             <div className={`q-content ${animClass}`} ref={contentRef}>
@@ -567,9 +572,7 @@ const Questionnaire = () => {
                                     <span className="q-option-text">{option}</span>
                                     <div className={`q-radio ${isSelected(option) ? 'checked' : ''}`}>
                                         {isSelected(option) && (
-                                            currentQuestion.multi
-                                                ? <Check size={13} strokeWidth={3} color="#FFFFFF" />
-                                                : <Check size={14} strokeWidth={3} color="#FF3C5D" />
+                                            <Check size={13} strokeWidth={3} color="#FFFFFF" />
                                         )}
                                     </div>
                                 </button>
