@@ -130,14 +130,14 @@
 
 .ob-next-btn {
     width: 100%;
-    max-width: 392px;
-    height: 54px;
+    max-width: 420px;
+    height: 60px;
     background: var(--color-text-primary);
     border: none;
-    border-radius: var(--r-xl);
+    border-radius: 22px;
     font-family: var(--font);
     font-weight: 700;
-    font-size: 16px;
+    font-size: 17px;
     line-height: 100%;
     color: var(--color-text-inverted);
     cursor: pointer;

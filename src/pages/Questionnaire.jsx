@@ -41,12 +41,13 @@ const questions = [
     {
         id: 2, phase: 0,
         question: 'How old are you?',
-        options: ['Under 18', '18 to 24', '25 to 34', '35 or older']
+        type: 'age',
+        options: []
     },
     {
         id: 3, phase: 0,
         question: 'How do you identify?',
-        options: ['Male', 'Female', 'Non-binary', 'Prefer not to say']
+        options: ['Male', 'Female', 'Prefer not to say']
     },
 
     // Phase 1: Waking Up & The Internal Clock (Q4-Q10)
@@ -203,14 +204,11 @@ const timeSteps = [
 /* ===============================================
    NAME STEP (step 0)  →  LOCATION STEP (step 1)
    → 18 QUESTIONS (steps 2-19)
-   → INFO SLIDES (steps 20-23)
    → LOADING → DONE
 =============================================== */
 const QUESTION_OFFSET = 2;               // first question at step index 2
 const TOTAL_QUESTION_STEPS = questions.length; // 18
-const INFO_OFFSET = QUESTION_OFFSET + TOTAL_QUESTION_STEPS; // step 20
-const INFO_COUNT = infoSlides.length;     // 4
-const TOTAL_STEPS = INFO_OFFSET + INFO_COUNT; // 24
+const TOTAL_STEPS = QUESTION_OFFSET + TOTAL_QUESTION_STEPS; // 20
 
 /* ─── Phase boundaries (question indices, 0-based) ─── */
 const WAKE_UP_END = 9; // Q1-Q10 → indices 0..9 (phases 0 & 1) are non-skippable
@@ -229,7 +227,16 @@ const Questionnaire = () => {
     const [slideDir, setSlideDir] = useState('next'); // animation direction
     const [animating, setAnimating] = useState(false);
     const [progressAnimating, setProgressAnimating] = useState(false);
+    const [infoSlideIndex, setInfoSlideIndex] = useState(0);
     const contentRef = useRef(null);
+    const ageWheelRef = useRef(null);
+    const AGE_MIN = 0;
+    const AGE_MAX = 150;
+    const AGE_ITEM_HEIGHT = 64;
+    const ages = Array.from({ length: AGE_MAX - AGE_MIN + 1 }, (_, i) => AGE_MIN + i);
+
+    // Track which age is currently selected via scroll
+    const selectedAge = answers[2] ? parseInt(answers[2]) : null;
 
     // ─── Loading progress timer ───
     useEffect(() => {
@@ -239,7 +246,7 @@ const Questionnaire = () => {
                     if (prev >= 100) { clearInterval(interval); return 100; }
                     return prev + 1;
                 });
-            }, 50);
+            }, 80);
             return () => clearInterval(interval);
         }
     }, [view]);
@@ -252,6 +259,16 @@ const Questionnaire = () => {
         }
     }, [loadingProgress, finalized]);
 
+    // ─── Auto-slide info carousel during loading ───
+    useEffect(() => {
+        if (view === 'loading' && !finalized) {
+            const interval = setInterval(() => {
+                setInfoSlideIndex(prev => (prev + 1) % infoSlides.length);
+            }, 3000);
+            return () => clearInterval(interval);
+        }
+    }, [view, finalized]);
+
     // ─── Trigger slide-in animation on step change ───
     useEffect(() => {
         setAnimating(true);
@@ -261,22 +278,64 @@ const Questionnaire = () => {
         return () => { clearTimeout(timeout); clearTimeout(progressTimeout); };
     }, [currentStep]);
 
+    // ─── Scroll to selected age on mount ───
+    useEffect(() => {
+        // Compute directly: age question is Q2 (index 1 in questions array), at step QUESTION_OFFSET + 1
+        const ageStepIndex = QUESTION_OFFSET + 1; // Q2 is the second question
+        if (currentStep !== ageStepIndex) return;
+
+        const initScroll = () => {
+            if (!ageWheelRef.current) return;
+            const currentAge = answers[2] ? parseInt(answers[2]) : 20;
+            const index = currentAge - AGE_MIN;
+            // Items start after a spacer of height = containerH/2 - itemH/2
+            // To center item N, scroll so that: spacerH + index*itemH is at containerH/2 - itemH/2
+            // scrollTop = index * AGE_ITEM_HEIGHT
+            ageWheelRef.current.scrollTop = index * AGE_ITEM_HEIGHT;
+            if (!answers[2]) {
+                setAnswers(prev => ({ ...prev, 2: '20' }));
+            }
+        };
+
+        // Wait for DOM to be fully ready after animation
+        const timer = setTimeout(initScroll, 150);
+        return () => clearTimeout(timer);
+    }, [currentStep]);
+
+    const handleAgeScroll = () => {
+        if (!ageWheelRef.current) return;
+        const scrollTop = ageWheelRef.current.scrollTop;
+        // Items start after a spacer. The spacer height = containerH/2 - itemH/2
+        // The center of the viewport is at scrollTop + containerH/2
+        // The item at the center = (scrollTop) / AGE_ITEM_HEIGHT since spacer accounts for the offset
+        const index = Math.round(scrollTop / AGE_ITEM_HEIGHT);
+        const clampedIndex = Math.max(0, Math.min(ages.length - 1, index));
+        const age = ages[clampedIndex];
+        if (age !== selectedAge) {
+            setAnswers(prev => ({ ...prev, 2: String(age) }));
+        }
+    };
+
+    const scrollToAge = (age) => {
+        if (!ageWheelRef.current) return;
+        const index = age - AGE_MIN;
+        ageWheelRef.current.scrollTo({ top: index * AGE_ITEM_HEIGHT, behavior: 'smooth' });
+    };
+
     /* ═════════════════════════════
        HELPERS
     ═════════════════════════════ */
     const isNameStep = currentStep === 0;
     const isLocationStep = currentStep === 1;
-    const isQuestionStep = currentStep >= QUESTION_OFFSET && currentStep < INFO_OFFSET;
-    const isInfoStep = currentStep >= INFO_OFFSET && currentStep < TOTAL_STEPS;
+    const isQuestionStep = currentStep >= QUESTION_OFFSET && currentStep < TOTAL_STEPS;
     const qIndex = currentStep - QUESTION_OFFSET;
-    const infoIndex = currentStep - INFO_OFFSET;
     const currentQuestion = isQuestionStep ? questions[qIndex] : null;
     const currentPhase = currentQuestion ? phases[currentQuestion.phase] : null;
-    const isSkippable = currentPhase ? currentPhase.skippable : isInfoStep;
+    const isSkippable = currentPhase ? currentPhase.skippable : false;
 
-    /* ─── Check if current question is answered ─── */
     const isAnswered = () => {
         if (!currentQuestion) return false;
+        if (currentQuestion.type === 'age') return !!answers[currentQuestion.id];
         if (currentQuestion.multi) {
             const sel = multiAnswers[currentQuestion.id] || [];
             return sel.length > 0;
@@ -321,23 +380,13 @@ const Questionnaire = () => {
             }
             return;
         }
-        // Info step
-        if (isInfoStep) {
-            if (currentStep < TOTAL_STEPS - 1) {
-                goToStep(currentStep + 1);
-            } else {
-                startLoading();
-            }
-            return;
-        }
     };
 
     const handleSkip = () => {
         if (isQuestionStep) {
-            // skip to next phase boundary or info slides
             const currentPhaseId = currentQuestion.phase;
             let nextStep = currentStep + 1;
-            while (nextStep < INFO_OFFSET) {
+            while (nextStep < TOTAL_STEPS) {
                 const nextQ = questions[nextStep - QUESTION_OFFSET];
                 if (nextQ && nextQ.phase !== currentPhaseId) break;
                 nextStep++;
@@ -406,14 +455,12 @@ const Questionnaire = () => {
         if (isNameStep) return 'GETTING STARTED';
         if (isLocationStep) return 'YOUR LOCATION';
         if (isQuestionStep) return `QUESTION ${qIndex + 1} OF ${TOTAL_QUESTION_STEPS}`;
-        if (isInfoStep) return `DISCOVER ${infoIndex + 1} OF ${INFO_COUNT}`;
         return '';
     };
 
     const getPhaseBadge = () => {
         if (isNameStep || isLocationStep) return null;
         if (isQuestionStep && currentPhase) return currentPhase.name;
-        if (isInfoStep) return 'How It Works';
         return null;
     };
 
@@ -421,59 +468,116 @@ const Questionnaire = () => {
        RENDER: LOADING / FINALIZING
     ═════════════════════════════════════════════════ */
     if (view === 'loading') {
-        const circumference = 2 * Math.PI * 74;
-        const strokeDashoffset = circumference - (Math.min(loadingProgress, 100) / 100) * circumference;
+        const currentTaskIdx = timeSteps.findIndex(s => loadingProgress < s.threshold);
+        const currentTask = currentTaskIdx >= 0 ? timeSteps[currentTaskIdx] : timeSteps[timeSteps.length - 1];
+        const pct = Math.min(loadingProgress, 100);
+        const hundreds = Math.floor(pct / 100);
+        const tens = Math.floor((pct % 100) / 10);
+        const ones = pct % 10;
+
+        const renderDigitStrip = (digit, key) => (
+            <div className="pers-digit-roller" key={key}>
+                <div
+                    className="pers-digit-strip"
+                    style={{ transform: `translateY(-${digit * 72}px)` }}
+                >
+                    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => (
+                        <div className="pers-digit-num" key={n}>{n}</div>
+                    ))}
+                </div>
+            </div>
+        );
+
+        const handleTouchStart = (e) => {
+            e.currentTarget._touchStartX = e.touches[0].clientX;
+        };
+        const handleTouchEnd = (e) => {
+            const startX = e.currentTarget._touchStartX;
+            const endX = e.changedTouches[0].clientX;
+            const diff = startX - endX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    setInfoSlideIndex(prev => Math.min(prev + 1, infoSlides.length - 1));
+                } else {
+                    setInfoSlideIndex(prev => Math.max(prev - 1, 0));
+                }
+            }
+        };
 
         return (
-            <div className="q-container">
-                <div className="finalizing-wrapper">
-                    <div className={`finalizing-screen ${finalized ? 'done' : ''}`}>
-                        <div className="final-ring-wrapper">
-                            <svg width="180" height="180" viewBox="0 0 180 180">
-                                <circle cx="90" cy="90" r="74" stroke="var(--color-border)" strokeWidth="14" fill="transparent" />
-                                <circle cx="90" cy="90" r="74" stroke="var(--color-brand)" strokeWidth="14" fill="transparent"
-                                    strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} strokeLinecap="round"
-                                    transform="rotate(-90 90 90)" style={{ transition: 'stroke-dashoffset 0.1s linear' }}
-                                />
-                            </svg>
-                            <div className="final-ring-text">
-                                <span className="final-percent">{Math.min(loadingProgress, 100)}%</span>
-                            </div>
-                        </div>
-                        <h2 className="final-title">Personalizing Plan</h2>
-                        <div className="final-steps-card">
-                            {timeSteps.map((step, idx) => {
-                                const isCompleted = loadingProgress >= step.threshold;
-                                const isCurrent = !isCompleted && (idx === 0 || loadingProgress >= timeSteps[idx - 1].threshold);
-                                return (
-                                    <div key={idx} className={`final-step ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''}`}>
-                                        <div className="final-step-icon">
-                                            {isCompleted ? (
-                                                <div className="final-check-circle">
-                                                    <Check size={12} strokeWidth={3} color="#FFFFFF" />
-                                                </div>
-                                            ) : isCurrent ? (
-                                                <div className="final-spinner" />
-                                            ) : (
-                                                <div className="final-empty-circle" />
-                                            )}
-                                        </div>
-                                        <span className="final-step-label">{step.label}</span>
+            <div className="q-container pers-container">
+                <div className="pers-content">
+                    {/* Odometer percentage */}
+                    <div className="pers-percent-wrapper">
+                        {hundreds > 0 && renderDigitStrip(hundreds, 'h')}
+                        {(hundreds > 0 || tens > 0) && renderDigitStrip(tens, 't')}
+                        {renderDigitStrip(ones, 'o')}
+                        <span className="pers-percent-sign">%</span>
+                    </div>
+                    <p className="pers-title">We're setting everything up for you</p>
+
+                    {/* Loading bar */}
+                    <div className="pers-bar-track">
+                        <div className="pers-bar-fill" style={{ width: `${Math.min(loadingProgress, 100)}%` }} />
+                    </div>
+                    <p className="pers-task-label">{currentTask.label}</p>
+
+                    {/* Task list */}
+                    <div className="pers-tasks">
+                        {timeSteps.map((step, idx) => {
+                            const isCompleted = loadingProgress >= step.threshold;
+                            const isCurrent = !isCompleted && (idx === 0 || loadingProgress >= timeSteps[idx - 1].threshold);
+                            return (
+                                <div key={idx} className={`pers-task-row ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''}`}>
+                                    <div className="pers-task-dot">
+                                        {(isCompleted || isCurrent) ? (
+                                            <div className="pers-dot-filled" />
+                                        ) : (
+                                            <div className="pers-dot-empty" />
+                                        )}
                                     </div>
-                                );
-                            })}
-                        </div>
+                                    <span className="pers-task-text">{step.label}</span>
+                                    {isCompleted && (
+                                        <div className="pers-task-check">
+                                            <Check size={14} strokeWidth={3} color="#FF3C5D" />
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
                     </div>
 
-                    <div className={`final-success ${finalized ? 'show' : ''}`}>
-                        <div className="final-success-icon">
-                            <Check size={44} strokeWidth={3} color="#FFFFFF" />
+                    {/* Info carousel */}
+                    <div
+                        className="pers-carousel"
+                        onTouchStart={handleTouchStart}
+                        onTouchEnd={handleTouchEnd}
+                    >
+                        <div className="pers-carousel-track" style={{ transform: `translateX(-${infoSlideIndex * 100}%)` }}>
+                            {infoSlides.map((slide) => (
+                                <div key={slide.id} className="pers-carousel-slide">
+                                    <img src={slide.image} alt={slide.title} className="pers-carousel-img" />
+                                    <h3 className="pers-carousel-title">{slide.title}</h3>
+                                    <p className="pers-carousel-desc">{slide.description}</p>
+                                </div>
+                            ))}
                         </div>
-                        <h2 className="final-success-title">You're All Set!</h2>
-                        <p className="final-success-subtitle">Your personalized plan is ready</p>
+                        <div className="pers-carousel-dots">
+                            {infoSlides.map((_, i) => (
+                                <div
+                                    key={i}
+                                    className={`pers-carousel-dot ${i === infoSlideIndex ? 'active' : ''}`}
+                                    onClick={() => setInfoSlideIndex(i)}
+                                />
+                            ))}
+                        </div>
                     </div>
                 </div>
 
+                {/* Confetti */}
+                {finalized && <div className="pers-confetti" />}
+
+                {/* Continue button */}
                 <div className="final-footer">
                     <button
                         className={`q-next-btn ${finalized ? 'visible' : 'hidden'}`}
@@ -497,12 +601,12 @@ const Questionnaire = () => {
             {/* ─── HEADER ─── */}
             <div className="q-header">
                 <button className="q-back-btn" onClick={handleBack}>
-                    <ChevronLeft size={26} strokeWidth={3} />
+                    <ChevronLeft size={24} strokeWidth={3} />
                 </button>
                 <div className="q-progress-track">
                     <div className={`q-progress-fill ${progressAnimating ? 'animating' : ''}`} style={{ width: `${progressPercent}%` }} />
                 </div>
-                <div style={{ width: 26 }} /> {/* Spacer */}
+                <div style={{ width: 24 }} /> {/* Spacer */}
             </div>
 
             {/* ─── PHASE BADGE + STEP LABEL (hidden on question steps) ─── */}
@@ -562,39 +666,61 @@ const Questionnaire = () => {
                         {currentQuestion.subtitle && (
                             <p className="q-subtitle">{currentQuestion.subtitle}</p>
                         )}
-                        <div className="q-options">
-                            {currentQuestion.options.map((option) => (
-                                <button
-                                    key={option}
-                                    className={`q-option ${isSelected(option) ? 'selected' : ''}`}
-                                    onClick={() => handleSelect(option)}
-                                >
-                                    <span className="q-option-text">{option}</span>
-                                    <div className={`q-radio ${isSelected(option) ? 'checked' : ''}`}>
-                                        {isSelected(option) && (
-                                            <Check size={13} strokeWidth={3} color="#FFFFFF" />
-                                        )}
+
+                        {/* AGE PICKER */}
+                        {currentQuestion.type === 'age' ? (
+                            <div className="q-age-picker">
+                                <span className="q-age-side-text">I'm</span>
+                                <div className="q-age-wheel">
+                                    <div className="q-age-highlight" />
+                                    <div
+                                        className="q-age-wheel-inner"
+                                        ref={ageWheelRef}
+                                        onScroll={handleAgeScroll}
+                                    >
+                                        {/* Top spacer */}
+                                        <div style={{ height: `calc(50% - ${AGE_ITEM_HEIGHT / 2}px)` }} />
+                                        {ages.map(age => {
+                                            const isSelected = selectedAge === age;
+                                            const isAdjacent = selectedAge && Math.abs(selectedAge - age) === 1;
+                                            return (
+                                                <div
+                                                    key={age}
+                                                    className={`q-age-item${isSelected ? ' selected' : ''}${isAdjacent ? ' adjacent' : ''}`}
+                                                    onClick={() => scrollToAge(age)}
+                                                >
+                                                    {age}
+                                                </div>
+                                            );
+                                        })}
+                                        {/* Bottom spacer */}
+                                        <div style={{ height: `calc(50% - ${AGE_ITEM_HEIGHT / 2}px)` }} />
                                     </div>
-                                </button>
-                            ))}
-                        </div>
+                                </div>
+                                <span className="q-age-side-text">yrs old</span>
+                            </div>
+                        ) : (
+                            /* NORMAL OPTIONS */
+                            <div className="q-options">
+                                {currentQuestion.options.map((option) => (
+                                    <button
+                                        key={option}
+                                        className={`q-option ${isSelected(option) ? 'selected' : ''}`}
+                                        onClick={() => handleSelect(option)}
+                                    >
+                                        <span className="q-option-text">{option}</span>
+                                        <div className={`q-radio ${isSelected(option) ? 'checked' : ''}`}>
+                                            {isSelected(option) && (
+                                                <Check size={13} strokeWidth={3} color="#FFFFFF" />
+                                            )}
+                                        </div>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                     </>
                 )}
 
-                {/* INFO SLIDES */}
-                {isInfoStep && (
-                    <div className="q-info-slide">
-                        <div className="q-info-image-wrapper">
-                            <img
-                                src={infoSlides[infoIndex].image}
-                                alt={infoSlides[infoIndex].title}
-                                className="q-info-image"
-                            />
-                        </div>
-                        <h2 className="q-info-title">{infoSlides[infoIndex].title}</h2>
-                        <p className="q-info-description">{infoSlides[infoIndex].description}</p>
-                    </div>
-                )}
             </div>
 
             {/* ─── FOOTER ─── */}
@@ -608,7 +734,7 @@ const Questionnaire = () => {
                     className={`q-next-btn ${shake ? 'btn-shake' : ''}`}
                     onClick={handleNext}
                 >
-                    {currentStep >= TOTAL_STEPS - 1 ? 'See My Results' : 'Next'}
+                    {currentStep >= TOTAL_STEPS - 1 ? 'See My Results' : 'Continue'}
                 </button>
             </div>
         </div>

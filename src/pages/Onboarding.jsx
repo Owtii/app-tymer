@@ -80,7 +80,7 @@ const Onboarding = () => {
             {/* Bottom: Next button */}
             <div className="ob-footer">
                 <button className="ob-next-btn" onClick={handleNext}>
-                    Next
+                    Continue
                 </button>
             </div>
         </div>
