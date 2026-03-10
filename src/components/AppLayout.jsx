@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import { CustomHome, CustomCalendar, CustomBell, CustomChart, CustomUser } from './CustomIcons';
 import './AppLayout.css';
@@ -11,36 +11,78 @@ const NAV_ITEMS = [
     { to: '/app/profile', icon: CustomUser },
 ];
 
+// Map paths to numeric indices for slide direction
+const PATH_INDEX = {
+    '/app/home': 0,
+    '/app/calendar': 1,
+    '/app/alarm': 2,
+    '/app/insights': 3,
+    '/app/profile': 4,
+};
+
 const AppLayout = () => {
     const location = useLocation();
+    const prevPathRef = useRef(location.pathname);
+    const [slideDirection, setSlideDirection] = useState('none');
+    const [isTransitioning, setIsTransitioning] = useState(false);
 
     const activeIndex = useMemo(() => {
         const idx = NAV_ITEMS.findIndex(item => location.pathname.startsWith(item.to));
         return idx >= 0 ? idx : 0;
     }, [location.pathname]);
 
+    // Determine slide direction on path change
+    useEffect(() => {
+        const prevPath = prevPathRef.current;
+        const prevIndex = PATH_INDEX[prevPath] ?? 0;
+        const currIndex = PATH_INDEX[location.pathname] ?? 0;
+
+        if (prevPath !== location.pathname) {
+            if (currIndex > prevIndex) {
+                setSlideDirection('slide-left');
+            } else if (currIndex < prevIndex) {
+                setSlideDirection('slide-right');
+            } else {
+                setSlideDirection('slide-fade');
+            }
+            setIsTransitioning(true);
+
+            const timer = setTimeout(() => {
+                setIsTransitioning(false);
+            }, 420);
+
+            prevPathRef.current = location.pathname;
+            return () => clearTimeout(timer);
+        }
+    }, [location.pathname]);
+
     return (
         <div className="app-layout">
             <main className="app-content">
-                <div className="page-transition" key={location.pathname}>
+                <div className={`page-slide-transition ${slideDirection}`} key={location.pathname}>
                     <Outlet />
                 </div>
             </main>
 
-            <nav className="bottom-nav">
+            <nav className="bottom-nav liquid-glass">
+                {/* Glass shimmer animation layer */}
+                <div className="nav-glass-shimmer" />
+
                 {/* Glide indicator */}
                 <div
                     className="nav-glide-indicator"
                     style={{ transform: `translateX(${activeIndex * 100}%)` }}
                 />
 
-                {NAV_ITEMS.map((item) => (
+                {NAV_ITEMS.map((item, index) => (
                     <NavLink
                         key={item.to}
                         to={item.to}
                         className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
                     >
-                        <item.icon size={20} />
+                        <div className="nav-icon-wrapper">
+                            <item.icon size={20} />
+                        </div>
                     </NavLink>
                 ))}
             </nav>

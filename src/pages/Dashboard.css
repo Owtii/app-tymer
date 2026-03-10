@@ -720,13 +720,38 @@
     height: 13px;
 }
 
+.dash-plan-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
 .dash-plan-menu-btn {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 4px;
+    padding: 6px;
     display: flex;
     align-items: center;
+    border-radius: 50%;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.dash-plan-menu-btn:hover {
+    background: var(--color-bg-pill);
+    transform: scale(1.1);
+}
+
+.dash-plan-menu-btn:hover svg {
+    color: var(--color-text-primary) !important;
+}
+
+.dash-plan-delete-btn:hover {
+    background: var(--color-brand-light);
+}
+
+.dash-plan-delete-btn:hover svg {
+    color: var(--color-brand) !important;
 }
 
 .dash-plan-title {
@@ -1059,23 +1084,26 @@
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     z-index: 200;
     animation: fadeIn 0.2s ease;
+    overflow-y: auto;
+    padding: 20px 0;
 }
 
 
 .alarm-modal {
     width: 100%;
     max-width: 440px;
-    max-height: 85vh;
-    overflow-y: auto;
+    max-height: none;
+    overflow-y: visible;
     background: var(--color-bg-card);
     border-radius: var(--r-xl);
     padding: 24px 24px 32px;
     animation: dashModalIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    margin: 16px;
+    margin: auto 16px;
+    flex-shrink: 0;
 }
 
 @keyframes dashModalIn {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CloudRain, Cloud, Sun, CloudSnow, CloudLightning, CloudDrizzle, CloudFog, Snowflake, Sunrise, Car, Footprints, ChevronRight, Cpu, Plus, X, Bus, PersonStanding, CalendarOff, ChevronDown } from 'lucide-react';
-import { CustomHome, CustomTimer, CustomTrash, CustomBell, CustomMapPin, CustomNavigation, CustomMoreVertical, CustomMoon, CustomPencil, CustomPlans } from '../components/CustomIcons';
+import { CustomHome, CustomTimer, CustomTrash, CustomBell, CustomMapPin, CustomNavigation, CustomMoon, CustomPencil, CustomPlans } from '../components/CustomIcons';
 import { useAppContext } from '../context/AppContext';
 import IOSTimePicker from '../components/IOSTimePicker';
 import { getWeather } from '../services/WeatherService';
@@ -374,9 +374,14 @@ const Dashboard = () => {
                                         <Cpu size={16} strokeWidth={1.5} style={{ color: event.color || '#FF3C5D' }} />
                                         <span style={{ color: event.color || '#FF3C5D' }}>SMART PLAN</span>
                                     </div>
-                                    <button className="dash-plan-menu-btn" onClick={(e) => { e.stopPropagation(); setEditingEvent({ ...event }); }}>
-                                        <CustomMoreVertical size={14} color="#1C1C1C" />
-                                    </button>
+                                    <div className="dash-plan-actions">
+                                        <button className="dash-plan-menu-btn" onClick={(e) => { e.stopPropagation(); setEditingEvent({ ...event }); }}>
+                                            <CustomPencil size={14} color="#979797" />
+                                        </button>
+                                        <button className="dash-plan-menu-btn dash-plan-delete-btn" onClick={(e) => { e.stopPropagation(); setConfirmDelete({ type: 'event', id: event.id }); }}>
+                                            <CustomTrash size={14} color="#979797" />
+                                        </button>
+                                    </div>
                                 </div>
 
                                 {/* Title */}
