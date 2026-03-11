@@ -168,7 +168,7 @@
     letter-spacing: -0.02em;
     color: var(--color-text-primary);
     max-width: 380px;
-    margin: 40px auto 0;
+    margin: 42px auto 0;
     padding: 0 24px;
 }
 
@@ -192,7 +192,7 @@
     flex-direction: column;
     align-items: center;
     gap: 12px;
-    padding: 24px 24px;
+    padding: 26px 24px;
     flex: 1;
     overflow-y: auto;
     animation: optionsFadeIn 0.4s ease both;
@@ -404,15 +404,15 @@
 
 .q-underline-input {
     width: 100%;
-    max-width: 392px;
-    min-height: 58px;
-    padding: 12px 20px;
+    max-width: 420px;
+    min-height: 70px;
+    padding: 18px 24px;
     background: var(--color-bg-card);
     border: 1.5px solid var(--color-border-subtle);
     border-radius: 22px;
     font-family: var(--font);
     font-weight: 600;
-    font-size: 16px;
+    font-size: 17px;
     color: var(--color-text-primary);
     text-align: center;
     outline: none;
@@ -474,8 +474,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 80px 24px 24px;
+    padding: 0 36px;
+    padding-top: 120px;
     overflow-y: auto;
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
 /* Odometer percentage */
@@ -483,127 +487,117 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 72px;
-    margin-bottom: 10px;
+    height: 110px;
+    margin-bottom: 6px;
 }
 
 .pers-digit-roller {
     display: inline-flex;
-    height: 72px;
+    height: 110px;
     overflow: hidden;
     position: relative;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
 }
 
 .pers-digit-strip {
     display: flex;
     flex-direction: column;
-    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-    will-change: transform;
+    transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1), filter 0.2s ease;
+    will-change: transform, filter;
+    filter: blur(0);
 }
 
 .pers-digit-strip.rolling {
-    filter: blur(1.5px);
+    filter: blur(2px);
 }
 
 .pers-digit-num {
-    height: 72px;
+    height: 86px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: var(--font);
-    font-weight: 800;
-    font-size: 64px;
+    font-weight: 700;
+    font-size: 86px;
     letter-spacing: -0.04em;
-    color: var(--color-text-primary);
+    color: #000000;
     line-height: 1;
 }
 
 .pers-percent-sign {
     font-family: var(--font);
-    font-weight: 800;
-    font-size: 40px;
-    color: var(--color-text-primary);
+    font-weight: 700;
+    font-size: 50px;
+    color: #000000;
     letter-spacing: -0.02em;
     margin-left: 2px;
     align-self: flex-start;
-    margin-top: 8px;
+    margin-top: 20px;
 }
 
 .pers-title {
     font-family: var(--font);
-    font-weight: 700;
-    font-size: 20px;
-    color: var(--color-text-primary);
-    margin-bottom: 32px;
+    font-weight: 800;
+    font-size: 30px;
+    line-height: 36px;
+    color: #1C1C1C;
+    margin: 0 0 32px 0;
     text-align: center;
     letter-spacing: -0.02em;
-    max-width: 280px;
-    line-height: 28px;
+    max-width: 343px;
 }
 
 /* Loading bar */
 .pers-bar-track {
     width: 100%;
-    max-width: 340px;
-    height: 8px;
-    background: var(--color-border);
-    border-radius: 100px;
+    max-width: 367px;
+    height: 10px;
+    background: #E2E2E2;
+    border-radius: 37px;
     overflow: hidden;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .pers-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--color-brand), #FF6B8A, var(--color-brand));
-    background-size: 200% 100%;
-    border-radius: 100px;
+    background: var(--color-brand);
+    border-radius: 37px;
     transition: width 0.3s ease;
-    animation: barShimmer 2s ease infinite;
-}
-
-@keyframes barShimmer {
-    0% {
-        background-position: 0% 0%;
-    }
-
-    100% {
-        background-position: 200% 0%;
-    }
 }
 
 .pers-task-label {
     font-family: var(--font);
-    font-weight: 500;
+    font-weight: 600;
     font-size: 14px;
-    color: var(--color-text-tertiary);
-    margin-bottom: 32px;
-    text-align: center;
+    color: #979797;
+    margin-bottom: 24px;
+    text-align: left;
+    width: 100%;
+    max-width: 367px;
 }
 
 /* Tasks */
 .pers-tasks {
     width: 100%;
-    max-width: 380px;
-    background: var(--color-bg-card);
-    border: 1px solid var(--color-border-subtle);
-    border-radius: 18px;
+    max-width: 368px;
+    background: #FFFFFF;
+    border: 1px solid #E2E2E2;
+    border-radius: 22px;
     padding: 0;
     display: flex;
     flex-direction: column;
-    box-shadow: var(--shadow-xs);
-    margin-bottom: 24px;
-    animation: fadeSlideUp 0.4s ease both;
     overflow: hidden;
+    animation: fadeSlideUp 0.4s ease both;
 }
 
 .pers-task-row {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 16px 20px;
-    opacity: 0.4;
+    justify-content: space-between;
+    padding: 18px 22px;
     transition: opacity 0.4s ease;
-    border-bottom: 1px solid var(--color-border-subtle);
+    border-bottom: 1px solid #E2E2E2;
 }
 
 .pers-task-row:last-child {
@@ -615,154 +609,114 @@
     opacity: 1;
 }
 
-.pers-task-dot {
-    width: 22px;
-    height: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.pers-dot-filled {
-    width: 22px;
-    height: 22px;
-    background: var(--color-brand);
-    border-radius: 50%;
-    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.pers-dot-empty {
-    width: 22px;
-    height: 22px;
-    border: 2px solid var(--color-border);
-    border-radius: 50%;
-}
-
 .pers-task-text {
     font-family: var(--font);
-    font-weight: 600;
-    font-size: 15px;
-    color: var(--color-text-primary);
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 20px;
+    color: #1C1C1C;
     flex: 1;
 }
 
-.pers-task-check {
+.pers-task-row:not(.current):not(.completed) .pers-task-text {
+    color: #979797;
+}
+
+.pers-task-status {
     flex-shrink: 0;
+    width: 19px;
+    height: 19px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 12px;
+}
+
+.pers-status-done {
+    width: 19px;
+    height: 19px;
+    background: var(--color-brand);
+    border: 2px solid var(--color-brand);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Info carousel */
-.pers-carousel {
-    width: 100%;
-    max-width: 360px;
-    overflow: hidden;
-    border-radius: 18px;
-    background: var(--color-bg-card);
-    border: 1px solid var(--color-border-subtle);
-    box-shadow: var(--shadow-xs);
-    animation: fadeSlideUp 0.5s ease 0.2s both;
-}
-
-.pers-carousel-track {
-    display: flex;
-    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-.pers-carousel-slide {
-    min-width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px 24px 16px;
-}
-
-.pers-carousel-img {
-    width: 100%;
-    max-width: 160px;
-    height: 120px;
-    object-fit: contain;
-    margin-bottom: 12px;
-}
-
-.pers-carousel-title {
-    font-family: var(--font);
-    font-weight: 700;
-    font-size: 18px;
-    color: var(--color-text-primary);
-    margin-bottom: 4px;
-    text-align: center;
-}
-
-.pers-carousel-desc {
-    font-family: var(--font);
-    font-weight: 500;
-    font-size: 13px;
-    color: var(--color-text-secondary);
-    text-align: center;
-    max-width: 260px;
-    line-height: 18px;
-}
-
-.pers-carousel-dots {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-    padding: 0 0 16px;
-}
-
-.pers-carousel-dot {
-    width: 6px;
-    height: 6px;
+.pers-status-active {
+    width: 19px;
+    height: 19px;
+    background: #FFEDED;
+    border: 2px solid #E9CCCC;
     border-radius: 50%;
-    background: var(--color-border);
-    cursor: pointer;
-    transition: all 0.3s ease;
 }
 
-.pers-carousel-dot.active {
-    width: 20px;
-    border-radius: 100px;
-    background: var(--color-brand);
+.pers-status-pending {
+    width: 19px;
+    height: 19px;
+    border: 2px solid #E2E2E2;
+    border-radius: 50%;
 }
 
-/* Confetti */
-.pers-confetti {
-    position: fixed;
+/* Fade out loading content */
+.pers-content.pers-fade-out {
+    opacity: 0;
+    transform: scale(0.96);
+    pointer-events: none;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* "You're All Set" screen */
+.pers-allset {
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s;
     pointer-events: none;
-    z-index: 100;
-    background-image:
-        radial-gradient(circle, var(--color-brand) 1.5px, transparent 1.5px),
-        radial-gradient(circle, #FFD700 1.5px, transparent 1.5px),
-        radial-gradient(circle, #4CAF50 1.5px, transparent 1.5px),
-        radial-gradient(circle, #2196F3 1.5px, transparent 1.5px),
-        radial-gradient(circle, #FF9800 1.5px, transparent 1.5px),
-        radial-gradient(circle, #E040FB 1.5px, transparent 1.5px);
-    background-size: 10% 10%;
-    background-position:
-        10% 0%, 25% 0%, 40% 0%, 55% 0%, 70% 0%, 85% 0%;
-    animation: confettiFall 2s ease-out forwards;
 }
 
-@keyframes confettiFall {
-    0% {
-        opacity: 1;
-        background-position:
-            10% -10%, 25% -5%, 40% -15%, 55% -8%, 70% -12%, 85% -6%;
-    }
+.pers-allset.show {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+}
 
-    100% {
-        opacity: 0;
-        background-position:
-            10% 110%, 25% 105%, 40% 115%, 55% 108%, 70% 112%, 85% 106%;
-    }
+.pers-allset-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--color-brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.4s both;
+}
+
+.pers-allset-title {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 34px;
+    letter-spacing: -0.02em;
+    color: #1C1C1C;
+    margin-bottom: 8px;
+}
+
+.pers-allset-subtitle {
+    font-family: var(--font);
+    font-weight: 500;
+    font-size: 16px;
+    color: #979797;
 }
 
 @keyframes fadeSlideUp {

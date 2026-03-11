@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, Check } from 'lucide-react';
+import confetti from 'canvas-confetti';
 import AddressInput from '../components/AddressInput';
 import './Questionnaire.css';
 
@@ -195,9 +196,10 @@ const infoSlides = [
    LOADING STEPS
 ───────────────────────────────────────────────────── */
 const timeSteps = [
-    { label: 'Analyzing your answers.', threshold: 25 },
-    { label: 'Calculating travel buffers.', threshold: 50 },
-    { label: 'Optimizing daily routes.', threshold: 80 },
+    { label: 'Configuring your goals.', threshold: 20 },
+    { label: 'Analyzing your sleep.', threshold: 40 },
+    { label: 'Calculating your time buffers.', threshold: 60 },
+    { label: 'Optimizing your departure alerts.', threshold: 80 },
     { label: 'Finalizing your plan.', threshold: 100 },
 ];
 
@@ -228,6 +230,8 @@ const Questionnaire = () => {
     const [animating, setAnimating] = useState(false);
     const [progressAnimating, setProgressAnimating] = useState(false);
     const [infoSlideIndex, setInfoSlideIndex] = useState(0);
+    const [rollingDigits, setRollingDigits] = useState({ h: false, t: false, o: false });
+    const prevProgressRef = useRef(0);
     const contentRef = useRef(null);
     const ageWheelRef = useRef(null);
     const AGE_MIN = 0;
@@ -251,23 +255,35 @@ const Questionnaire = () => {
         }
     }, [view]);
 
-    // ─── Finalize ───
+    // ─── Finalize + confetti ───
     useEffect(() => {
         if (loadingProgress >= 97 && !finalized) {
-            const timer = setTimeout(() => setFinalized(true), 400);
+            const timer = setTimeout(() => {
+                setFinalized(true);
+                // Gentle confetti: 3 spread-out bursts
+                const colors = ['#FF3C5D', '#FF6B8A', '#FFD700', '#FF9800', '#E040FB'];
+                confetti({ particleCount: 60, spread: 70, origin: { x: 0.3, y: 0.35 }, colors, gravity: 0.8, ticks: 150 });
+                setTimeout(() => confetti({ particleCount: 50, spread: 65, origin: { x: 0.7, y: 0.3 }, colors, gravity: 0.8, ticks: 150 }), 300);
+                setTimeout(() => confetti({ particleCount: 45, spread: 80, origin: { x: 0.5, y: 0.4 }, colors, gravity: 0.8, ticks: 150 }), 600);
+            }, 400);
             return () => clearTimeout(timer);
         }
     }, [loadingProgress, finalized]);
 
-    // ─── Auto-slide info carousel during loading ───
+    // ─── Track rolling digits for blur ───
     useEffect(() => {
-        if (view === 'loading' && !finalized) {
-            const interval = setInterval(() => {
-                setInfoSlideIndex(prev => (prev + 1) % infoSlides.length);
-            }, 3000);
-            return () => clearInterval(interval);
-        }
-    }, [view, finalized]);
+        if (view !== 'loading') return;
+        const prev = prevProgressRef.current;
+        const curr = Math.min(loadingProgress, 100);
+        const prevH = Math.floor(prev / 100), currH = Math.floor(curr / 100);
+        const prevT = Math.floor((prev % 100) / 10), currT = Math.floor((curr % 100) / 10);
+        const prevO = prev % 10, currO = curr % 10;
+        const rolling = { h: prevH !== currH, t: prevT !== currT, o: prevO !== currO };
+        setRollingDigits(rolling);
+        prevProgressRef.current = curr;
+        const timer = setTimeout(() => setRollingDigits({ h: false, t: false, o: false }), 400);
+        return () => clearTimeout(timer);
+    }, [loadingProgress, view]);
 
     // ─── Trigger slide-in animation on step change ───
     useEffect(() => {
@@ -475,11 +491,14 @@ const Questionnaire = () => {
         const tens = Math.floor((pct % 100) / 10);
         const ones = pct % 10;
 
+        const DIGIT_H = 86;
+        const ROLLER_H = 110;
+        const OFFSET = (ROLLER_H - DIGIT_H) / 2;
         const renderDigitStrip = (digit, key) => (
             <div className="pers-digit-roller" key={key}>
                 <div
-                    className="pers-digit-strip"
-                    style={{ transform: `translateY(-${digit * 72}px)` }}
+                    className={`pers-digit-strip ${rollingDigits[key] ? 'rolling' : ''}`}
+                    style={{ transform: `translateY(-${digit * DIGIT_H - OFFSET}px)` }}
                 >
                     {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => (
                         <div className="pers-digit-num" key={n}>{n}</div>
@@ -488,25 +507,10 @@ const Questionnaire = () => {
             </div>
         );
 
-        const handleTouchStart = (e) => {
-            e.currentTarget._touchStartX = e.touches[0].clientX;
-        };
-        const handleTouchEnd = (e) => {
-            const startX = e.currentTarget._touchStartX;
-            const endX = e.changedTouches[0].clientX;
-            const diff = startX - endX;
-            if (Math.abs(diff) > 50) {
-                if (diff > 0) {
-                    setInfoSlideIndex(prev => Math.min(prev + 1, infoSlides.length - 1));
-                } else {
-                    setInfoSlideIndex(prev => Math.max(prev - 1, 0));
-                }
-            }
-        };
-
         return (
             <div className="q-container pers-container">
-                <div className="pers-content">
+                {/* Loading content — fades out when finalized */}
+                <div className={`pers-content ${finalized ? 'pers-fade-out' : ''}`}>
                     {/* Odometer percentage */}
                     <div className="pers-percent-wrapper">
                         {hundreds > 0 && renderDigitStrip(hundreds, 'h')}
@@ -514,11 +518,11 @@ const Questionnaire = () => {
                         {renderDigitStrip(ones, 'o')}
                         <span className="pers-percent-sign">%</span>
                     </div>
-                    <p className="pers-title">We're setting everything up for you</p>
+                    <h2 className="pers-title">We're personalizing<br />your plan</h2>
 
                     {/* Loading bar */}
                     <div className="pers-bar-track">
-                        <div className="pers-bar-fill" style={{ width: `${Math.min(loadingProgress, 100)}%` }} />
+                        <div className="pers-bar-fill" style={{ width: `${pct}%` }} />
                     </div>
                     <p className="pers-task-label">{currentTask.label}</p>
 
@@ -529,53 +533,32 @@ const Questionnaire = () => {
                             const isCurrent = !isCompleted && (idx === 0 || loadingProgress >= timeSteps[idx - 1].threshold);
                             return (
                                 <div key={idx} className={`pers-task-row ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''}`}>
-                                    <div className="pers-task-dot">
-                                        {(isCompleted || isCurrent) ? (
-                                            <div className="pers-dot-filled" />
+                                    <span className="pers-task-text">{step.label}</span>
+                                    <div className="pers-task-status">
+                                        {isCompleted ? (
+                                            <div className="pers-status-done">
+                                                <Check size={11} strokeWidth={3} color="#FFFFFF" />
+                                            </div>
+                                        ) : isCurrent ? (
+                                            <div className="pers-status-active" />
                                         ) : (
-                                            <div className="pers-dot-empty" />
+                                            <div className="pers-status-pending" />
                                         )}
                                     </div>
-                                    <span className="pers-task-text">{step.label}</span>
-                                    {isCompleted && (
-                                        <div className="pers-task-check">
-                                            <Check size={14} strokeWidth={3} color="#FF3C5D" />
-                                        </div>
-                                    )}
                                 </div>
                             );
                         })}
                     </div>
-
-                    {/* Info carousel */}
-                    <div
-                        className="pers-carousel"
-                        onTouchStart={handleTouchStart}
-                        onTouchEnd={handleTouchEnd}
-                    >
-                        <div className="pers-carousel-track" style={{ transform: `translateX(-${infoSlideIndex * 100}%)` }}>
-                            {infoSlides.map((slide) => (
-                                <div key={slide.id} className="pers-carousel-slide">
-                                    <img src={slide.image} alt={slide.title} className="pers-carousel-img" />
-                                    <h3 className="pers-carousel-title">{slide.title}</h3>
-                                    <p className="pers-carousel-desc">{slide.description}</p>
-                                </div>
-                            ))}
-                        </div>
-                        <div className="pers-carousel-dots">
-                            {infoSlides.map((_, i) => (
-                                <div
-                                    key={i}
-                                    className={`pers-carousel-dot ${i === infoSlideIndex ? 'active' : ''}`}
-                                    onClick={() => setInfoSlideIndex(i)}
-                                />
-                            ))}
-                        </div>
-                    </div>
                 </div>
 
-                {/* Confetti */}
-                {finalized && <div className="pers-confetti" />}
+                {/* "You're all set" screen — fades in when finalized */}
+                <div className={`pers-allset ${finalized ? 'show' : ''}`}>
+                    <div className="pers-allset-icon">
+                        <Check size={44} strokeWidth={3} color="#FFFFFF" />
+                    </div>
+                    <h2 className="pers-allset-title">You're All Set!</h2>
+                    <p className="pers-allset-subtitle">Your personalized plan is ready</p>
+                </div>
 
                 {/* Continue button */}
                 <div className="final-footer">
