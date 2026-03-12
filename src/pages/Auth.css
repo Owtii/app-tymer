@@ -3,51 +3,56 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: var(--color-bg-app);
+    background: #FFFFFF;
     padding: 0 24px;
     overflow: hidden;
+    box-sizing: border-box;
 }
 
 /* Header */
 .auth-header {
-    margin-bottom: 36px;
-    text-align: center;
+    margin-top: auto;
+    text-align: left;
+    width: 100%;
+    max-width: 392px;
+    align-self: center;
 }
 
 .auth-title {
     font-family: var(--font);
     font-weight: 800;
-    font-size: 36px;
-    line-height: 42px;
+    font-size: 48px;
+    line-height: 54px;
     letter-spacing: -0.03em;
-    color: var(--color-text-primary);
-    margin-bottom: 10px;
+    color: #1C1C1C;
+    margin: 0 0 16px 0;
+    display: flex;
+    align-items: center;
 }
 
 .auth-subtitle {
     font-family: var(--font);
-    font-weight: 500;
-    font-size: 16px;
+    font-weight: 600;
+    font-size: 20px;
     line-height: 22px;
-    color: var(--color-text-secondary);
-    max-width: 320px;
-    margin: 0 auto;
+    color: #979797;
+    max-width: 357px;
+    margin: 0 0 48px 0;
 }
 
 /* Auth buttons */
 .auth-buttons {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
     width: 100%;
     max-width: 392px;
+    align-self: center;
 }
 
 .auth-btn {
     width: 100%;
-    height: 54px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -56,11 +61,15 @@
     cursor: pointer;
     font-family: var(--font);
     font-weight: 600;
-    font-size: 16px;
+    font-size: 17px;
     line-height: 100%;
     padding: 12px;
     transition: all 0.2s;
-    box-shadow: var(--shadow-xs);
+    border-radius: 22px;
+}
+
+.auth-btn:active {
+    transform: scale(0.97);
 }
 
 .auth-btn span {
@@ -70,67 +79,53 @@
 
 /* Apple button — dark */
 .auth-btn-apple {
-    background: var(--color-text-primary);
-    color: var(--color-text-inverted);
-    border-radius: var(--r-xl);
+    background: #1C1C1C;
+    color: #FFFFFF;
 }
 
 .auth-btn-apple:hover {
-    opacity: 0.9;
-}
-
-.auth-btn-apple:active {
-    transform: scale(0.98);
+    background: #2C2C2C;
 }
 
 /* Google button — outlined */
 .auth-btn-google {
-    background: var(--color-bg-card);
-    color: var(--color-text-primary);
-    border: 1.5px solid var(--color-border);
-    border-radius: var(--r-xl);
+    background: #FFFFFF;
+    color: #1C1C1C;
+    border: 2px solid #E2E2E2;
 }
 
 .auth-btn-google:hover {
-    background: var(--color-bg-input);
-    border-color: var(--color-text-tertiary);
-}
-
-.auth-btn-google:active {
-    transform: scale(0.98);
+    background: #FAFAFA;
+    border-color: #D0D0D0;
 }
 
 /* Email button — brand */
 .auth-btn-email {
-    background: var(--color-brand);
-    color: var(--color-text-inverted);
-    border-radius: var(--r-xl);
+    background: #FF3C5D;
+    color: #FFFFFF;
 }
 
 .auth-btn-email:hover {
-    background: var(--color-brand-hover);
-}
-
-.auth-btn-email:active {
-    transform: scale(0.98);
+    background: #E8354F;
 }
 
 /* Footer */
 .auth-footer {
     text-align: center;
-    padding: 20px 0 0;
+    margin-top: auto;
+    padding: 0 0 48px 0;
 }
 
 .auth-signup-text {
     font-family: var(--font);
-    font-weight: 500;
-    font-size: 15px;
+    font-weight: 600;
+    font-size: 14px;
     line-height: 100%;
-    color: var(--color-text-secondary);
+    color: #979797;
 }
 
 .auth-signup-link {
-    color: var(--color-brand);
+    color: #FF3C5D;
     cursor: pointer;
     font-weight: 700;
 }

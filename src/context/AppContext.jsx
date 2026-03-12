@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import { checkAndNotify, requestNotificationPermission } from '../services/NotificationService';
 
 const AppContext = createContext();
 
@@ -93,6 +94,33 @@ export const AppProvider = ({ children }) => {
     useEffect(() => {
         if (homeLocation) localStorage.setItem('punct_home', JSON.stringify(homeLocation));
     }, [homeLocation]);
+
+    // ─── Notification system ───
+    const notifiedRef = useRef(new Set());
+
+    // Request notification permission on mount
+    useEffect(() => {
+        requestNotificationPermission();
+    }, []);
+
+    // Check plans & alarms every second
+    useEffect(() => {
+        const interval = setInterval(() => {
+            notifiedRef.current = checkAndNotify(events, alarms, notifiedRef.current);
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [events, alarms]);
+
+    // Reset notified set at midnight
+    useEffect(() => {
+        const checkMidnight = setInterval(() => {
+            const now = new Date();
+            if (now.getHours() === 0 && now.getMinutes() === 0 && now.getSeconds() === 0) {
+                notifiedRef.current = new Set();
+            }
+        }, 1000);
+        return () => clearInterval(checkMidnight);
+    }, []);
 
     const setHomeLocation = (location) => {
         setHomeLocationState(location);

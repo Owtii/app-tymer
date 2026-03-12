@@ -588,6 +588,17 @@ body:has(.alarm-modal-overlay) .bottom-nav {
     box-shadow: var(--shadow-md);
 }
 
+/* Past events — greyed out */
+.cal-event-past {
+    opacity: 0.4;
+    filter: grayscale(0.8);
+}
+
+.cal-event-past .cal-event-menu-btn {
+    opacity: 1;
+    filter: none;
+}
+
 /* Top: SMART PLAN + dots menu */
 .cal-event-top {
     display: flex;

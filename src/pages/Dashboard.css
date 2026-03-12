@@ -165,11 +165,16 @@
     font-weight: 600;
 }
 
-/* Fulfilled event — greyed out */
+/* Fulfilled event — greyed out but still interactive for deletion */
 .dash-plan-fulfilled {
-    opacity: 0.5;
-    filter: grayscale(0.6);
-    pointer-events: none;
+    opacity: 0.4;
+    filter: grayscale(0.8);
+}
+
+.dash-plan-fulfilled .dash-plan-actions {
+    opacity: 1;
+    filter: none;
+    pointer-events: auto;
 }
 
 .dash-hero-empty {

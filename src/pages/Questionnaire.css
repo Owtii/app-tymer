@@ -41,7 +41,7 @@
 .q-progress-track {
     flex: 1;
     max-width: 280px;
-    height: 6px;
+    height: 7px;
     background: var(--color-border);
     border-radius: var(--r-pill);
     overflow: hidden;
@@ -162,14 +162,15 @@
 .q-question {
     font-family: var(--font);
     font-weight: 700;
-    font-size: 32px;
-    line-height: 40px;
+    font-size: 34px;
+    line-height: 42px;
     text-align: center;
     letter-spacing: -0.02em;
     color: var(--color-text-primary);
     max-width: 380px;
     margin: 42px auto 0;
     padding: 0 24px;
+    white-space: normal;
 }
 
 .q-subtitle {
@@ -227,41 +228,10 @@
     font-family: var(--font);
     box-shadow: var(--shadow-xs);
     text-align: left;
-    opacity: 0;
-    animation: optionItemFadeIn 0.35s ease forwards;
+    opacity: 1;
 }
 
-.q-option:nth-child(1) {
-    animation-delay: 0.05s;
-}
-
-.q-option:nth-child(2) {
-    animation-delay: 0.1s;
-}
-
-.q-option:nth-child(3) {
-    animation-delay: 0.15s;
-}
-
-.q-option:nth-child(4) {
-    animation-delay: 0.2s;
-}
-
-.q-option:nth-child(5) {
-    animation-delay: 0.25s;
-}
-
-@keyframes optionItemFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(8px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+/* Options use parent .q-options animation instead of per-item stagger */
 
 .q-option:hover {
     background: var(--color-bg-input);
@@ -374,7 +344,7 @@
     font-family: var(--font);
     font-weight: 600;
     font-size: 14px;
-    color: var(--color-text-secondary);
+    color: #979797;
     cursor: pointer;
     padding: 6px 16px;
     border-radius: var(--r-pill);
@@ -383,11 +353,13 @@
 }
 
 .q-skip-btn:hover {
-    color: var(--color-brand);
-    background: var(--color-brand-light);
+    color: #6E6E6E;
+    background: #F0F0F0;
 }
 
 .q-skip-btn:active {
+    color: #6E6E6E;
+    background: #E8E8E8;
     transform: scale(0.96);
 }
 
@@ -405,8 +377,8 @@
 .q-underline-input {
     width: 100%;
     max-width: 420px;
-    min-height: 70px;
-    padding: 18px 24px;
+    min-height: 68px;
+    padding: 17px 24px;
     background: var(--color-bg-card);
     border: 1.5px solid var(--color-border-subtle);
     border-radius: 22px;
@@ -503,13 +475,14 @@
 .pers-digit-strip {
     display: flex;
     flex-direction: column;
-    transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1), filter 0.2s ease;
+    transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1), filter 0.1s ease-out;
     will-change: transform, filter;
-    filter: blur(0);
+    filter: blur(0px);
 }
 
 .pers-digit-strip.rolling {
-    filter: blur(2px);
+    filter: blur(1.5px);
+    transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1), filter 0.05s ease-in;
 }
 
 .pers-digit-num {
@@ -548,11 +521,24 @@
     max-width: 343px;
 }
 
+/* Static digit display for 100% */
+.pers-digit-static {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 86px;
+    letter-spacing: -0.04em;
+    color: #000000;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    height: 110px;
+}
+
 /* Loading bar */
 .pers-bar-track {
     width: 100%;
     max-width: 367px;
-    height: 10px;
+    height: 11px;
     background: #E2E2E2;
     border-radius: 37px;
     overflow: hidden;

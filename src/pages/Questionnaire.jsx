@@ -230,7 +230,7 @@ const Questionnaire = () => {
     const [animating, setAnimating] = useState(false);
     const [progressAnimating, setProgressAnimating] = useState(false);
     const [infoSlideIndex, setInfoSlideIndex] = useState(0);
-    const [rollingDigits, setRollingDigits] = useState({ h: false, t: false, o: false });
+    const [rollingDigits, setRollingDigits] = useState(false);
     const prevProgressRef = useRef(0);
     const contentRef = useRef(null);
     const ageWheelRef = useRef(null);
@@ -275,14 +275,16 @@ const Questionnaire = () => {
         if (view !== 'loading') return;
         const prev = prevProgressRef.current;
         const curr = Math.min(loadingProgress, 100);
-        const prevH = Math.floor(prev / 100), currH = Math.floor(curr / 100);
-        const prevT = Math.floor((prev % 100) / 10), currT = Math.floor((curr % 100) / 10);
-        const prevO = prev % 10, currO = curr % 10;
-        const rolling = { h: prevH !== currH, t: prevT !== currT, o: prevO !== currO };
-        setRollingDigits(rolling);
+        // Only blur briefly when the ones digit actually changes
+        const prevOnes = prev % 10;
+        const currOnes = curr % 10;
+        if (prev !== curr && prevOnes !== currOnes) {
+            setRollingDigits(true);
+            const timer = setTimeout(() => setRollingDigits(false), 60);
+            prevProgressRef.current = curr;
+            return () => clearTimeout(timer);
+        }
         prevProgressRef.current = curr;
-        const timer = setTimeout(() => setRollingDigits({ h: false, t: false, o: false }), 400);
-        return () => clearTimeout(timer);
     }, [loadingProgress, view]);
 
     // ─── Trigger slide-in animation on step change ───
@@ -400,18 +402,7 @@ const Questionnaire = () => {
 
     const handleSkip = () => {
         if (isQuestionStep) {
-            const currentPhaseId = currentQuestion.phase;
-            let nextStep = currentStep + 1;
-            while (nextStep < TOTAL_STEPS) {
-                const nextQ = questions[nextStep - QUESTION_OFFSET];
-                if (nextQ && nextQ.phase !== currentPhaseId) break;
-                nextStep++;
-            }
-            if (nextStep >= TOTAL_STEPS) {
-                startLoading();
-            } else {
-                goToStep(nextStep);
-            }
+            startLoading();
         }
     };
 
@@ -497,7 +488,7 @@ const Questionnaire = () => {
         const renderDigitStrip = (digit, key) => (
             <div className="pers-digit-roller" key={key}>
                 <div
-                    className={`pers-digit-strip ${rollingDigits[key] ? 'rolling' : ''}`}
+                    className={`pers-digit-strip ${rollingDigits ? 'rolling' : ''}`}
                     style={{ transform: `translateY(-${digit * DIGIT_H - OFFSET}px)` }}
                 >
                     {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => (
@@ -513,9 +504,15 @@ const Questionnaire = () => {
                 <div className={`pers-content ${finalized ? 'pers-fade-out' : ''}`}>
                     {/* Odometer percentage */}
                     <div className="pers-percent-wrapper">
-                        {hundreds > 0 && renderDigitStrip(hundreds, 'h')}
-                        {(hundreds > 0 || tens > 0) && renderDigitStrip(tens, 't')}
-                        {renderDigitStrip(ones, 'o')}
+                        {pct >= 100 ? (
+                            <span className="pers-digit-static">100</span>
+                        ) : (
+                            <>
+                                {hundreds > 0 && renderDigitStrip(hundreds, 'h')}
+                                {(hundreds > 0 || tens > 0) && renderDigitStrip(tens, 't')}
+                                {renderDigitStrip(ones, 'o')}
+                            </>
+                        )}
                         <span className="pers-percent-sign">%</span>
                     </div>
                     <h2 className="pers-title">We're personalizing<br />your plan</h2>
@@ -606,7 +603,7 @@ const Questionnaire = () => {
                 {isNameStep && (
                     <>
                         <h2 className="q-question">What's your name?</h2>
-                        <p className="q-subtitle">We'll personalize your experience with this.</p>
+                        <p className="q-subtitle">Used to personalize your plan.</p>
                         <div className="q-input-area">
                             <input
                                 className="q-underline-input"

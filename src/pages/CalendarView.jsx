@@ -353,8 +353,13 @@ const CalendarView = () => {
                 {dateEvents.map((event) => {
                     const TravelIcon = getTravelIcon(event.travelMode);
                     const eventColor = event.color || '#FF3C5D';
+                    // Check if event has passed (for today's events only)
+                    const now = new Date();
+                    const isToday = selectedDate === todayStr;
+                    const [eH, eM] = event.time.split(':').map(Number);
+                    const isPast = isToday && (now.getHours() * 60 + now.getMinutes()) > (eH * 60 + eM);
                     return (
-                        <div key={event.id} className="cal-event-card">
+                        <div key={event.id} className={`cal-event-card ${isPast ? 'cal-event-past' : ''}`}>
                             <div className="cal-event-top">
                                 <div className="cal-smart-label" style={{ color: eventColor }}>
                                     <Cpu size={16} strokeWidth={1.5} style={{ color: eventColor }} />
