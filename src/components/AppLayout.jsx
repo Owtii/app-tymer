@@ -4,11 +4,11 @@ import { CustomHome, CustomCalendar, CustomBell, CustomChart, CustomUser } from 
 import './AppLayout.css';
 
 const NAV_ITEMS = [
-    { to: '/app/home', icon: CustomHome },
-    { to: '/app/calendar', icon: CustomCalendar },
-    { to: '/app/alarm', icon: CustomBell },
-    { to: '/app/insights', icon: CustomChart },
-    { to: '/app/profile', icon: CustomUser },
+    { to: '/app/home', icon: CustomHome, label: 'Home' },
+    { to: '/app/calendar', icon: CustomCalendar, label: 'Calendar' },
+    { to: '/app/alarm', icon: CustomBell, label: 'Alarm' },
+    { to: '/app/insights', icon: CustomChart, label: 'Insights' },
+    { to: '/app/profile', icon: CustomUser, label: 'Profile' },
 ];
 
 // Map paths to numeric indices for slide direction
@@ -68,9 +68,9 @@ const AppLayout = () => {
                 {/* Glass shimmer animation layer */}
                 <div className="nav-glass-shimmer" />
 
-                {/* Glide indicator */}
+                {/* Glide indicator — liquid glass */}
                 <div
-                    className="nav-glide-indicator"
+                    className="nav-glide-indicator liquid-glass-indicator"
                     style={{ transform: `translateX(${activeIndex * 100}%)` }}
                 />
 
@@ -81,8 +81,9 @@ const AppLayout = () => {
                         className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
                     >
                         <div className="nav-icon-wrapper">
-                            <item.icon size={20} />
+                            <item.icon size={19} />
                         </div>
+                        <span className="nav-label">{item.label}</span>
                     </NavLink>
                 ))}
             </nav>

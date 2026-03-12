@@ -274,8 +274,8 @@ const Dashboard = () => {
                     <div className="hero-route-widget" onClick={() => navigate(`/app/route-details/${nextEvent.id}`)}>
                         <div className="route-widget-header">
                             <div className="route-widget-title">
-                                <CustomNavigation size={14} />
-                                <span>Your Route</span>
+                                <CustomMapPin size={14} />
+                                <span>{nextEvent.location || 'Your Route'}</span>
                             </div>
                             <span className="route-widget-total">{(nextEvent.travelMinutes || 0) + (nextEvent.walkMinutes || 0)} min</span>
                         </div>

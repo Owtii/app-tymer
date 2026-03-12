@@ -79,7 +79,7 @@
     right: 20px;
     max-width: 400px;
     margin: 0 auto;
-    height: 72px;
+    height: 78px;
 
     /* ── White Glass Core ── */
     background: linear-gradient(135deg,
@@ -169,37 +169,118 @@
     transform: translateY(-1px);
 }
 
-/* Glide Indicator — subtle grey pill (no pink) */
+/* Glide Indicator — Liquid Glass Effect */
 .nav-glide-indicator {
     position: absolute;
     width: calc((100% - 16px) / 5);
-    height: 48px;
+    height: 58px;
     top: 50%;
     left: 8px;
-    margin-top: -24px;
-    background: linear-gradient(135deg,
-            rgba(0, 0, 0, 0.06) 0%,
-            rgba(0, 0, 0, 0.03) 100%);
-    border: 1px solid rgba(0, 0, 0, 0.04);
-    border-radius: 18px;
+    margin-top: -29px;
+    border-radius: 22px;
     transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
     z-index: 0;
     pointer-events: none;
+}
+
+.nav-glide-indicator.liquid-glass-indicator {
+    /* ── Liquid Glass Core ── */
+    background: linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.55) 0%,
+        rgba(255, 255, 255, 0.25) 30%,
+        rgba(240, 245, 255, 0.35) 60%,
+        rgba(255, 255, 255, 0.45) 100%
+    );
+    backdrop-filter: blur(16px) saturate(180%) brightness(1.12);
+    -webkit-backdrop-filter: blur(16px) saturate(180%) brightness(1.12);
+
+    /* ── Glass Border with refraction ── */
+    border: 1.5px solid rgba(255, 255, 255, 0.65);
+    border-top: 1.5px solid rgba(255, 255, 255, 0.85);
+    border-left: 1.5px solid rgba(255, 255, 255, 0.75);
+
+    /* ── Depth & Glow Shadows ── */
     box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.5),
-        0 1px 4px rgba(0, 0, 0, 0.03);
+        0 4px 16px rgba(0, 0, 0, 0.06),
+        0 1px 4px rgba(0, 0, 0, 0.04),
+        inset 0 1px 2px rgba(255, 255, 255, 0.7),
+        inset 0 -1px 1px rgba(0, 0, 0, 0.03),
+        0 0 20px rgba(255, 60, 93, 0.06);
+
+    /* ── Shimmer overlay via pseudo-element ── */
+    overflow: hidden;
+}
+
+.nav-glide-indicator.liquid-glass-indicator::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        105deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.4) 45%,
+        rgba(255, 255, 255, 0.6) 50%,
+        rgba(255, 255, 255, 0.4) 55%,
+        transparent 70%
+    );
+    border-radius: inherit;
+    animation: liquidShimmer 4s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.nav-glide-indicator.liquid-glass-indicator::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 15%;
+    right: 15%;
+    height: 40%;
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.5) 0%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    border-radius: 20px 20px 50% 50%;
+    pointer-events: none;
+}
+
+@keyframes liquidShimmer {
+    0% {
+        left: -150%;
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    60% {
+        left: 150%;
+        opacity: 1;
+    }
+    80% {
+        opacity: 0;
+    }
+    100% {
+        left: 150%;
+        opacity: 0;
+    }
 }
 
 /* Nav Items */
 .nav-item {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     flex: 1;
-    height: 48px;
+    height: 58px;
+    gap: 3px;
     text-decoration: none;
     color: #B8B8BD;
-    border-radius: 18px;
+    border-radius: 22px;
     transition:
         color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
         transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -209,6 +290,24 @@
 
 .nav-item:active {
     transform: scale(0.9);
+}
+
+/* Nav Label */
+.nav-label {
+    font-family: var(--font, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+    font-weight: 600;
+    font-size: 9.5px;
+    letter-spacing: 0.01em;
+    color: inherit;
+    transition: color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                font-weight 0.3s ease;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.nav-item.active .nav-label {
+    color: var(--color-brand, #FF3C5D);
+    font-weight: 700;
 }
 
 .nav-icon-wrapper {
