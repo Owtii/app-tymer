@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
-import { checkAndNotify, requestNotificationPermission } from '../services/NotificationService';
+import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react';
+import { checkAndNotifyPlans, requestNotificationPermission } from '../services/NotificationService';
 
 const AppContext = createContext();
 
@@ -7,6 +7,13 @@ const getTodayStr = () => {
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 };
+
+const getNowMinutes = () => {
+    const now = new Date();
+    return now.getHours() * 60 + now.getMinutes();
+};
+
+const getTodayDayIndex = () => new Date().getDay();
 
 // Seed data
 const SEED_EVENTS = [
@@ -46,7 +53,7 @@ const SEED_ALARMS = [
         type: 'morning',
         smart: true,
         active: true,
-        days: [false, true, true, true, true, true, false] // Mon-Fri
+        days: [false, true, true, true, true, true, false]
     },
     {
         id: 'alm-2',
@@ -55,7 +62,7 @@ const SEED_ALARMS = [
         type: 'morning',
         smart: true,
         active: true,
-        days: [true, false, false, false, false, false, true] // Sat-Sun
+        days: [true, false, false, false, false, false, true]
     },
     {
         id: 'alm-3',
@@ -82,6 +89,10 @@ export const AppProvider = ({ children }) => {
     const [alarms, setAlarms] = useState(() => loadFromStorage('punct_alarms', SEED_ALARMS));
     const [homeLocation, setHomeLocationState] = useState(() => loadFromStorage('punct_home', null));
 
+    // ─── Ringing alarm state ───
+    const [ringingAlarm, setRingingAlarm] = useState(null);
+    const snoozeTimerRef = useRef(null);
+
     // Persist on change
     useEffect(() => {
         localStorage.setItem('punct_events', JSON.stringify(events));
@@ -98,18 +109,41 @@ export const AppProvider = ({ children }) => {
     // ─── Notification system ───
     const notifiedRef = useRef(new Set());
 
-    // Request notification permission on mount
     useEffect(() => {
         requestNotificationPermission();
     }, []);
 
-    // Check plans & alarms every second
+    // Check plans (browser notifications only) every second
     useEffect(() => {
         const interval = setInterval(() => {
-            notifiedRef.current = checkAndNotify(events, alarms, notifiedRef.current);
+            notifiedRef.current = checkAndNotifyPlans(events, notifiedRef.current);
         }, 1000);
         return () => clearInterval(interval);
-    }, [events, alarms]);
+    }, [events]);
+
+    // Check alarms every second — trigger ringing screen
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (ringingAlarm) return; // Don't trigger new alarm while one is ringing
+            const nowMin = getNowMinutes();
+            const todayDay = getTodayDayIndex();
+
+            for (const alarm of alarms) {
+                if (!alarm.active) continue;
+                if (alarm.days && !alarm.days[todayDay]) continue;
+                const [h, m] = alarm.time.split(':').map(Number);
+                const alarmMin = h * 60 + m;
+                const alarmKey = `alarm-${alarm.id}`;
+
+                if (nowMin === alarmMin && !notifiedRef.current.has(alarmKey)) {
+                    notifiedRef.current.add(alarmKey);
+                    setRingingAlarm({ ...alarm });
+                    break;
+                }
+            }
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [alarms, ringingAlarm]);
 
     // Reset notified set at midnight
     useEffect(() => {
@@ -120,6 +154,33 @@ export const AppProvider = ({ children }) => {
             }
         }, 1000);
         return () => clearInterval(checkMidnight);
+    }, []);
+
+    // Stop ringing
+    const stopRinging = useCallback(() => {
+        setRingingAlarm(null);
+        if (snoozeTimerRef.current) {
+            clearTimeout(snoozeTimerRef.current);
+            snoozeTimerRef.current = null;
+        }
+    }, []);
+
+    // Snooze ringing — re-trigger after N minutes
+    const snoozeRinging = useCallback((minutes = 5) => {
+        const snoozedAlarm = ringingAlarm;
+        setRingingAlarm(null);
+        if (snoozedAlarm) {
+            snoozeTimerRef.current = setTimeout(() => {
+                setRingingAlarm({ ...snoozedAlarm, _snoozed: true });
+            }, minutes * 60 * 1000);
+        }
+    }, [ringingAlarm]);
+
+    // Cleanup snooze timer on unmount
+    useEffect(() => {
+        return () => {
+            if (snoozeTimerRef.current) clearTimeout(snoozeTimerRef.current);
+        };
     }, []);
 
     const setHomeLocation = (location) => {
@@ -165,12 +226,10 @@ export const AppProvider = ({ children }) => {
         setAlarms(prev => prev.map(a => a.id === id ? { ...a, active: !a.active } : a));
     };
 
-    // Get events for a specific date
     const getEventsForDate = (dateStr) => {
         return events.filter(e => e.date === dateStr);
     };
 
-    // Get nearest upcoming event based on current time (today only)
     const getNextEvent = () => {
         const now = new Date();
         const todayStr = getTodayStr();
@@ -195,7 +254,8 @@ export const AppProvider = ({ children }) => {
             events, addEvent, updateEvent, deleteEvent,
             alarms, addAlarm, updateAlarm, deleteAlarm, toggleAlarm,
             getNextEvent, getEventsForDate,
-            homeLocation, setHomeLocation
+            homeLocation, setHomeLocation,
+            ringingAlarm, setRingingAlarm, stopRinging, snoozeRinging
         }}>
             {children}
         </AppContext.Provider>

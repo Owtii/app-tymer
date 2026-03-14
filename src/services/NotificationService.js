@@ -85,11 +85,6 @@ const getNowMinutes = () => {
 };
 
 /**
- * Get today's day index (0=Sun, 1=Mon, ..., 6=Sat).
- */
-const getTodayDayIndex = () => new Date().getDay();
-
-/**
  * Get today's date string (YYYY-MM-DD).
  */
 const getTodayStr = () => {
@@ -98,13 +93,12 @@ const getTodayStr = () => {
 };
 
 /**
- * Check events and alarms, fire notifications for ones hitting their time.
- * Tracks which IDs have already been notified to avoid duplicates.
+ * Check plan events only, fire notifications.
+ * Alarms are now handled by AppContext directly (ringing screen).
  * Returns the updated set of notified IDs.
  */
-export const checkAndNotify = (events, alarms, notifiedSet) => {
+export const checkAndNotifyPlans = (events, notifiedSet) => {
     const nowMin = getNowMinutes();
-    const todayDay = getTodayDayIndex();
     const todayStr = getTodayStr();
     const newNotified = new Set(notifiedSet);
 
@@ -113,7 +107,6 @@ export const checkAndNotify = (events, alarms, notifiedSet) => {
         if (event.date && event.date !== todayStr) return;
         const [h, m] = event.time.split(':').map(Number);
         const eventMin = h * 60 + m;
-        // Notify at departure time (event time minus travel)
         const departMin = eventMin - (event.travelMinutes || 0) - (event.walkMinutes || 0);
         const departKey = `depart-${event.id}`;
         const arriveKey = `arrive-${event.id}`;
@@ -133,20 +126,8 @@ export const checkAndNotify = (events, alarms, notifiedSet) => {
         }
     });
 
-    // Check alarms
-    alarms.forEach(alarm => {
-        if (!alarm.active) return;
-        if (alarm.days && !alarm.days[todayDay]) return;
-        const [h, m] = alarm.time.split(':').map(Number);
-        const alarmMin = h * 60 + m;
-        const alarmKey = `alarm-${alarm.id}`;
-
-        if (nowMin === alarmMin && !newNotified.has(alarmKey)) {
-            playAlarmSound('alarm');
-            showNotification('Alarm', `${alarm.name || 'Alarm'} — ${alarm.time}`);
-            newNotified.add(alarmKey);
-        }
-    });
-
     return newNotified;
 };
+
+// Keep backward compatibility
+export const checkAndNotify = checkAndNotifyPlans;

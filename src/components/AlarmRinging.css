@@ -1,0 +1,591 @@
+/* ═══════════════════════════════════════ */
+/* iOS-STYLE ALARM RINGING SCREEN          */
+/* ═══════════════════════════════════════ */
+
+.alarm-ringing-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: linear-gradient(160deg,
+            #1a0a10 0%,
+            #2d0f1e 20%,
+            #3a1225 40%,
+            #2a0e1a 60%,
+            #1a0a10 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: alarmOverlayIn 0.5s ease both;
+    overflow: hidden;
+}
+
+@keyframes alarmOverlayIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* ── Main Screen ── */
+.alarm-ringing-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 60px 32px 80px;
+    position: relative;
+}
+
+/* ── Pulse Rings ── */
+.alarm-ring-pulse {
+    position: absolute;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 60, 93, 0.12);
+    pointer-events: none;
+}
+
+.alarm-ring-pulse.ring-1 {
+    width: 160px; height: 160px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -65%);
+    animation: ringPulse 3s ease-in-out infinite 0s;
+}
+
+.alarm-ring-pulse.ring-2 {
+    width: 240px; height: 240px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -65%);
+    animation: ringPulse 3s ease-in-out infinite 0.7s;
+}
+
+.alarm-ring-pulse.ring-3 {
+    width: 320px; height: 320px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -65%);
+    animation: ringPulse 3s ease-in-out infinite 1.4s;
+}
+
+@keyframes ringPulse {
+    0%   { transform: translate(-50%, -65%) scale(1);   opacity: 0.6; border-color: rgba(255, 60, 93, 0.18); }
+    50%  { transform: translate(-50%, -65%) scale(1.35); opacity: 0.05; border-color: rgba(255, 60, 93, 0.04); }
+    100% { transform: translate(-50%, -65%) scale(1);   opacity: 0.6; border-color: rgba(255, 60, 93, 0.18); }
+}
+
+/* ── Bell Icon ── */
+.alarm-ringing-bell {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, rgba(255, 60, 93, 0.25), rgba(255, 60, 93, 0.08));
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 60, 93, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 28px;
+    animation: bellShake 0.8s ease-in-out infinite;
+    box-shadow:
+        0 0 40px rgba(255, 60, 93, 0.15),
+        0 0 80px rgba(255, 60, 93, 0.06);
+    z-index: 2;
+}
+
+@keyframes bellShake {
+    0%, 100% { transform: rotate(0deg); }
+    15%      { transform: rotate(14deg); }
+    30%      { transform: rotate(-14deg); }
+    45%      { transform: rotate(8deg); }
+    60%      { transform: rotate(-8deg); }
+    75%      { transform: rotate(3deg); }
+}
+
+/* ── Alarm Name ── */
+.alarm-ringing-name {
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.45);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    z-index: 2;
+}
+
+/* ── Time Display ── */
+.alarm-ringing-time {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    margin-bottom: 80px;
+    z-index: 2;
+}
+
+.alarm-ringing-hours,
+.alarm-ringing-minutes {
+    font-family: var(--font);
+    font-weight: 800;
+    font-size: 88px;
+    color: #ffffff;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    text-shadow: 0 0 40px rgba(255, 60, 93, 0.2);
+}
+
+.alarm-ringing-colon {
+    font-family: var(--font);
+    font-weight: 300;
+    font-size: 72px;
+    color: rgba(255, 255, 255, 0.35);
+    margin: 0 4px;
+    animation: colonBlink 1.5s ease-in-out infinite;
+}
+
+@keyframes colonBlink {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.25; }
+}
+
+.alarm-ringing-period {
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.45);
+    margin-left: 8px;
+    align-self: flex-end;
+    margin-bottom: 14px;
+}
+
+/* ═══════════════════════════════════════ */
+/* SLIDE-TO-DISMISS SLIDERS                */
+/* ═══════════════════════════════════════ */
+
+.alarm-ringing-sliders {
+    width: 100%;
+    max-width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    z-index: 2;
+}
+
+.alarm-slide-track {
+    position: relative;
+    width: 100%;
+    height: 64px;
+    border-radius: 32px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.alarm-slide-track.stop {
+    background: rgba(255, 60, 93, 0.10);
+    border: 1px solid rgba(255, 60, 93, 0.18);
+}
+
+.alarm-slide-track.snooze {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.alarm-slide-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    border-radius: 32px;
+    pointer-events: none;
+    transition: width 0.05s linear;
+}
+
+.alarm-slide-fill.stop {
+    background: linear-gradient(90deg, rgba(255, 60, 93, 0.25), rgba(255, 60, 93, 0.08));
+}
+
+.alarm-slide-fill.snooze {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.03));
+}
+
+.alarm-slide-thumb {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+    cursor: grab;
+    touch-action: none;
+}
+
+.alarm-slide-thumb:active {
+    cursor: grabbing;
+}
+
+.alarm-slide-thumb-inner {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.alarm-slide-thumb-inner.stop {
+    background: linear-gradient(145deg, #FF3C5D, #E8354F);
+    color: white;
+    box-shadow:
+        0 4px 20px rgba(255, 60, 93, 0.45),
+        0 0 30px rgba(255, 60, 93, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.alarm-slide-thumb:active .alarm-slide-thumb-inner.stop {
+    transform: scale(1.12);
+    box-shadow:
+        0 4px 28px rgba(255, 60, 93, 0.55),
+        0 0 40px rgba(255, 60, 93, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.alarm-slide-thumb-inner.snooze {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.06));
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: rgba(255, 255, 255, 0.7);
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.alarm-slide-thumb:active .alarm-slide-thumb-inner.snooze {
+    transform: scale(1.12);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.10));
+}
+
+.alarm-slide-text {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.45);
+    letter-spacing: 0.04em;
+    pointer-events: none;
+    z-index: 1;
+    animation: labelPulse 2.5s ease-in-out infinite;
+}
+
+.alarm-slide-text.snooze {
+    color: rgba(255, 255, 255, 0.25);
+}
+
+@keyframes labelPulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.45; }
+}
+
+
+/* ═══════════════════════════════════════ */
+/* DISMISS TASK SCREENS                    */
+/* ═══════════════════════════════════════ */
+
+.alarm-ringing-task-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 60px 32px 80px;
+}
+
+.alarm-task-header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.alarm-task-header h2 {
+    font-family: var(--font);
+    font-weight: 800;
+    font-size: 28px;
+    color: #ffffff;
+    margin: 0 0 8px;
+}
+
+.alarm-task-header p {
+    font-family: var(--font);
+    font-weight: 500;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.4);
+    margin: 0;
+}
+
+.alarm-task-content {
+    width: 100%;
+    max-width: 360px;
+}
+
+/* ── Math Problem ── */
+.alarm-math-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    backdrop-filter: blur(20px);
+}
+
+.alarm-math-label {
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.35);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.alarm-math-question {
+    font-family: var(--font);
+    font-weight: 800;
+    font-size: 42px;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+    text-shadow: 0 0 30px rgba(255, 60, 93, 0.2);
+}
+
+.alarm-math-input-row {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.alarm-math-input-row.shake {
+    animation: mathShake 0.5s ease-in-out;
+}
+
+@keyframes mathShake {
+    0%, 100% { transform: translateX(0); }
+    20%  { transform: translateX(-12px); }
+    40%  { transform: translateX(12px); }
+    60%  { transform: translateX(-8px); }
+    80%  { transform: translateX(8px); }
+}
+
+.alarm-math-input {
+    flex: 1;
+    height: 56px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 22px;
+    color: #ffffff;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+.alarm-math-input::-webkit-inner-spin-button,
+.alarm-math-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.alarm-math-input::placeholder {
+    color: rgba(255, 255, 255, 0.18);
+}
+
+.alarm-math-input:focus {
+    border-color: var(--color-brand);
+    background: rgba(255, 60, 93, 0.06);
+}
+
+.alarm-math-submit {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(145deg, #FF3C5D, #E8354F);
+    border: none;
+    border-radius: 16px;
+    font-size: 22px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 16px rgba(255, 60, 93, 0.3);
+    flex-shrink: 0;
+}
+
+.alarm-math-submit:active {
+    transform: scale(0.95);
+}
+
+.alarm-math-error {
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 13px;
+    color: #FF6B7A;
+    animation: fadeInUp 0.3s ease;
+}
+
+/* ── Shake Task ── */
+.alarm-shake-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    backdrop-filter: blur(20px);
+}
+
+.alarm-shake-icon {
+    font-size: 48px;
+    animation: shakeIcon 0.6s ease-in-out infinite;
+}
+
+@keyframes shakeIcon {
+    0%, 100% { transform: rotate(0deg); }
+    25%      { transform: rotate(15deg); }
+    75%      { transform: rotate(-15deg); }
+}
+
+.alarm-shake-label {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.alarm-shake-progress-track {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.alarm-shake-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #FF3C5D, #FF6B7A);
+    border-radius: 4px;
+    transition: width 0.15s ease;
+}
+
+.alarm-shake-count {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.alarm-shake-fallback {
+    margin-top: 8px;
+    padding: 12px 24px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.45);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.alarm-shake-fallback:active {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* ── Hold Timer Task ── */
+.alarm-hold-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    backdrop-filter: blur(20px);
+}
+
+.alarm-hold-label {
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.alarm-hold-button {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.alarm-hold-button:active,
+.alarm-hold-button.holding {
+    transform: scale(0.95);
+}
+
+.alarm-hold-svg {
+    width: 140px;
+    height: 140px;
+    position: absolute;
+    transform: rotate(-90deg);
+}
+
+.alarm-hold-track-circle {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.08);
+    stroke-width: 4;
+}
+
+.alarm-hold-progress-circle {
+    fill: none;
+    stroke: var(--color-brand, #FF3C5D);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-dasharray: 276.46;
+    stroke-dashoffset: 276.46;
+    transition: stroke-dashoffset 0.05s linear;
+    filter: drop-shadow(0 0 8px rgba(255, 60, 93, 0.4));
+}
+
+.alarm-hold-text {
+    font-family: var(--font);
+    font-weight: 800;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.6);
+    z-index: 2;
+}
+
+.alarm-hold-button.holding .alarm-hold-text {
+    color: #FF3C5D;
+}
+
+/* ── Utility Animations ── */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}

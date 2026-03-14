@@ -81,9 +81,8 @@ const AppLayout = () => {
                         className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
                     >
                         <div className="nav-icon-wrapper">
-                            <item.icon size={19} />
+                            <item.icon size={22} />
                         </div>
-                        <span className="nav-label">{item.label}</span>
                     </NavLink>
                 ))}
             </nav>

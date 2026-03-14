@@ -17,10 +17,12 @@ import Insights from './pages/Insights';
 import AlarmPage from './pages/AlarmPage';
 import RouteDetails from './pages/RouteDetails';
 import AppLayout from './components/AppLayout';
+import AlarmOverlay from './components/AlarmOverlay';
 
 function App() {
   return (
     <AppProvider>
+      <AlarmOverlay />
       <Router>
         <div className="app-container">
           <Routes>
